@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiosk Display</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000000;
+      color: #5caeff;
+      font-family: 'Roboto', sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+    #main-container {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      width: 100%;
+    }
+    #main-left {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end; /* align content to the right */
+      padding: 2vh;
+      box-sizing: border-box;
+      position: relative;
+    }
+    #main-right {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2vh;
+      box-sizing: border-box;
+      position: relative;
+    }
+    #sun-times {
+      position: absolute;
+      top: 30%;
+      transform: translateY(-50%);
+      text-align: center;
+    }
+    #moon-phase {
+      position: absolute;
+      top: 66%;
+      transform: translateY(-50%);
+      text-align: center;
+    }
+    #time {
+      font-size: 18vh;
+      font-weight: 300;
+      margin-bottom: 1vh;
+      color: #66b2ff;
+    }
+    #date {
+      font-size: 3.5vh;
+      font-weight: 300;
+      color: #99ccff;
+      margin-bottom: 4vh;
+    }
+    #weather {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 4vh;
+    }
+    #weather-icon {
+      width: 20vh;
+      height: 20vh;
+    }
+    #temp-now {
+      font-size: 7vh;
+      font-weight: 500;
+      color: #5caeff;
+      margin-top: -2vh;
+    }
+    #weather-desc {
+      font-size: 3.5vh;
+      color: #99ccff;
+      margin-top: 0.5vh;
+    }
+    #weather-range {
+      font-size: 3vh;
+      margin-top: 1vh;
+      color: #80c1ff;
+      opacity: 0.9;
+    }
+    #forecast {
+      display: flex;
+      justify-content: center;
+      gap: 4vw;
+      margin-top: 2vh;
+    }
+    .forecast-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 3vh;
+      opacity: 0.95;
+    }
+    .forecast-day img {
+      width: 11vh;
+      height: 11vh;
+      margin-bottom: 1vh;
+    }
+    .forecast-desc {
+      font-size: 2.7vh;
+      color: #99ccff;
+      margin-bottom: 0.5vh;
+      text-align: center;
+    }
+    .forecast-range {
+      color: #5caeff;
+      font-size: 3vh;
+    }
+    #moon-emoji {
+      font-size: 18vh;
+      margin-bottom: 2vh;
+    }
+    #moon-phase-name {
+      font-size: 3vh;
+      color: #99ccff;
+      text-align: center;
+    }
+    #sun-times {
+      display: flex;
+      flex-direction: row;
+      gap: 2vw;
+      justify-content: center;
+    }
+    .sun-time {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 3vh;
+      color: #99ccff;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div id="main-container">
+    <div id="main-left">
+        <div id="sun-times" style="display: flex; flex-direction: row; gap: 2vw; justify-content: center;">
+        <div class="sun-time">
+          <img src="sunrise.png" alt="Sunrise" width="48" height="48">
+          <span id="sunrise-time">--:--</span>
+        </div>
+        <div class="sun-time">
+          <img src="sunset.png" alt="Sunset" width="48" height="48">
+          <span id="sunset-time">--:--</span>
+        </div>
+      </div>
+      <div id="moon-phase">
+        <div id="moon-emoji">🌑</div>
+        <div id="moon-phase-name">Loading moon phase...</div>
+      </div>
+    </div>
+    <div id="main-right">
+      <div id="time">--:--</div>
+      <div id="date">Loading date...</div>
+      <div id="weather">
+        <img id="weather-icon" src="" alt="" />
+        <div id="temp-now">--°</div>
+        <div id="weather-desc">Loading...</div>
+        <div id="weather-range"></div>
+      </div>
+      <div id="forecast"></div>
+      
+    </div>
+  </div>
+  <script>
+    const WEATHER_API_KEY = 'f749be486c7d4b8086fd36a881cee470';
+    const GEO_API_KEY = '427038ba33484b68a108126e21c197f4';
+    const ZIP = '55410';
+    const COUNTRY = 'US';
+
+    const emojiMap = {
+      "New Moon": "🌑",
+      "Waxing Crescent": "🌒",
+      "First Quarter": "🌓",
+      "Waxing Gibbous": "🌔",
+      "Full Moon": "🌕",
+      "Waning Gibbous": "🌖",
+      "Last Quarter": "🌗",
+      "Waning Crescent": "🌘"
+    };
+
+    function updateTimeAndDate() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('time').textContent = `${hours}:${minutes}`;
+
+      const options = { weekday: 'long', month: 'long', day: 'numeric' };
+      document.getElementById('date').textContent = now.toLocaleDateString(undefined, options);
+    }
+
+    function formatTimeFromUnix(unixTimestamp) {
+      return new Date(unixTimestamp * 1000).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+    }
+
+    async function fetchCurrentWeather() {
+      const url = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},${COUNTRY}&units=imperial&appid=${WEATHER_API_KEY}`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const temp = Math.round(data.main.temp);
+        const desc = data.weather[0].description;
+        const iconCode = data.weather[0].icon;
+        const tempMin = Math.round(data.main.temp_min);
+        const tempMax = Math.round(data.main.temp_max);
+
+        const sunrise = formatTimeFromUnix(data.sys.sunrise);
+        const sunset = formatTimeFromUnix(data.sys.sunset);
+        document.getElementById('sunrise-time').textContent = sunrise;
+        document.getElementById('sunset-time').textContent = sunset;
+
+        document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+        document.getElementById('weather-icon').alt = desc;
+        document.getElementById('temp-now').textContent = `${temp}°`;
+        document.getElementById('weather-desc').textContent = desc;
+        document.getElementById('weather-range').textContent = `${tempMax}° / ${tempMin}°`;
+      } catch (err) {
+        console.error('Weather fetch error:', err);
+      }
+    }
+
+    async function fetchForecast() {
+      const url = `https://api.openweathermap.org/data/2.5/forecast?zip=${ZIP},${COUNTRY}&units=imperial&appid=${WEATHER_API_KEY}`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const forecastsByDay = {};
+        data.list.forEach(entry => {
+          const dateTime = new Date(entry.dt * 1000);
+          const date = dateTime.toISOString().split('T')[0];
+          if (!forecastsByDay[date]) forecastsByDay[date] = [];
+          forecastsByDay[date].push(entry);
+        });
+
+        const today = new Date().toISOString().split('T')[0];
+        const upcomingDays = Object.keys(forecastsByDay)
+          .filter(d => d > today)
+          .slice(0, 3);
+
+        const forecastContainer = document.getElementById('forecast');
+        forecastContainer.innerHTML = '';
+
+        upcomingDays.forEach(day => {
+          const entries = forecastsByDay[day];
+          let min = Infinity, max = -Infinity;
+          let bestIcon = '01d';
+          let bestDesc = '';
+          let minTimeDiff = Infinity;
+
+          entries.forEach(e => {
+            const entryDate = new Date(e.dt * 1000);
+            const hour = entryDate.getHours();
+            const diff = Math.abs(hour - 12);
+            if (diff < minTimeDiff && e.weather && e.weather[0]) {
+              bestIcon = e.weather[0].icon;
+              bestDesc = e.weather[0].description;
+              minTimeDiff = diff;
+            }
+            if (e.main.temp_min < min) min = e.main.temp_min;
+            if (e.main.temp_max > max) max = e.main.temp_max;
+          });
+
+          const dayDiv = document.createElement('div');
+          dayDiv.className = 'forecast-day';
+          dayDiv.innerHTML = `
+            <img src="https://openweathermap.org/img/wn/${bestIcon}@2x.png" alt="forecast" />
+            <div class="forecast-desc">${bestDesc}</div>
+            <div class="forecast-range">${Math.round(max)}° / ${Math.round(min)}°</div>
+          `;
+          forecastContainer.appendChild(dayDiv);
+        });
+      } catch (err) {
+        console.error('Forecast fetch error:', err);
+      }
+    }
+
+    async function fetchMoonPhase() {
+      const url = `https://api.ipgeolocation.io/astronomy?apiKey=${GEO_API_KEY}&location=Minneapolis`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const rawPhase = data.moon_phase || "New Moon";
+        const formattedPhase = rawPhase
+          .toLowerCase()
+          .replace(/_/g, ' ')
+          .replace(/\b\w/g, c => c.toUpperCase());
+        const emoji = emojiMap[formattedPhase] || "🌑";
+
+        document.getElementById('moon-emoji').textContent = emoji;
+        document.getElementById('moon-phase-name').textContent = formattedPhase;
+      } catch (err) {
+        console.error('Moon phase fetch error:', err);
+      }
+    }
+
+    updateTimeAndDate();
+    fetchCurrentWeather();
+    fetchForecast();
+    fetchMoonPhase();
+
+    setInterval(updateTimeAndDate, 1000);
+    setInterval(() => {
+      fetchCurrentWeather();
+      fetchForecast();
+      fetchMoonPhase();
+    }, 10 * 60 * 1000);
+  </script>
+</body>
+</html>

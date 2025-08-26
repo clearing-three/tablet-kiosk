@@ -1,14 +1,50 @@
+/* ---------- Root & Resets ---------- */
+:root {
+  --bg: #000000;
+  --fg: #5caeff;
+  --fg-strong: #66b2ff;
+  --fg-mid: #99ccff;
+  --fg-soft: #80c1ff;
+
+  --pad: 2vh;
+  --gap-lg: 4vw;
+  --gap-md: 2vw;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
   padding: 0;
-  background: #000000;
-  color: #5caeff;
-  font-family: 'Roboto', sans-serif;
   height: 100%;
   width: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Roboto', sans-serif;
   overflow: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
+img {
+  display: block; /* avoid baseline gap */
+  max-width: 100%;
+  height: auto;
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
+body,
+#main-container,
+#main-left,
+#main-right {
+  user-select: none; /* kiosk: avoid accidental selection */
+}
+
+/* ---------- Layout ---------- */
 #main-container {
   display: flex;
   flex-direction: row;
@@ -21,8 +57,8 @@ html, body {
   width: 30%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;      /* align content to the right */
-  padding: 2vh;
+  align-items: flex-end;         /* align content to the right */
+  padding: var(--pad);
   box-sizing: border-box;
   position: relative;
 }
@@ -33,19 +69,19 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2vh;
+  padding: var(--pad);
   box-sizing: border-box;
   position: relative;
 }
 
-/* Sun times row (absolute in left column) */
+/* ---------- Sun times (absolute in left column) ---------- */
 #sun-times {
   position: absolute;
   top: 30%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: row;
-  gap: 2vw;
+  gap: var(--gap-md);
   justify-content: center;
   text-align: center;
 }
@@ -55,10 +91,10 @@ html, body {
   flex-direction: column;
   align-items: center;
   font-size: 3vh;
-  color: #99ccff;
+  color: var(--fg-mid);
 }
 
-/* Moon block (absolute in left column) */
+/* ---------- Moon block (absolute in left column) ---------- */
 #moon-phase {
   position: absolute;
   top: 66%;
@@ -73,26 +109,26 @@ html, body {
 
 #moon-phase-name {
   font-size: 3vh;
-  color: #99ccff;
+  color: var(--fg-mid);
   text-align: center;
 }
 
-/* Time / date */
+/* ---------- Time / date ---------- */
 #time {
   font-size: 18vh;
   font-weight: 300;
   margin-bottom: 1vh;
-  color: #66b2ff;
+  color: var(--fg-strong);
 }
 
 #date {
   font-size: 3.5vh;
   font-weight: 300;
-  color: #99ccff;
+  color: var(--fg-mid);
   margin-bottom: 4vh;
 }
 
-/* Current weather */
+/* ---------- Current weather ---------- */
 #weather {
   display: flex;
   flex-direction: column;
@@ -108,28 +144,28 @@ html, body {
 #temp-now {
   font-size: 7vh;
   font-weight: 500;
-  color: #5caeff;
+  color: var(--fg);
   margin-top: -2vh;
 }
 
 #weather-desc {
   font-size: 3.5vh;
-  color: #99ccff;
+  color: var(--fg-mid);
   margin-top: 0.5vh;
 }
 
 #weather-range {
   font-size: 3vh;
   margin-top: 1vh;
-  color: #80c1ff;
+  color: var(--fg-soft);
   opacity: 0.9;
 }
 
-/* 3-day forecast */
+/* ---------- 3-day forecast ---------- */
 #forecast {
   display: flex;
   justify-content: center;
-  gap: 4vw;
+  gap: var(--gap-lg);
   margin-top: 2vh;
 }
 
@@ -139,9 +175,11 @@ html, body {
   align-items: center;
   font-size: 3vh;
   opacity: 0.95;
+  text-align: center;
 }
 
 .forecast-day img {
+  /* keep icons large but bounded on tight layouts */
   width: 11vh;
   height: 11vh;
   margin-bottom: 1vh;
@@ -149,12 +187,11 @@ html, body {
 
 .forecast-desc {
   font-size: 2.7vh;
-  color: #99ccff;
+  color: var(--fg-mid);
   margin-bottom: 0.5vh;
-  text-align: center;
 }
 
 .forecast-range {
-  color: #5caeff;
+  color: var(--fg);
   font-size: 3vh;
 }

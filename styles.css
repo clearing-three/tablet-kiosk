@@ -1,0 +1,160 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000000;
+  color: #5caeff;
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#main-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+/* Left column */
+#main-left {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;      /* align content to the right */
+  padding: 2vh;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Right column */
+#main-right {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2vh;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Sun times row (absolute in left column) */
+#sun-times {
+  position: absolute;
+  top: 30%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 2vw;
+  justify-content: center;
+  text-align: center;
+}
+
+.sun-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 3vh;
+  color: #99ccff;
+}
+
+/* Moon block (absolute in left column) */
+#moon-phase {
+  position: absolute;
+  top: 66%;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+#moon-emoji {
+  font-size: 18vh;
+  margin-bottom: 2vh;
+}
+
+#moon-phase-name {
+  font-size: 3vh;
+  color: #99ccff;
+  text-align: center;
+}
+
+/* Time / date */
+#time {
+  font-size: 18vh;
+  font-weight: 300;
+  margin-bottom: 1vh;
+  color: #66b2ff;
+}
+
+#date {
+  font-size: 3.5vh;
+  font-weight: 300;
+  color: #99ccff;
+  margin-bottom: 4vh;
+}
+
+/* Current weather */
+#weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 4vh;
+}
+
+#weather-icon {
+  width: 20vh;
+  height: 20vh;
+}
+
+#temp-now {
+  font-size: 7vh;
+  font-weight: 500;
+  color: #5caeff;
+  margin-top: -2vh;
+}
+
+#weather-desc {
+  font-size: 3.5vh;
+  color: #99ccff;
+  margin-top: 0.5vh;
+}
+
+#weather-range {
+  font-size: 3vh;
+  margin-top: 1vh;
+  color: #80c1ff;
+  opacity: 0.9;
+}
+
+/* 3-day forecast */
+#forecast {
+  display: flex;
+  justify-content: center;
+  gap: 4vw;
+  margin-top: 2vh;
+}
+
+.forecast-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 3vh;
+  opacity: 0.95;
+}
+
+.forecast-day img {
+  width: 11vh;
+  height: 11vh;
+  margin-bottom: 1vh;
+}
+
+.forecast-desc {
+  font-size: 2.7vh;
+  color: #99ccff;
+  margin-bottom: 0.5vh;
+  text-align: center;
+}
+
+.forecast-range {
+  color: #5caeff;
+  font-size: 3vh;
+}

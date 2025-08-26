@@ -1,22 +1,20 @@
-// --- Config ---
-const WEATHER_API_KEY = 'f749be486c7d4b8086fd36a881cee470';
-const GEO_API_KEY = '427038ba33484b68a108126e21c197f4';
-const ZIP = '55410';
-const COUNTRY = 'US';
-const LATITUDE = '44.91233400591799';
-const LONGITUDE = '-93.31721559338696';
 
-// --- Moon phase emoji map ---
-const emojiMap = {
-  "New Moon": "🌑",
-  "Waxing Crescent": "🌒",
-  "First Quarter": "🌓",
-  "Waxing Gibbous": "🌔",
-  "Full Moon": "🌕",
-  "Waning Gibbous": "🌖",
-  "Last Quarter": "🌗",
-  "Waning Crescent": "🌘"
-};
+// --- Config ---
+const API_KEY = 'f749be486c7d4b8086fd36a881cee470'; // One Call 3.0 key
+const LAT = '44.91233400591799';
+const LON = '-93.31721559338696';
+
+// --- Moon emoji by phase decimal ---
+function getMoonEmoji(phase) {
+  if (phase === 0 || phase === 1) return "🌑";
+  if (phase < 0.25) return "🌒";
+  if (phase === 0.25) return "🌓";
+  if (phase < 0.5) return "🌔";
+  if (phase === 0.5) return "🌕";
+  if (phase < 0.75) return "🌖";
+  if (phase === 0.75) return "🌗";
+  return "🌘";
+}
 
 // --- Time & Date ---
 function updateTimeAndDate() {
@@ -30,130 +28,85 @@ function updateTimeAndDate() {
 }
 
 // --- Helpers ---
-function formatTimeFromUnix(unixTimestamp) {
-  return new Date(unixTimestamp * 1000).toLocaleTimeString([], {
+function formatTimeFromUnix(unix) {
+  return new Date(unix * 1000).toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false
   });
 }
 
-// --- Current weather ---
-async function fetchCurrentWeather() {
-  const url = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},${COUNTRY}&units=imperial&appid=${WEATHER_API_KEY}`;
+// --- Main fetch logic using One Call 3.0 ---
+async function fetchWeatherData() {
+  const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${LAT}&lon=${LON}&units=imperial&exclude=minutely,hourly,alerts&appid=${API_KEY}`;
+
   try {
     const response = await fetch(url);
     const data = await response.json();
 
-    const temp = Math.round(data.main.temp);
-    const desc = data.weather[0].description;
-    const iconCode = data.weather[0].icon;
-    const tempMin = Math.round(data.main.temp_min);
-    const tempMax = Math.round(data.main.temp_max);
+    // --- Current conditions ---
+    const current = data.current;
+    const iconCode = current.weather[0].icon;
+    const desc = current.weather[0].description;
+    const temp = Math.round(current.temp);
+    const tempMin = Math.round(data.daily[0].temp.min);
+    const tempMax = Math.round(data.daily[0].temp.max);
+    const sunrise = formatTimeFromUnix(current.sunrise);
+    const sunset = formatTimeFromUnix(current.sunset);
 
-    const sunrise = formatTimeFromUnix(data.sys.sunrise);
-    const sunset = formatTimeFromUnix(data.sys.sunset);
-    document.getElementById('sunrise-time').textContent = sunrise;
-    document.getElementById('sunset-time').textContent = sunset;
-
-    const icon = document.getElementById('weather-icon');
-    icon.src = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
-    icon.alt = desc;
-
+    document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+    document.getElementById('weather-icon').alt = desc;
     document.getElementById('temp-now').textContent = `${temp}°`;
     document.getElementById('weather-desc').textContent = desc;
     document.getElementById('weather-range').textContent = `${tempMax}° / ${tempMin}°`;
-  } catch (err) {
-    console.error('Weather fetch error:', err);
-  }
-}
+    document.getElementById('sunrise-time').textContent = sunrise;
+    document.getElementById('sunset-time').textContent = sunset;
 
-// --- 3-day forecast ---
-async function fetchForecast() {
-  const url = `https://api.openweathermap.org/data/2.5/forecast?zip=${ZIP},${COUNTRY}&units=imperial&appid=${WEATHER_API_KEY}`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+    // --- Moon phase ---
+    const moonPhaseVal = data.daily[0].moon_phase;
+    document.getElementById('moon-emoji').textContent = getMoonEmoji(moonPhaseVal);
+    const phaseName = describeMoonPhase(moonPhaseVal);
+    document.getElementById('moon-phase-name').textContent = phaseName;
 
-    const forecastsByDay = {};
-    data.list.forEach(entry => {
-      const dateTime = new Date(entry.dt * 1000);
-      const date = dateTime.toISOString().split('T')[0];
-      if (!forecastsByDay[date]) forecastsByDay[date] = [];
-      forecastsByDay[date].push(entry);
-    });
-
-    const today = new Date().toISOString().split('T')[0];
-    const upcomingDays = Object.keys(forecastsByDay)
-      .filter(d => d > today)
-      .slice(0, 3);
-
+    // --- Forecast (next 3 days, skip today) ---
     const forecastContainer = document.getElementById('forecast');
     forecastContainer.innerHTML = '';
+    for (let i = 1; i <= 3; i++) {
+      const day = data.daily[i];
+      const fIcon = day.weather[0].icon;
+      const fDesc = day.weather[0].description;
+      const fMax = Math.round(day.temp.max);
+      const fMin = Math.round(day.temp.min);
 
-    upcomingDays.forEach(day => {
-      const entries = forecastsByDay[day];
-      let min = Infinity, max = -Infinity;
-      let bestIcon = '01d';
-      let bestDesc = '';
-      let minTimeDiff = Infinity;
-
-      entries.forEach(e => {
-        const entryDate = new Date(e.dt * 1000);
-        const hour = entryDate.getHours();
-        const diff = Math.abs(hour - 12);
-        if (diff < minTimeDiff && e.weather && e.weather[0]) {
-          bestIcon = e.weather[0].icon;
-          bestDesc = e.weather[0].description;
-          minTimeDiff = diff;
-        }
-        if (e.main.temp_min < min) min = e.main.temp_min;
-        if (e.main.temp_max > max) max = e.main.temp_max;
-      });
-
-      const dayDiv = document.createElement('div');
-      dayDiv.className = 'forecast-day';
-      dayDiv.innerHTML = `
-        <img src="https://openweathermap.org/img/wn/${bestIcon}@2x.png" alt="forecast" />
-        <div class="forecast-desc">${bestDesc}</div>
-        <div class="forecast-range">${Math.round(max)}° / ${Math.round(min)}°</div>
+      const div = document.createElement('div');
+      div.className = 'forecast-day';
+      div.innerHTML = `
+        <img src="https://openweathermap.org/img/wn/${fIcon}@2x.png" alt="forecast" />
+        <div class="forecast-desc">${fDesc}</div>
+        <div class="forecast-range">${fMax}° / ${fMin}°</div>
       `;
-      forecastContainer.appendChild(dayDiv);
-    });
+      forecastContainer.appendChild(div);
+    }
   } catch (err) {
-    console.error('Forecast fetch error:', err);
+    console.error('One Call API error:', err);
   }
 }
 
-// --- Moon phase ---
-async function fetchMoonPhase() {
-  const url = `https://api.ipgeolocation.io/astronomy?apiKey=${GEO_API_KEY}&location=Minneapolis`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    const rawPhase = data.moon_phase || "New Moon";
-    const formattedPhase = rawPhase
-      .toLowerCase()
-      .replace(/_/g, ' ')
-      .replace(/\b\w/g, c => c.toUpperCase());
-    const emoji = emojiMap[formattedPhase] || "🌑";
-
-    document.getElementById('moon-emoji').textContent = emoji;
-    document.getElementById('moon-phase-name').textContent = formattedPhase;
-  } catch (err) {
-    console.error('Moon phase fetch error:', err);
-  }
+// --- Describe moon phase by decimal value ---
+function describeMoonPhase(val) {
+  if (val === 0 || val === 1) return "New Moon";
+  if (val === 0.25) return "First Quarter";
+  if (val === 0.5) return "Full Moon";
+  if (val === 0.75) return "Last Quarter";
+  if (val < 0.25) return "Waxing Crescent";
+  if (val < 0.5) return "Waxing Gibbous";
+  if (val < 0.75) return "Waning Gibbous";
+  return "Waning Crescent";
 }
 
-// --- Kick everything off and set intervals ---
+// --- Init ---
 updateTimeAndDate();
-fetchCurrentWeather();
-fetchForecast();
-fetchMoonPhase();
+fetchWeatherData();
 
 setInterval(updateTimeAndDate, 1000);
-setInterval(() => {
-  fetchCurrentWeather();
-  fetchForecast();
-  fetchMoonPhase();
-}, 10 * 60 * 1000);
+setInterval(fetchWeatherData, 10 * 60 * 1000); // every 10 minutes

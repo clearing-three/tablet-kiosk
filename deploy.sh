@@ -2,6 +2,7 @@
 
 DEST_DIR="/sdcard/Android/data/de.ozerov.fully/files/html"
 FILES=("kiosk.html" "styles.css" "app.js" "sunrise.png" "sunset.png")
+ICONS_DIR="weather-icons"
 
 usage() {
   echo "Usage: $0 [OPTIONS]"
@@ -17,13 +18,15 @@ usage() {
 
 list_files() {
   adb shell ls -lh "$DEST_DIR"
+  adb shell ls -lh "$DEST_DIR/$ICONS_DIR" 2>/dev/null || echo "(no icon folder)"
 }
 
 clean_files() {
   for file in "${FILES[@]}"; do
     adb shell rm -f "$DEST_DIR/$file"
   done
-  echo "Deployed files removed from device."
+  adb shell rm -rf "$DEST_DIR/$ICONS_DIR"
+  echo "All deployed files and icons removed from device."
 }
 
 deploy_files() {
@@ -35,6 +38,13 @@ deploy_files() {
       echo "Missing: $file (skipped)"
     fi
   done
+
+  if [[ -d "$ICONS_DIR" ]]; then
+    adb push "$ICONS_DIR" "$DEST_DIR/" > /dev/null
+    echo "Deployed icon folder: $ICONS_DIR/"
+  else
+    echo "Missing icon folder: $ICONS_DIR (skipped)"
+  fi
 }
 
 case "$1" in

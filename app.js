@@ -54,7 +54,8 @@ async function fetchWeatherData() {
     const sunrise = formatTimeFromUnix(current.sunrise);
     const sunset = formatTimeFromUnix(current.sunset);
 
-    document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+    const iconFile = mapOWMIconToSVG(iconCode);
+    document.getElementById('weather-icon').data = `weather-icons/${iconFile}.svg`;
     document.getElementById('weather-icon').alt = desc;
     document.getElementById('temp-now').textContent = `${temp}°`;
     document.getElementById('weather-desc').textContent = desc;
@@ -78,14 +79,20 @@ async function fetchWeatherData() {
       const fMax = Math.round(day.temp.max);
       const fMin = Math.round(day.temp.min);
 
+      const dateObj = new Date(day.dt * 1000);
+      const dayName = dateObj.toLocaleDateString(undefined, { weekday: 'short' }); // e.g. "Mon"
+
+      const forecastIconFile = mapOWMIconToSVG(fIcon);
       const div = document.createElement('div');
       div.className = 'forecast-day';
       div.innerHTML = `
-        <img src="https://openweathermap.org/img/wn/${fIcon}@2x.png" alt="forecast" />
+        <div class="forecast-day-name">${dayName}</div>
+        <object type="image/svg+xml" data="weather-icons/${forecastIconFile}.svg" class="forecast-icon"></object>
         <div class="forecast-desc">${fDesc}</div>
         <div class="forecast-range">${fMax}° / ${fMin}°</div>
       `;
       forecastContainer.appendChild(div);
+
     }
   } catch (err) {
     console.error('One Call API error:', err);
@@ -103,6 +110,31 @@ function describeMoonPhase(val) {
   if (val < 0.75) return "Waning Gibbous";
   return "Waning Crescent";
 }
+
+function mapOWMIconToSVG(owmCode) {
+  const map = {
+    "01d": "clear-day",
+    "01n": "clear-night",
+    "02d": "partly-cloudy-day",
+    "02n": "partly-cloudy-night",
+    "03d": "cloudy",
+    "03n": "cloudy",
+    "04d": "overcast-day",
+    "04n": "overcast-night",
+    "09d": "rain",
+    "09n": "rain",
+    "10d": "rain",
+    "10n": "rain",
+    "11d": "thunderstorms-day",
+    "11n": "thunderstorms-night",
+    "13d": "snow",
+    "13n": "snow",
+    "50d": "mist",
+    "50n": "mist"
+  };
+  return map[owmCode] || "na";
+}
+
 
 // --- Init ---
 updateTimeAndDate();

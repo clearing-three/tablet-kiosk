@@ -4,7 +4,6 @@
   --fg-primary: #66b2ff;     /* time */
   --fg-secondary: #a8cfff;   /* date, weather desc */
   --fg-tertiary: #c2e5ff;    /* current temp, less contrast */
-  --fg-range: #aad4ff;       /* high/low temps */
   --fg-day: #ffe0b3;         /* weekday names */
   --fg-sun: #ffcc80;         /* sunrise/sunset times */
   --fg-moon: #ccccff;        /* moon phase label */

@@ -6,7 +6,8 @@
   --fg-tertiary: #c2e5ff;    /* current temp, less contrast */
   --fg-day: #ffe0b3;         /* weekday names */
   --fg-sun: #ffcc80;         /* sunrise/sunset times */
-  --fg-moon: #ccccff;        /* moon phase label */
+  --fg-moon: #d0d0d0;        
+  --fg-moon-text: #b0c4de; 
 
   --pad: 2vh;
   --gap-lg: 4vw;
@@ -140,7 +141,7 @@ body,
 #weather-range {
   font-size: 3vh;
   margin-top: 1vh;
-  color: var(--fg-secondary);
+  color: var(--fg-tertiary);
   opacity: 0.9;
 }
 
@@ -265,7 +266,7 @@ body,
 
 #moon-phase-name {
   font-size: 3vh;
-  color: var(--fg-moon);
+  color: var(--fg-moon-text);
   text-align: center;
 }
 

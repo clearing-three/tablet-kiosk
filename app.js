@@ -62,11 +62,14 @@ async function fetchWeatherData() {
 
     updateSunMoonTimes(data);
 
+
     // --- Moon phase ---
-    const moonPhaseVal = data.daily[0].moon_phase;
-    document.getElementById('moon-emoji').textContent = getMoonEmoji(moonPhaseVal);
-    const phaseName = describeMoonPhase(moonPhaseVal);
-    document.getElementById('moon-phase-name').textContent = phaseName;
+    var svg = document.getElementById("moon");
+
+    updateMoonPhase(data.daily[0].moon_phase);
+    svg.setAttribute("viewBox", "0 0 200 200"); 
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
 
     // --- Forecast (next 3 days, skip today) ---
     const forecastContainer = document.getElementById('forecast');
@@ -144,6 +147,30 @@ function updateSunMoonTimes(data) {
   document.getElementById('sunset-time').textContent = formatTimeFromUnix(data.current.sunset);
   document.getElementById('moonrise-time').textContent = formatTimeFromUnix(data.daily[0].moonrise);
   document.getElementById('moonset-time').textContent = formatTimeFromUnix(data.daily[0].moonset);
+}
+
+function getMoonPhaseName(phase) {
+  const phases = [
+    "New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous",
+    "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent"
+  ];
+  const index = Math.floor(phase * 8) % 8;
+  return phases[index];
+}
+
+function updateMoonPhase(moonPhaseFloat) {
+  // Set name
+  const name = getMoonPhaseName(moonPhaseFloat);
+  document.getElementById("moon-phase-name").textContent = name;
+
+  // Clear old SVG
+  const container = document.getElementById("moon");
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+
+  // Render new SVG using library
+  phase_junk(moonPhaseFloat);
 }
 
 

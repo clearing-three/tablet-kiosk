@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEST_DIR="/sdcard/Android/data/de.ozerov.fully/files/html"
-FILES=("kiosk.html" "styles.css" "app.js" "sunrise.png" "sunset.png")
+FILES=("kiosk.html" "styles.css" "app.js" "moon-phase.js")
 ICONS_DIR="weather-icons"
 
 usage() {

@@ -96,25 +96,6 @@ body,
   color: var(--fg-mid);
 }
 
-/* ---------- Moon block (absolute in left column) ---------- */
-#moon-phase {
-  position: absolute;
-  top: 66%;
-  transform: translateY(-50%);
-  text-align: center;
-}
-
-#moon-emoji {
-  font-size: 18vh;
-  margin-bottom: 2vh;
-}
-
-#moon-phase-name {
-  font-size: 3vh;
-  color: var(--fg-moon);
-  text-align: center;
-}
-
 /* ---------- Time / date ---------- */
 #time {
   font-size: 18vh;
@@ -261,13 +242,38 @@ body,
   color: var(--fg-moon);
 }
 
-
-.time-block span {
-  font-size: 3vh;
+#moon-phase {
+  position: absolute;
+  top: 66%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
-.moon-icon {
-  width: 12vh;
-  height: 12vh;
+#moon-phase-render {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#moon {
+  width: 16vh;
+  height: 16vh;
   display: block;
+}
+
+#moon-phase-name {
+  font-size: 3vh;
+  color: var(--fg-moon);
+  text-align: center;
+}
+
+/* Optional: Style the light/dark parts of the moon */
+.moon {
+  fill: var(--fg-moon);
+}
+
+.moonback {
+  fill: #111111;
 }

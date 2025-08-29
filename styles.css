@@ -76,17 +76,17 @@ body,
   position: relative;
 }
 
-/* ---------- Sun times (absolute in left column) ---------- */
-#sun-times {
+#sun-moon-times {
   position: absolute;
   top: 30%;
   transform: translateY(-50%);
   display: flex;
-  flex-direction: row;
-  gap: var(--gap-md);
-  justify-content: center;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2vh;
   text-align: center;
 }
+
 
 .sun-time {
   display: flex;
@@ -216,4 +216,58 @@ body,
 #sunrise-time,
 #sunset-time {
   color: var(--fg-sun);
+}
+
+#astro-times {
+  position: absolute;
+  top: 30%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2vh;
+  text-align: center;
+}
+
+
+.time-row {
+  display: flex;
+  flex-direction: row;
+  gap: 4vw;
+}
+
+.astro-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.astro-time span {
+  font-size: 3vh;
+}
+
+.astro-icon {
+  width: 12vh;
+  height: 12vh;
+  display: block;
+}
+
+
+.sun-time span {
+  color: var(--fg-sun);
+}
+
+.moon-time span {
+  color: var(--fg-moon);
+}
+
+
+.time-block span {
+  font-size: 3vh;
+}
+
+.moon-icon {
+  width: 12vh;
+  height: 12vh;
+  display: block;
 }

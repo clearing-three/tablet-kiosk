@@ -51,8 +51,6 @@ async function fetchWeatherData() {
     const temp = Math.round(current.temp);
     const tempMin = Math.round(data.daily[0].temp.min);
     const tempMax = Math.round(data.daily[0].temp.max);
-    const sunrise = formatTimeFromUnix(current.sunrise);
-    const sunset = formatTimeFromUnix(current.sunset);
 
     const iconFile = mapOWMIconToSVG(iconCode);
     document.getElementById('weather-icon').data = `weather-icons/${iconFile}.svg`;
@@ -60,8 +58,9 @@ async function fetchWeatherData() {
     document.getElementById('temp-now').textContent = `${temp}°`;
     document.getElementById('weather-desc').textContent = desc;
     document.getElementById('weather-range').textContent = `${tempMax}° / ${tempMin}°`;
-    document.getElementById('sunrise-time').textContent = sunrise;
-    document.getElementById('sunset-time').textContent = sunset;
+
+
+    updateSunMoonTimes(data);
 
     // --- Moon phase ---
     const moonPhaseVal = data.daily[0].moon_phase;
@@ -134,6 +133,19 @@ function mapOWMIconToSVG(owmCode) {
   };
   return map[owmCode] || "na";
 }
+
+function formatTimeFromUnix(unixTime) {
+  const date = new Date(unixTime * 1000);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function updateSunMoonTimes(data) {
+  document.getElementById('sunrise-time').textContent = formatTimeFromUnix(data.current.sunrise);
+  document.getElementById('sunset-time').textContent = formatTimeFromUnix(data.current.sunset);
+  document.getElementById('moonrise-time').textContent = formatTimeFromUnix(data.daily[0].moonrise);
+  document.getElementById('moonset-time').textContent = formatTimeFromUnix(data.daily[0].moonset);
+}
+
 
 
 // --- Init ---

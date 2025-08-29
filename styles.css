@@ -159,7 +159,7 @@ body,
 #weather-range {
   font-size: 3vh;
   margin-top: 1vh;
-  color: var(--fg-soft);
+  color: var(--fg-secondary);
   opacity: 0.9;
 }
 

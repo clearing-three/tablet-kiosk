@@ -57,7 +57,7 @@ body,
 
 /* Left column */
 #main-left {
-  width: 30%;
+  width: 45%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,7 +69,7 @@ body,
 
 /* Right column */
 #main-right {
-  width: 70%;
+  width: 55%;
   display: flex;
   flex-direction: column;
   align-items: center;

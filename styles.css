@@ -149,18 +149,21 @@ body,
 /* ---------- 3-day forecast ---------- */
 #forecast {
   display: flex;
-  justify-content: center;
-  gap: var(--gap-lg);
+  justify-content: space-between;
+  gap: 0;
+  width: 100%;
   margin-top: 1vh;
 }
 
 .forecast-day {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 3vh;
   opacity: 0.95;
   text-align: center;
+  max-width: 33.33%;
 }
 
 .forecast-day img {

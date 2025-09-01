@@ -145,8 +145,8 @@ function formatTimeFromUnix(unixTime) {
 function updateSunMoonTimes(data) {
   document.getElementById('sunrise-time').textContent = formatTimeFromUnix(data.current.sunrise);
   document.getElementById('sunset-time').textContent = formatTimeFromUnix(data.current.sunset);
-  document.getElementById('moonrise-time').textContent = formatTimeFromUnix(data.daily[0].moonrise);
-  document.getElementById('moonset-time').textContent = formatTimeFromUnix(data.daily[0].moonset);
+  document.getElementById('moonrise-time').textContent = data.daily[0].moonrise === 0 ? '-' : formatTimeFromUnix(data.daily[0].moonrise);
+  document.getElementById('moonset-time').textContent = data.daily[0].moonset === 0 ? '-' : formatTimeFromUnix(data.daily[0].moonset);
 }
 
 function getMoonPhaseName(phase) {

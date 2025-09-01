@@ -102,7 +102,7 @@ body,
 #time {
   font-size: 18vh;
   font-weight: 300;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5vh;
   color: var(--fg-primary);
 }
 

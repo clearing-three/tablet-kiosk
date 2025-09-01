@@ -110,7 +110,7 @@ body,
   font-size: 3.5vh;
   font-weight: 300;
   color: var(--fg-secondary);
-  margin-bottom: 4vh;
+  margin-bottom: 2.5vh;
 }
 
 /* ---------- Current weather ---------- */
@@ -118,7 +118,7 @@ body,
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 4vh;
+  margin-bottom: 2.5vh;
 }
 
 #weather-icon {
@@ -151,7 +151,7 @@ body,
   display: flex;
   justify-content: center;
   gap: var(--gap-lg);
-  margin-top: 2vh;
+  margin-top: 1vh;
 }
 
 .forecast-day {
@@ -167,7 +167,7 @@ body,
   /* keep icons large but bounded on tight layouts */
   width: 11vh;
   height: 11vh;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5vh;
 }
 
 .forecast-day .forecast-icon {
@@ -179,7 +179,7 @@ body,
 .forecast-desc {
   font-size: 2.7vh;
   color: var(--fg-secondary);
-  margin-bottom: 0.5vh;
+  margin-bottom: 0.3vh;
 }
 .forecast-range {
   color: var(--fg-tertiary);

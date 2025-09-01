@@ -1,0 +1,63 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+This is a weather kiosk application designed for tablet displays, specifically targeting Samsung Galaxy Tab S8 Ultra running in Fully Kiosk Browser. The app displays current weather, forecast, astronomical times (sunrise/sunset, moonrise/moonset), and moon phase information.
+
+## Architecture
+
+### Core Files
+- `kiosk.html`: Main HTML structure with semantic layout for left/right panels
+- `app.js`: Main application logic handling weather API calls, DOM updates, and time display
+- `moon-phase.js`: Third-party library for moon phase calculations and SVG rendering
+- `styles.css`: CSS with CSS custom properties for theming and responsive viewport units
+
+### Data Flow
+1. App fetches weather data from OpenWeatherMap One Call 3.0 API every 10 minutes
+2. Weather icons are mapped from OpenWeatherMap codes to local SVG files in `weather-icons/`
+3. Moon phase calculations use Julian date calculations to determine current lunar phase
+4. All times are formatted in 24-hour format using `formatTimeFromUnix()`
+
+### Configuration
+- Weather API configuration (API key, coordinates) is at the top of `app.js:3-5`
+- Icon mapping from OpenWeatherMap codes to local SVGs in `mapOWMIconToSVG()` function at `app.js:116`
+
+## Development Commands
+
+Since this is a client-side HTML/JS/CSS application, there are no build commands or package managers. Development is file-based:
+
+### Deployment
+- `./deploy.sh`: Deploy files to connected Android tablet via ADB
+- `./deploy.sh -l`: List deployed files on device
+- `./deploy.sh -c`: Clean/remove all deployed files from device
+
+### Device Setup
+Per README.md, the target device requires:
+1. Fully Kiosk Browser app installation
+2. Developer mode enabled with USB debugging
+3. Files deployed to `/sdcard/Android/data/de.ozerov.fully/files/html/`
+
+## Code Patterns
+
+### Weather Data Handling
+- All weather data comes from OpenWeatherMap One Call 3.0 API
+- Temperature values are rounded using `Math.round()`
+- Weather icons use SVG objects for scalability
+- Forecast shows next 3 days (skipping today)
+
+### Time Management
+- Clock updates every second via `setInterval`
+- Weather data updates every 10 minutes
+- All Unix timestamps converted using `formatTimeFromUnix()`
+
+### Moon Phase Rendering
+- Uses external `phase_junk()` function from `moon-phase.js`
+- Dynamically generates SVG paths based on lunar phase decimal (0-1)
+- Moon phase names calculated in `getMoonPhaseName()` function
+
+### Styling
+- Uses CSS custom properties for consistent theming
+- Viewport units (vh, vw) for responsive tablet display
+- Color scheme optimized for dark backgrounds with blue accent colors

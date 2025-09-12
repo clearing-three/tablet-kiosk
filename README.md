@@ -1,6 +1,6 @@
 # Kiosk
 
-## Device
+## Tablet
 
 * Samsung Galaxy Tab S8 Ultra
 
@@ -14,17 +14,23 @@
 3. Settings → Developer options
     * Turn on USB debugging
 
-## Debian
-```bash
+## Development
 
-sudo apt install android-tools-adb
+Since this is a client-side HTML/JS/CSS application, there are no build commands or package managers. Development is file-based.
 
-adb devices
+## Deployment
 
-adb push ./kiosk.html /sdcard/Android/data/de.ozerov.fully/files/html
-
-adb shell ls /sdcard/Android/data/de.ozerov.fully/files/html/
-
+1. Enable devloper mode on the tablet, see instructions in this doc.
+2. Install Android Debug Bridge.
 ```
+sudo apt install android-tools-adb
+adb devices
+```
+3. Use `deploy.sh`, see instructions below.
+
+### Deployment Commands
+- `./deploy.sh`: Deploy files to connected Android tablet via ADB
+- `./deploy.sh -l`: List deployed files on device
+- `./deploy.sh -c`: Clean/remove all deployed files from device
 
 

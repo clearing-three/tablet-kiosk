@@ -24,20 +24,6 @@ This is a weather kiosk application designed for tablet displays, specifically t
 - Weather API configuration (API key, coordinates) is at the top of `app.js:3-5`
 - Icon mapping from OpenWeatherMap codes to local SVGs in `mapOWMIconToSVG()` function at `app.js:116`
 
-## Development Commands
-
-Since this is a client-side HTML/JS/CSS application, there are no build commands or package managers. Development is file-based:
-
-### Deployment
-- `./deploy.sh`: Deploy files to connected Android tablet via ADB
-- `./deploy.sh -l`: List deployed files on device
-- `./deploy.sh -c`: Clean/remove all deployed files from device
-
-### Device Setup
-Per README.md, the target device requires:
-1. Fully Kiosk Browser app installation
-2. Developer mode enabled with USB debugging
-3. Files deployed to `/sdcard/Android/data/de.ozerov.fully/files/html/`
 
 ## Code Patterns
 
@@ -55,9 +41,22 @@ Per README.md, the target device requires:
 ### Moon Phase Rendering
 - Uses external `phase_junk()` function from `moon-phase.js`
 - Dynamically generates SVG paths based on lunar phase decimal (0-1)
-- Moon phase names calculated in `getMoonPhaseName()` function
+- Moon phase names calculated in `describeMoonPhase()` function at `app.js:105`
 
 ### Styling
 - Uses CSS custom properties for consistent theming
 - Viewport units (vh, vw) for responsive tablet display
 - Color scheme optimized for dark backgrounds with blue accent colors
+
+## External Resources
+
+### Weather Icons
+The SVG weather icons in `weather-icons/` directory are sourced from:
+- **Repository**: https://github.com/basmilius/weather-icons
+- Custom SVG icons designed for weather applications
+
+### Moon Phase Script  
+The `moon-phase.js` file is sourced from:
+- **Repository**: https://github.com/tingletech/moon-phase
+- Contains lunar phase calculations and SVG path generation
+- Uses Julian date calculations and astronomical algorithms for accurate moon phase rendering

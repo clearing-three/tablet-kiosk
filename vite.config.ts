@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
+  root: '.',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -10,8 +11,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    minify: 'terser',
-    // Input will be configured when src structure is created in task 1.7
+    minify: 'esbuild',
+    rollupOptions: {
+      input: resolve(__dirname, 'src/index.html'),
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+      },
+    },
   },
   server: {
     port: 3000,

@@ -11,6 +11,14 @@ import './styles/main.css'
 import { WeatherService } from './services/WeatherService'
 import { MoonPhaseService } from './services/MoonPhaseService'
 
+// Asset management
+import {
+  preloadCriticalAssets,
+  getCriticalAssetUrls,
+  validateAssetExists,
+  reportMissingAssets,
+} from './utils/assets'
+
 // Components
 import { WeatherDisplay } from './components/Weather/WeatherDisplay'
 import { WeatherForecast } from './components/Weather/WeatherForecast'
@@ -148,11 +156,48 @@ class TabletKioskApp {
   }
 
   /**
+   * Validates that critical assets are available
+   */
+  private async validateAssets(): Promise<void> {
+    console.log('Validating critical assets...')
+
+    const criticalAssets = getCriticalAssetUrls()
+    const missingAssets: string[] = []
+
+    // Validate assets in parallel for better performance
+    const validationPromises = criticalAssets.map(async assetUrl => {
+      const exists = await validateAssetExists(assetUrl)
+      if (!exists) {
+        missingAssets.push(assetUrl)
+      }
+    })
+
+    await Promise.all(validationPromises)
+
+    if (missingAssets.length > 0) {
+      reportMissingAssets(missingAssets)
+      // Don't throw error for missing assets, just warn
+      console.warn('Some assets are missing but application will continue')
+    } else {
+      console.log('All critical assets validated successfully')
+    }
+  }
+
+  /**
    * Initializes the application
    */
   public async initialize(): Promise<void> {
     try {
       console.log('Initializing Tablet Kiosk application...')
+
+      // Preload critical assets for better performance
+      preloadCriticalAssets()
+      console.log('Critical assets preloaded')
+
+      // Validate assets are available (non-blocking)
+      this.validateAssets().catch(error => {
+        console.warn('Asset validation failed:', error)
+      })
 
       // Check if all required DOM elements are present
       if (!this.validateDOMElements()) {

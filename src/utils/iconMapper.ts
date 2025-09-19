@@ -95,12 +95,12 @@ function isValidOWMIconCode(code: string): code is OWMIconCode {
 /**
  * Gets the full path to a weather icon SVG file
  * @param owmCode OpenWeatherMap icon code
- * @param basePath Base path for weather icons (default: 'weather-icons')
+ * @param basePath Base path for weather icons (default: '/weather-icons')
  * @returns Full path to the SVG file
  */
 export function getWeatherIconPath(
   owmCode: string,
-  basePath: string = 'weather-icons'
+  basePath: string = '/weather-icons'
 ): string {
   const iconName = mapOWMIconToSVG(owmCode)
   return `${basePath}/${iconName}.svg`

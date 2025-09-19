@@ -55,8 +55,19 @@ The SVG weather icons in `weather-icons/` directory are sourced from:
 - **Repository**: https://github.com/basmilius/weather-icons
 - Custom SVG icons designed for weather applications
 
-### Moon Phase Script  
+### Moon Phase Script
 The `moon-phase.js` file is sourced from:
 - **Repository**: https://github.com/tingletech/moon-phase
 - Contains lunar phase calculations and SVG path generation
 - Uses Julian date calculations and astronomical algorithms for accurate moon phase rendering
+
+## Development Workflow
+
+### Branch Protection
+**IMPORTANT**: Never make code changes when on the `main` branch. If the user requests changes while on `main`:
+1. Check current branch with `git branch --show-current`
+2. If on `main`, do NOT make any file changes
+3. Inform the user: "Currently on main branch. Should I create a feature branch or would you like to switch branches first?"
+4. Wait for user instructions before proceeding
+
+This prevents accidental commits to the main branch and maintains clean git history.

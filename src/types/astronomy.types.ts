@@ -25,7 +25,6 @@ export interface FormattedAstronomyTimes {
 export interface MoonPhase {
   phase: number // Decimal value from 0 to 1 representing moon phase
   name: string // Human-readable phase name
-  emoji: string // Unicode moon emoji for the phase
   illumination: number // Percentage of moon illuminated
 }
 
@@ -60,7 +59,6 @@ export interface MoonPhaseSVGData {
 export interface MoonPhaseServiceInterface {
   calculatePhase(date: Date): MoonPhase
   getPhaseName(phase: number): string
-  getPhaseEmoji(phase: number): string
   generateSVG(phase: number): MoonPhaseSVGData
 }
 

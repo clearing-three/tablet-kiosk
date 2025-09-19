@@ -1,8 +1,10 @@
 #!/bin/bash
 
 DEST_DIR="/sdcard/Android/data/de.ozerov.fully/files/html"
-FILES=("kiosk.html" "styles.css" "app.js" "moon-phase.js")
+SOURCE_DIR="dist"
+FILES=("index.html" "moon-phase.js")
 ICONS_DIR="weather-icons"
+ASSETS_DIR="assets"
 
 usage() {
   echo "Usage: $0 [OPTIONS]"
@@ -19,6 +21,7 @@ usage() {
 list_files() {
   adb shell ls -lh "$DEST_DIR"
   adb shell ls -lh "$DEST_DIR/$ICONS_DIR" 2>/dev/null || echo "(no icon folder)"
+  adb shell ls -lh "$DEST_DIR/$ASSETS_DIR" 2>/dev/null || echo "(no assets folder)"
 }
 
 clean_files() {
@@ -26,24 +29,41 @@ clean_files() {
     adb shell rm -f "$DEST_DIR/$file"
   done
   adb shell rm -rf "$DEST_DIR/$ICONS_DIR"
-  echo "All deployed files and icons removed from device."
+  adb shell rm -rf "$DEST_DIR/$ASSETS_DIR"
+  echo "All deployed files, icons, and assets removed from device."
 }
 
 deploy_files() {
+  # Check if dist directory exists
+  if [[ ! -d "$SOURCE_DIR" ]]; then
+    echo "Error: $SOURCE_DIR directory not found. Run 'npm run build' first."
+    exit 1
+  fi
+
+  # Deploy main files from dist/
   for file in "${FILES[@]}"; do
-    if [[ -f "$file" ]]; then
-      adb push "$file" "$DEST_DIR/" > /dev/null
+    if [[ -f "$SOURCE_DIR/$file" ]]; then
+      adb push "$SOURCE_DIR/$file" "$DEST_DIR/" > /dev/null
       echo "Deployed: $file"
     else
-      echo "Missing: $file (skipped)"
+      echo "Missing: $SOURCE_DIR/$file (skipped)"
     fi
   done
 
-  if [[ -d "$ICONS_DIR" ]]; then
-    adb push "$ICONS_DIR" "$DEST_DIR/" > /dev/null
+  # Deploy weather icons from dist/
+  if [[ -d "$SOURCE_DIR/$ICONS_DIR" ]]; then
+    adb push "$SOURCE_DIR/$ICONS_DIR" "$DEST_DIR/" > /dev/null
     echo "Deployed icon folder: $ICONS_DIR/"
   else
-    echo "Missing icon folder: $ICONS_DIR (skipped)"
+    echo "Missing icon folder: $SOURCE_DIR/$ICONS_DIR (skipped)"
+  fi
+
+  # Deploy assets directory from dist/
+  if [[ -d "$SOURCE_DIR/$ASSETS_DIR" ]]; then
+    adb push "$SOURCE_DIR/$ASSETS_DIR" "$DEST_DIR/" > /dev/null
+    echo "Deployed assets folder: $ASSETS_DIR/"
+  else
+    echo "Missing assets folder: $SOURCE_DIR/$ASSETS_DIR (skipped)"
   fi
 }
 

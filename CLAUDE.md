@@ -18,7 +18,7 @@ This is a weather kiosk application designed for tablet displays, specifically t
 
 ### Data Flow
 1. App fetches weather data from OpenWeatherMap One Call 3.0 API every 10 minutes
-2. Weather icons are mapped from OpenWeatherMap codes to local SVG files in `src/assets/weather-icons/`
+2. Weather icons are mapped from OpenWeatherMap codes to local SVG files in `public/weather-icons/`
 3. Moon phase calculations use Julian date calculations to determine current lunar phase
 4. All times are formatted in 24-hour format using `formatTimeFromUnix()`
 
@@ -53,9 +53,10 @@ This is a weather kiosk application designed for tablet displays, specifically t
 ## External Resources
 
 ### Weather Icons
-The SVG weather icons in `src/assets/weather-icons/` directory are sourced from:
+The SVG weather icons in `public/weather-icons/` directory are sourced from:
 - **Repository**: https://github.com/basmilius/weather-icons
 - Custom SVG icons designed for weather applications
+- **Build Process**: Icons are served as static assets via Vite's public directory and copied to `dist/weather-icons/` during build
 
 ### Moon Phase Script
 The `moon-phase.js` file is sourced from:

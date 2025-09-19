@@ -15,7 +15,7 @@ This command finds the next uncompleted subtask from the specified modernization
 2. Switches to main branch, pulls latest changes, and creates a new git branch for the subtask (e.g., `implement-1-1`, `implement-1-2`)
 3. Switches to the new branch and completes the work
 4. Marks the task as completed in the plan
-5. Creates a git commit (but does NOT push)
+5. Creates a git commit and pushes to remote
 6. Waits for further instructions
 
 ## Example
@@ -26,7 +26,7 @@ This command finds the next uncompleted subtask from the specified modernization
 - Switches to main branch, pulls latest changes, and creates branch `implement-1-1`
 - Implements the package.json setup and dependencies
 - Updates the plan to mark task 1.1 as completed
-- Commits changes with descriptive message (does NOT push)
+- Commits changes with descriptive message and pushes to remote
 - Provides summary and waits for next instructions
 
 ## Prerequisites
@@ -35,6 +35,6 @@ This command finds the next uncompleted subtask from the specified modernization
 
 ## Output
 - Summary of completed work
-- Git branch created and committed (NOT pushed)
+- Git branch created, committed, and pushed to remote
 - Updated modernization plan with task marked complete
 - Ready for next task or review

@@ -4,6 +4,7 @@ import { resolve } from 'path'
 export default defineConfig({
   root: 'src',
   publicDir: '../public',
+  envDir: '../', // Look for .env files in project root
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),

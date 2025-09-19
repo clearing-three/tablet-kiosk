@@ -9,20 +9,22 @@ This is a weather kiosk application designed for tablet displays, specifically t
 ## Architecture
 
 ### Core Files
-- `kiosk.html`: Main HTML structure with semantic layout for left/right panels
-- `app.js`: Main application logic handling weather API calls, DOM updates, and time display
+- `src/index.html`: Main HTML structure with semantic layout for left/right panels
+- `src/main.ts`: Main application entry point and orchestration
+- `src/services/`: TypeScript service modules for weather API, moon phase, and time services
+- `src/components/`: Modular UI components for weather display, forecast, astronomy, and time
+- `src/styles/main.css`: CSS with CSS custom properties for theming and responsive viewport units
 - `moon-phase.js`: Third-party library for moon phase calculations and SVG rendering
-- `styles.css`: CSS with CSS custom properties for theming and responsive viewport units
 
 ### Data Flow
 1. App fetches weather data from OpenWeatherMap One Call 3.0 API every 10 minutes
-2. Weather icons are mapped from OpenWeatherMap codes to local SVG files in `weather-icons/`
+2. Weather icons are mapped from OpenWeatherMap codes to local SVG files in `src/assets/weather-icons/`
 3. Moon phase calculations use Julian date calculations to determine current lunar phase
 4. All times are formatted in 24-hour format using `formatTimeFromUnix()`
 
 ### Configuration
-- Weather API configuration (API key, coordinates) is at the top of `app.js:3-5`
-- Icon mapping from OpenWeatherMap codes to local SVGs in `mapOWMIconToSVG()` function at `app.js:116`
+- Weather API configuration (API key, coordinates) is managed via environment variables in `.env.local`
+- Icon mapping from OpenWeatherMap codes to local SVGs in `src/utils/iconMapper.ts`
 
 
 ## Code Patterns
@@ -41,7 +43,7 @@ This is a weather kiosk application designed for tablet displays, specifically t
 ### Moon Phase Rendering
 - Uses external `phase_junk()` function from `moon-phase.js`
 - Dynamically generates SVG paths based on lunar phase decimal (0-1)
-- Moon phase names calculated in `describeMoonPhase()` function at `app.js:105`
+- Moon phase names calculated in `src/services/MoonPhaseService.ts`
 
 ### Styling
 - Uses CSS custom properties for consistent theming
@@ -51,7 +53,7 @@ This is a weather kiosk application designed for tablet displays, specifically t
 ## External Resources
 
 ### Weather Icons
-The SVG weather icons in `weather-icons/` directory are sourced from:
+The SVG weather icons in `src/assets/weather-icons/` directory are sourced from:
 - **Repository**: https://github.com/basmilius/weather-icons
 - Custom SVG icons designed for weather applications
 

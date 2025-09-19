@@ -36,7 +36,7 @@ export class WeatherForecast {
 
     div.innerHTML = `
       <div class="forecast-day-name">${day.dayName}</div>
-      <object type="image/svg+xml" data="/weather-icons/${iconFile}.svg" class="forecast-icon"></object>
+      <object type="image/svg+xml" data="weather-icons/${iconFile}.svg" class="forecast-icon"></object>
       <div class="forecast-desc">${day.description}</div>
       <div class="forecast-range">${temperatureRange}</div>
     `

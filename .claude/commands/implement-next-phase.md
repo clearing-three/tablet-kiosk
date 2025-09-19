@@ -12,7 +12,7 @@ This command finds the next uncompleted subtask from the specified modernization
 
 ## What it does
 1. Reads the specified modernization plan to find the next uncompleted subtask
-2. Creates a git branch for the subtask (e.g., `implement-1-1`, `implement-1-2`)
+2. Switches to main branch and creates a new git branch for the subtask (e.g., `implement-1-1`, `implement-1-2`)
 3. Switches to the new branch and completes the work
 4. Marks the task as completed in the plan
 5. Creates a git commit (but does not push)
@@ -23,7 +23,7 @@ This command finds the next uncompleted subtask from the specified modernization
 @implement-next-phase Modernization-Plan-2025-09.md
 ```
 - Finds task "1.1 Initialize Package Management" is next uncompleted task
-- Creates branch `implement-1-1`
+- Switches to main branch and creates branch `implement-1-1`
 - Implements the package.json setup and dependencies
 - Updates the plan to mark task 1.1 as completed
 - Commits changes with descriptive message

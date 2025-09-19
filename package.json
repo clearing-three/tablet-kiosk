@@ -1,0 +1,52 @@
+{
+  "name": "tablet-kiosk",
+  "version": "1.0.0",
+  "description": "Weather kiosk application for Samsung Galaxy Tab S8 Ultra",
+  "type": "module",
+  "main": "dist/index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext ts,js",
+    "lint:fix": "eslint src --ext ts,js --fix",
+    "format": "prettier --write src/**/*.{ts,js,css,html}",
+    "type-check": "tsc --noEmit",
+    "deploy": "./deploy.sh",
+    "deploy:list": "./deploy.sh -l",
+    "deploy:clean": "./deploy.sh -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/relsam-atinersier/tablet-kiosk.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/relsam-atinersier/tablet-kiosk/issues"
+  },
+  "homepage": "https://github.com/relsam-atinersier/tablet-kiosk#readme",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.5.2",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "jest": "^30.1.3",
+    "jest-environment-jsdom": "^30.1.2",
+    "lint-staged": "^16.1.6",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.3",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.6"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0"
+  }
+}

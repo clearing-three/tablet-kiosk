@@ -50,7 +50,7 @@ export class WeatherDisplay {
     if (!icon) return
 
     const iconFile = this.weatherService.mapIconCodeToSVG(iconCode)
-    icon.data = `/weather-icons/${iconFile}.svg`
+    icon.data = `weather-icons/${iconFile}.svg`
     icon.setAttribute('alt', description)
   }
 

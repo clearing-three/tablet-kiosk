@@ -12,6 +12,7 @@ import type {
   WeatherApiError,
 } from '../types/weather.types'
 import { environment } from '../config/environment'
+import { mapOWMIconToSVG } from '../utils/iconMapper'
 
 export class WeatherService {
   private readonly config: WeatherServiceConfig
@@ -151,28 +152,7 @@ export class WeatherService {
    * @returns string Local SVG filename without extension
    */
   mapIconCodeToSVG(owmCode: string): string {
-    const iconMap: Record<string, string> = {
-      '01d': 'clear-day',
-      '01n': 'clear-night',
-      '02d': 'partly-cloudy-day',
-      '02n': 'partly-cloudy-night',
-      '03d': 'partly-cloudy-day',
-      '03n': 'partly-cloudy-night',
-      '04d': 'overcast',
-      '04n': 'overcast',
-      '09d': 'rain',
-      '09n': 'rain',
-      '10d': 'rain',
-      '10n': 'rain',
-      '11d': 'thunderstorms-day',
-      '11n': 'thunderstorms-night',
-      '13d': 'snow',
-      '13n': 'snow',
-      '50d': 'mist',
-      '50n': 'mist',
-    }
-
-    return iconMap[owmCode] || 'na'
+    return mapOWMIconToSVG(owmCode)
   }
 
   /**

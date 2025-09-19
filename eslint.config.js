@@ -8,6 +8,7 @@ export default [
   {
     ignores: [
       'dist/**',
+      'src/dist/**',
       'node_modules/**',
       'public/**',
       'app.js',
@@ -33,6 +34,11 @@ export default [
         __dirname: 'readonly',
         process: 'readonly',
         HTMLObjectElement: 'readonly',
+        HTMLElement: 'readonly',
+        SVGElement: 'readonly',
+        Element: 'readonly',
+        Event: 'readonly',
+        NodeJS: 'readonly',
       },
     },
     plugins: {

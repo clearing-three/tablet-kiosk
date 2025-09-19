@@ -2,7 +2,8 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
-  root: '.',
+  root: 'src',
+  publicDir: '../public',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -20,6 +21,7 @@ export default defineConfig({
         entryFileNames: 'assets/[name]-[hash].js',
       },
     },
+    copyPublicDir: true,
   },
   server: {
     port: 3000,

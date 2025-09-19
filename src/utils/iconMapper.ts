@@ -100,7 +100,7 @@ function isValidOWMIconCode(code: string): code is OWMIconCode {
  */
 export function getWeatherIconPath(
   owmCode: string,
-  basePath: string = '/weather-icons'
+  basePath: string = 'weather-icons'
 ): string {
   const iconName = mapOWMIconToSVG(owmCode)
   return `${basePath}/${iconName}.svg`

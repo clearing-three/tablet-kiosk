@@ -24,6 +24,7 @@ export default defineConfig({
     },
     copyPublicDir: true,
   },
+  base: './', // Use relative paths instead of absolute
   server: {
     port: 3000,
     open: true,

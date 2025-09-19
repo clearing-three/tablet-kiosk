@@ -626,7 +626,27 @@ Add advanced features, optimize production deployment, and implement monitoring 
   - Memory leak prevention
   - Efficient DOM updates
 
-#### 5.6 Advanced Deployment Features
+#### 5.6 API Key Security Rotation
+**Task**: Replace compromised API key with new secure credentials
+**Details**:
+- Generate new OpenWeatherMap API key:
+  - Create fresh API key in OpenWeatherMap dashboard
+  - Test new key with sample API calls
+  - Verify all API endpoints work with new credentials
+- Update environment configuration:
+  - Replace API key in `.env.local` with new secure key
+  - Update production deployment configuration
+  - Verify API key is not exposed in any logs or error messages
+- Deactivate old compromised key:
+  - Delete old API key from OpenWeatherMap dashboard
+  - Verify old key no longer works
+  - Document the security rotation in project notes
+- Security verification:
+  - Confirm new key works in both development and production
+  - Test error handling with invalid keys
+  - Verify no old key references remain in codebase history
+
+#### 5.7 Advanced Deployment Features
 **Task**: Enhance deployment process with advanced features
 **Details**:
 - Deployment automation:

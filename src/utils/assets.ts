@@ -71,22 +71,22 @@ export async function validateAssetExists(assetPath: string): Promise<boolean> {
  */
 export function getCriticalAssetUrls(): string[] {
   return [
-    '/weather-icons/clear-day.svg',
-    '/weather-icons/clear-night.svg',
-    '/weather-icons/partly-cloudy-day.svg',
-    '/weather-icons/partly-cloudy-night.svg',
-    '/weather-icons/overcast.svg',
-    '/weather-icons/rain.svg',
-    '/weather-icons/thunderstorms-day.svg',
-    '/weather-icons/thunderstorms-night.svg',
-    '/weather-icons/snow.svg',
-    '/weather-icons/mist.svg',
-    '/weather-icons/na.svg',
-    '/weather-icons/sunrise.svg',
-    '/weather-icons/sunset.svg',
-    '/weather-icons/moonrise.svg',
-    '/weather-icons/moonset.svg',
-    '/moon-phase.js',
+    'weather-icons/clear-day.svg',
+    'weather-icons/clear-night.svg',
+    'weather-icons/partly-cloudy-day.svg',
+    'weather-icons/partly-cloudy-night.svg',
+    'weather-icons/overcast.svg',
+    'weather-icons/rain.svg',
+    'weather-icons/thunderstorms-day.svg',
+    'weather-icons/thunderstorms-night.svg',
+    'weather-icons/snow.svg',
+    'weather-icons/mist.svg',
+    'weather-icons/na.svg',
+    'weather-icons/sunrise.svg',
+    'weather-icons/sunset.svg',
+    'weather-icons/moonrise.svg',
+    'weather-icons/moonset.svg',
+    'moon-phase.js',
   ]
 }
 

@@ -1,0 +1,185 @@
+/**
+ * Weather Service
+ *
+ * Service class for handling OpenWeatherMap One Call 3.0 API interactions.
+ * Provides type-safe weather data fetching, error handling, and data processing.
+ */
+
+import type {
+  WeatherData,
+  ProcessedWeatherData,
+  WeatherServiceConfig,
+  WeatherApiError,
+} from '../types/weather.types'
+import { environment } from '../config/environment'
+
+export class WeatherService {
+  private readonly config: WeatherServiceConfig
+  private readonly baseUrl = 'https://api.openweathermap.org/data/3.0/onecall'
+
+  constructor() {
+    this.config = {
+      apiKey: environment.openWeatherApiKey,
+      latitude: environment.location.lat,
+      longitude: environment.location.lon,
+      units: 'imperial' as const,
+      language: 'en',
+    }
+  }
+
+  /**
+   * Constructs the API URL with all required parameters
+   */
+  private buildApiUrl(): string {
+    const params = new globalThis.URLSearchParams({
+      lat: this.config.latitude,
+      lon: this.config.longitude,
+      units: this.config.units,
+      exclude: 'minutely,hourly,alerts',
+      appid: this.config.apiKey,
+    })
+
+    if (this.config.language) {
+      params.append('lang', this.config.language)
+    }
+
+    return `${this.baseUrl}?${params.toString()}`
+  }
+
+  /**
+   * Fetches raw weather data from OpenWeatherMap API
+   * @returns Promise<WeatherData> Raw API response data
+   * @throws Error if API call fails or returns invalid data
+   */
+  async fetchWeatherData(): Promise<WeatherData> {
+    const url = this.buildApiUrl()
+
+    try {
+      const response = await fetch(url)
+
+      if (!response.ok) {
+        // Try to parse error response
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`
+        try {
+          const errorData: WeatherApiError = await response.json()
+          errorMessage = `API Error ${errorData.cod}: ${errorData.message}`
+        } catch {
+          // Use the HTTP error message if JSON parsing fails
+        }
+        throw new Error(errorMessage)
+      }
+
+      const data: WeatherData = await response.json()
+
+      // Basic validation of response structure
+      if (!data.current || !data.daily || !Array.isArray(data.daily)) {
+        throw new Error('Invalid API response: missing required data fields')
+      }
+
+      if (data.daily.length === 0) {
+        throw new Error('Invalid API response: no daily forecast data')
+      }
+
+      return data
+    } catch (error) {
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        throw new Error('Network error: Unable to connect to weather service')
+      }
+      throw error
+    }
+  }
+
+  /**
+   * Processes raw weather data into format suitable for UI components
+   * @param data Raw weather data from API
+   * @returns ProcessedWeatherData Processed data ready for display
+   */
+  processWeatherData(data: WeatherData): ProcessedWeatherData {
+    const current = data.current
+    const todaysForecast = data.daily[0]
+
+    // Process current weather
+    const currentWeather = {
+      temperature: Math.round(current.temp),
+      description: current.weather[0].description,
+      iconCode: current.weather[0].icon,
+      minTemp: Math.round(todaysForecast.temp.min),
+      maxTemp: Math.round(todaysForecast.temp.max),
+    }
+
+    // Process forecast (next 3 days, skipping today)
+    const forecast = data.daily.slice(1, 4).map(day => {
+      const date = new Date(day.dt * 1000)
+      return {
+        dayName: date.toLocaleDateString(undefined, { weekday: 'short' }),
+        iconCode: day.weather[0].icon,
+        description: day.weather[0].description,
+        maxTemp: Math.round(day.temp.max),
+        minTemp: Math.round(day.temp.min),
+        date,
+      }
+    })
+
+    // Process astronomy data
+    const astronomy = {
+      sunrise: current.sunrise,
+      sunset: current.sunset,
+      moonrise: todaysForecast.moonrise,
+      moonset: todaysForecast.moonset,
+      moonPhase: todaysForecast.moon_phase,
+    }
+
+    return {
+      current: currentWeather,
+      forecast,
+      astronomy,
+    }
+  }
+
+  /**
+   * Fetches and processes weather data in one call
+   * @returns Promise<ProcessedWeatherData> Processed weather data ready for display
+   */
+  async getProcessedWeatherData(): Promise<ProcessedWeatherData> {
+    const rawData = await this.fetchWeatherData()
+    return this.processWeatherData(rawData)
+  }
+
+  /**
+   * Maps OpenWeatherMap icon codes to local SVG file names
+   * @param owmCode OpenWeatherMap icon code (e.g., '01d', '02n')
+   * @returns string Local SVG filename without extension
+   */
+  mapIconCodeToSVG(owmCode: string): string {
+    const iconMap: Record<string, string> = {
+      '01d': 'clear-day',
+      '01n': 'clear-night',
+      '02d': 'partly-cloudy-day',
+      '02n': 'partly-cloudy-night',
+      '03d': 'partly-cloudy-day',
+      '03n': 'partly-cloudy-night',
+      '04d': 'overcast',
+      '04n': 'overcast',
+      '09d': 'rain',
+      '09n': 'rain',
+      '10d': 'rain',
+      '10n': 'rain',
+      '11d': 'thunderstorms-day',
+      '11n': 'thunderstorms-night',
+      '13d': 'snow',
+      '13n': 'snow',
+      '50d': 'mist',
+      '50n': 'mist',
+    }
+
+    return iconMap[owmCode] || 'na'
+  }
+
+  /**
+   * Gets the current configuration
+   * @returns WeatherServiceConfig Current service configuration
+   */
+  getConfig(): WeatherServiceConfig {
+    return { ...this.config }
+  }
+}

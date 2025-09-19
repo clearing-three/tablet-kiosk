@@ -17,7 +17,8 @@
     "type-check": "tsc --noEmit",
     "deploy": "./deploy.sh",
     "deploy:list": "./deploy.sh -l",
-    "deploy:clean": "./deploy.sh -c"
+    "deploy:clean": "./deploy.sh -c",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -48,5 +49,14 @@
   },
   "dependencies": {
     "date-fns": "4.1.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,html}": [
+      "prettier --write"
+    ]
   }
 }

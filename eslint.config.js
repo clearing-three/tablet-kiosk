@@ -6,7 +6,13 @@ import prettier from 'eslint-config-prettier'
 export default [
   js.configs.recommended,
   {
-    ignores: ['dist/**', 'node_modules/**', 'app.js', 'moon-phase.js'],
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'public/**',
+      'app.js',
+      'moon-phase.js',
+    ],
   },
   {
     files: ['**/*.{js,ts}'],
@@ -26,6 +32,7 @@ export default [
         clearInterval: 'readonly',
         __dirname: 'readonly',
         process: 'readonly',
+        HTMLObjectElement: 'readonly',
       },
     },
     plugins: {

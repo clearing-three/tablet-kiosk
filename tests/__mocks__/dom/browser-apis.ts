@@ -262,7 +262,7 @@ export class IntersectionObserverMock {
  * Browser API mock setup utility
  */
 export class BrowserApiMock {
-  private static originalApis: Map<string, any> = new Map()
+  private static originalApis: Map<string, unknown> = new Map()
 
   static setup() {
     // Mock Image

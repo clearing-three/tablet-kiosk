@@ -199,7 +199,7 @@ export const mockApiResponses = {
 /**
  * Helper to mock fetch responses
  */
-export function mockFetch(response: any) {
+export function mockFetch(response: Partial<Response>) {
   ;(global.fetch as jest.Mock).mockResolvedValueOnce(response)
 }
 

@@ -57,10 +57,11 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'warn',
 
       // General rules
-      'no-console': 'warn',
+      'no-console': 'off',
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-undef': 'off', // TypeScript already checks undefined identifiers
 
       // Style rules (let Prettier handle most formatting)
       quotes: ['error', 'single', { avoidEscape: true }],
@@ -76,37 +77,6 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
       },
-      globals: {
-        // Jest globals
-        jest: 'readonly',
-        describe: 'readonly',
-        it: 'readonly',
-        test: 'readonly',
-        expect: 'readonly',
-        beforeAll: 'readonly',
-        afterAll: 'readonly',
-        beforeEach: 'readonly',
-        afterEach: 'readonly',
-
-        // Browser globals for testing
-        console: 'readonly',
-        document: 'readonly',
-        window: 'readonly',
-        global: 'readonly',
-        fetch: 'readonly',
-        setTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        process: 'readonly',
-        Image: 'readonly',
-        HTMLElement: 'readonly',
-        SVGElement: 'readonly',
-        Element: 'readonly',
-        Event: 'readonly',
-        EventInit: 'readonly',
-        NodeJS: 'readonly',
-        NodeListOf: 'readonly',
-      },
     },
     plugins: {
       '@typescript-eslint': typescript,
@@ -120,7 +90,7 @@ export default [
         'error',
         { argsIgnorePattern: '^_' },
       ],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off', // Allow any in test files
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-namespace': 'off', // Allow global namespace augmentation in tests
 
@@ -129,6 +99,7 @@ export default [
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-undef': 'off', // TypeScript already checks undefined identifiers
 
       // Style rules
       quotes: ['error', 'single', { avoidEscape: true }],

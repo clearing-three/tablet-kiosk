@@ -102,7 +102,6 @@ export class MoonPhaseService implements MoonPhaseServiceInterface {
     if (typeof globalThis.phase_junk === 'function') {
       globalThis.phase_junk(phase)
     } else {
-      // eslint-disable-next-line no-console
       console.warn(
         'phase_junk function not available from moon-phase.js library'
       )
@@ -142,7 +141,6 @@ export class MoonPhaseService implements MoonPhaseServiceInterface {
     if (typeof globalThis.phase_junk === 'function') {
       globalThis.phase_junk(phase)
     } else {
-      // eslint-disable-next-line no-console
       console.error('Moon phase library (phase_junk) not available')
     }
   }

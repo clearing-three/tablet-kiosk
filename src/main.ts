@@ -323,7 +323,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     await app.initialize()
 
     // Make app globally available for debugging
-    ;(globalThis as any).kioskApp = app
+    ;(globalThis as typeof globalThis & { kioskApp: TabletKioskApp }).kioskApp =
+      app
   } catch (error) {
     console.error('Failed to start application:', error)
 

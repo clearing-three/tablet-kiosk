@@ -2,7 +2,6 @@ import js from '@eslint/js'
 import typescript from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import prettier from 'eslint-config-prettier'
-import globals from 'globals'
 
 export default [
   js.configs.recommended,
@@ -77,11 +76,6 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.jest,
       },
     },
     plugins: {

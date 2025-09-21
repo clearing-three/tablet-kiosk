@@ -1,19 +1,29 @@
 // Global test setup file
 import 'jest-environment-jsdom'
+import {
+  setupAllMocks,
+  teardownAllMocks,
+  resetAllMocks,
+} from './__mocks__/setup'
 
 // Mock environment variables for tests
 process.env.VITE_API_KEY = 'test-api-key'
 process.env.VITE_LAT = '40.7128'
 process.env.VITE_LON = '-74.0060'
 
-// Mock console.error to reduce noise in tests unless explicitly testing error scenarios
-const originalError = console.error
+// Set up all mocks before tests start
 beforeAll(() => {
-  console.error = jest.fn()
+  setupAllMocks()
 })
 
+// Reset mocks between tests to ensure test isolation
+beforeEach(() => {
+  resetAllMocks()
+})
+
+// Clean up mocks after all tests complete
 afterAll(() => {
-  console.error = originalError
+  teardownAllMocks()
 })
 
 // Global DOM setup for tablet kiosk environment
@@ -50,33 +60,6 @@ beforeEach(() => {
     </div>
   `
 })
-
-// Mock fetch for API calls
-global.fetch = jest.fn()
-
-// Mock setInterval and clearInterval for timer management
-global.setInterval = jest.fn((fn: () => void) => {
-  // Return a mock timer ID
-  return setTimeout(fn, 0) // Execute immediately in tests
-}) as any
-
-global.clearInterval = jest.fn()
-
-// Mock Image constructor for weather icon testing
-global.Image = class {
-  onload: (() => void) | null = null
-  onerror: (() => void) | null = null
-  src: string = ''
-
-  constructor() {
-    // Simulate successful image loading in tests
-    setTimeout(() => {
-      if (this.onload) {
-        this.onload()
-      }
-    }, 0)
-  }
-} as any
 
 // Add custom matchers if needed
 expect.extend({

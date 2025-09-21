@@ -106,6 +106,22 @@ export default [
         EventInit: 'readonly',
         NodeJS: 'readonly',
         NodeListOf: 'readonly',
+
+        // Browser API types
+        Response: 'readonly',
+        RequestInit: 'readonly',
+        Document: 'readonly',
+        GeolocationPosition: 'readonly',
+        GeolocationPositionError: 'readonly',
+        GeolocationCoordinates: 'readonly',
+        ResizeObserverCallback: 'readonly',
+        ResizeObserverEntry: 'readonly',
+        IntersectionObserverCallback: 'readonly',
+        IntersectionObserverEntry: 'readonly',
+
+        // Storage and additional APIs
+        localStorage: 'readonly',
+        clearTimeout: 'readonly',
       },
     },
     plugins: {

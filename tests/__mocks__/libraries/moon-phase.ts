@@ -115,8 +115,8 @@ export function mockMoonDay(date: Date): number {
  * Moon phase mock utility class
  */
 export class MoonPhaseMock {
-  private static originalPhaseJunk: any
-  private static originalMoonDay: any
+  private static originalPhaseJunk: unknown
+  private static originalMoonDay: unknown
 
   /**
    * Set up mocks for moon phase functions
@@ -194,7 +194,7 @@ export class MoonPhaseMock {
       }
       return mockPhaseJunk(phase)
     })
-    ;(global as any).moon_day = jest.fn((date: any) => {
+    ;(global as any).moon_day = jest.fn((date: unknown) => {
       if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
         return 0 // Default to new moon for invalid dates
       }

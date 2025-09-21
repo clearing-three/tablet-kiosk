@@ -331,7 +331,7 @@ export const mockEdgeCaseResponses = {
  * Helper function to create fetch mock responses
  */
 export function createMockFetchResponse(
-  data: any,
+  data: unknown,
   init: Partial<Response> = {}
 ) {
   return Promise.resolve({

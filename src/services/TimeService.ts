@@ -175,7 +175,6 @@ export class TimeService {
       try {
         await callback()
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('Weather update callback failed:', error)
       }
     }

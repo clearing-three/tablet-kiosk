@@ -2,6 +2,7 @@ import js from '@eslint/js'
 import typescript from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import prettier from 'eslint-config-prettier'
+import globals from 'globals'
 
 export default [
   js.configs.recommended,
@@ -57,10 +58,11 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'warn',
 
       // General rules
-      'no-console': 'warn',
+      'no-console': 'off',
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-undef': 'off', // TypeScript already checks undefined identifiers
 
       // Style rules (let Prettier handle most formatting)
       quotes: ['error', 'single', { avoidEscape: true }],
@@ -77,51 +79,9 @@ export default [
         sourceType: 'module',
       },
       globals: {
-        // Jest globals
-        jest: 'readonly',
-        describe: 'readonly',
-        it: 'readonly',
-        test: 'readonly',
-        expect: 'readonly',
-        beforeAll: 'readonly',
-        afterAll: 'readonly',
-        beforeEach: 'readonly',
-        afterEach: 'readonly',
-
-        // Browser globals for testing
-        console: 'readonly',
-        document: 'readonly',
-        window: 'readonly',
-        global: 'readonly',
-        fetch: 'readonly',
-        setTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        process: 'readonly',
-        Image: 'readonly',
-        HTMLElement: 'readonly',
-        SVGElement: 'readonly',
-        Element: 'readonly',
-        Event: 'readonly',
-        EventInit: 'readonly',
-        NodeJS: 'readonly',
-        NodeListOf: 'readonly',
-
-        // Browser API types
-        Response: 'readonly',
-        RequestInit: 'readonly',
-        Document: 'readonly',
-        GeolocationPosition: 'readonly',
-        GeolocationPositionError: 'readonly',
-        GeolocationCoordinates: 'readonly',
-        ResizeObserverCallback: 'readonly',
-        ResizeObserverEntry: 'readonly',
-        IntersectionObserverCallback: 'readonly',
-        IntersectionObserverEntry: 'readonly',
-
-        // Storage and additional APIs
-        localStorage: 'readonly',
-        clearTimeout: 'readonly',
+        ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
       },
     },
     plugins: {
@@ -145,6 +105,7 @@ export default [
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-undef': 'off', // TypeScript already checks undefined identifiers
 
       // Style rules
       quotes: ['error', 'single', { avoidEscape: true }],

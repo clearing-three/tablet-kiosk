@@ -11,6 +11,7 @@ import type {
   MoonPhaseSVGData,
 } from '../types/astronomy.types'
 import { MoonPhaseName } from '../types/astronomy.types'
+import type { MoonPhaseServiceConfig } from '../types/service-config.types'
 
 // Declare the global phase_junk function from moon-phase.js
 declare global {
@@ -21,6 +22,11 @@ declare global {
 }
 
 export class MoonPhaseService implements MoonPhaseServiceInterface {
+  private readonly config: MoonPhaseServiceConfig
+
+  constructor(config: MoonPhaseServiceConfig) {
+    this.config = config
+  }
   /**
    * Calculate moon phase data for a given date
    * @param date Date to calculate moon phase for
@@ -213,5 +219,13 @@ export class MoonPhaseService implements MoonPhaseServiceInterface {
    */
   isLibraryAvailable(): boolean {
     return typeof globalThis.phase_junk === 'function'
+  }
+
+  /**
+   * Get the current configuration
+   * @returns MoonPhaseServiceConfig Current service configuration
+   */
+  getConfig(): MoonPhaseServiceConfig {
+    return { ...this.config }
   }
 }

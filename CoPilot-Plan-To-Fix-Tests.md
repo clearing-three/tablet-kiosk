@@ -13,10 +13,10 @@ This plan outlines the incremental steps to refactor service classes to use depe
 3. **Update WeatherService tests** ✅ COMPLETED
    - Update WeatherService tests to provide config via constructor. Remove environment mocks.
 
-4. **Refactor MoonPhaseService & TimeService**
+4. **Refactor MoonPhaseService & TimeService** ✅ COMPLETED
    - Repeat DI refactor for MoonPhaseService and TimeService. Remove environment.ts dependency from both.
 
-5. **Update MoonPhaseService & TimeService tests**
+5. **Update MoonPhaseService & TimeService tests** ✅ COMPLETED
    - Update MoonPhaseService and TimeService tests to use DI config.
 
 6. **Update environment.ts for DI**

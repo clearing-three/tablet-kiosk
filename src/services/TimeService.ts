@@ -6,17 +6,19 @@
  */
 
 import type { FormattedAstronomyTimes } from '../types/astronomy.types'
-import { environment } from '../config/environment'
+import type { TimeServiceConfig } from '../types/service-config.types'
 
 export class TimeService {
   private clockInterval: NodeJS.Timeout | null = null
   private weatherInterval: NodeJS.Timeout | null = null
   private readonly clockUpdateInterval: number
   private readonly weatherUpdateInterval: number
+  private readonly config: TimeServiceConfig
 
-  constructor() {
-    this.clockUpdateInterval = environment.intervals.clockUpdate
-    this.weatherUpdateInterval = environment.intervals.weatherUpdate
+  constructor(config: TimeServiceConfig) {
+    this.config = config
+    this.clockUpdateInterval = config.clockUpdateInterval
+    this.weatherUpdateInterval = config.weatherUpdateInterval
   }
 
   /**
@@ -232,6 +234,14 @@ export class TimeService {
       clockRunning: this.clockInterval !== null,
       weatherRunning: this.weatherInterval !== null,
     }
+  }
+
+  /**
+   * Get the current configuration
+   * @returns TimeServiceConfig Current service configuration
+   */
+  getConfig(): TimeServiceConfig {
+    return { ...this.config }
   }
 
   /**

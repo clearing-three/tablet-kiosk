@@ -5,6 +5,8 @@ export default {
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^../../src/config/environment$':
+      '<rootDir>/tests/__mocks__/environment.ts',
   },
   testMatch: ['<rootDir>/tests/**/*.test.ts', '<rootDir>/tests/**/*.spec.ts'],
   collectCoverageFrom: [

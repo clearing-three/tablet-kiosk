@@ -5,6 +5,7 @@ import {
   teardownAllMocks,
   resetAllMocks,
 } from './__mocks__/setup'
+import './testEnvironment'
 
 // Mock environment variables for tests
 process.env.VITE_API_KEY = 'test-api-key'

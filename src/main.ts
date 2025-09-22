@@ -11,6 +11,9 @@ import './styles/main.css'
 import { WeatherService } from './services/WeatherService'
 import { MoonPhaseService } from './services/MoonPhaseService'
 
+// Configuration
+import { environment } from './config/environment'
+
 // Asset management
 import {
   preloadCriticalAssets,
@@ -47,7 +50,14 @@ class TabletKioskApp {
 
   constructor() {
     // Initialize services
-    this.weatherService = new WeatherService()
+    const weatherConfig = {
+      apiKey: environment.openWeatherApiKey,
+      latitude: environment.location.lat,
+      longitude: environment.location.lon,
+      units: 'imperial' as const,
+      language: 'en',
+    }
+    this.weatherService = new WeatherService(weatherConfig)
     this.moonPhaseService = new MoonPhaseService()
 
     // Initialize components

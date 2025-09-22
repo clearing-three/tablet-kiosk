@@ -8,24 +8,17 @@
 import type {
   WeatherData,
   ProcessedWeatherData,
-  WeatherServiceConfig,
   WeatherApiError,
 } from '../types/weather.types'
-import { environment } from '../config/environment'
+import type { WeatherServiceConfig } from '../types/service-config.types'
 import { mapOWMIconToSVG } from '../utils/iconMapper'
 
 export class WeatherService {
   private readonly config: WeatherServiceConfig
   private readonly baseUrl = 'https://api.openweathermap.org/data/3.0/onecall'
 
-  constructor() {
-    this.config = {
-      apiKey: environment.openWeatherApiKey,
-      latitude: environment.location.lat,
-      longitude: environment.location.lon,
-      units: 'imperial' as const,
-      language: 'en',
-    }
+  constructor(config: WeatherServiceConfig) {
+    this.config = config
   }
 
   /**

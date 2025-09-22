@@ -111,15 +111,6 @@ export interface ProcessedWeatherData {
   }
 }
 
-// Weather service configuration
-export interface WeatherServiceConfig {
-  apiKey: string
-  latitude: string
-  longitude: string
-  units: 'metric' | 'imperial' | 'kelvin'
-  language?: string
-}
-
 // API error response
 export interface WeatherApiError {
   cod: string | number

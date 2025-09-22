@@ -1,7 +1,14 @@
 /**
  * Environment Configuration Module
  * Validates and provides type-safe access to environment variables
+ * Exports individual service configurations for dependency injection
  */
+
+import type {
+  WeatherServiceConfig,
+  TimeServiceConfig,
+  MoonPhaseServiceConfig,
+} from '../types/service-config.types'
 
 export interface EnvironmentConfig {
   openWeatherApiKey: string
@@ -122,6 +129,46 @@ export function loadEnvironmentConfig(): EnvironmentConfig {
  * Call this once during application initialization
  */
 export const environment = loadEnvironmentConfig()
+
+/**
+ * Creates WeatherServiceConfig from environment variables
+ */
+export function createWeatherServiceConfig(): WeatherServiceConfig {
+  const env = loadEnvironmentConfig()
+  return {
+    apiKey: env.openWeatherApiKey,
+    latitude: env.location.lat,
+    longitude: env.location.lon,
+    units: 'imperial', // Default to imperial units
+    language: 'en', // Default to English
+  }
+}
+
+/**
+ * Creates TimeServiceConfig from environment variables
+ */
+export function createTimeServiceConfig(): TimeServiceConfig {
+  const env = loadEnvironmentConfig()
+  return {
+    clockUpdateInterval: env.intervals.clockUpdate,
+    weatherUpdateInterval: env.intervals.weatherUpdate,
+  }
+}
+
+/**
+ * Creates MoonPhaseServiceConfig from environment variables
+ */
+export function createMoonPhaseServiceConfig(): MoonPhaseServiceConfig {
+  // No environment variables needed for MoonPhaseService currently
+  return {}
+}
+
+/**
+ * Service configuration objects for dependency injection
+ */
+export const weatherServiceConfig = createWeatherServiceConfig()
+export const timeServiceConfig = createTimeServiceConfig()
+export const moonPhaseServiceConfig = createMoonPhaseServiceConfig()
 
 /**
  * Helper function to check if we're in development mode

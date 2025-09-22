@@ -83,7 +83,11 @@ export class WeatherService {
 
       return data
     } catch (error) {
-      if (error instanceof TypeError && error.message.includes('fetch')) {
+      if (
+        error instanceof TypeError &&
+        (error.message.includes('fetch') ||
+          error.message.includes('Network request'))
+      ) {
         throw new Error('Network error: Unable to connect to weather service')
       }
       throw error

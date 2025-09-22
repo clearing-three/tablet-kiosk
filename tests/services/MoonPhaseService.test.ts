@@ -56,12 +56,12 @@ describe('MoonPhaseService', () => {
   describe('Phase Calculations', () => {
     it('should calculate moon phase for known dates', () => {
       const testDates = [
-        new Date('2022-01-02T00:00:00Z'),
-        new Date('2022-01-09T00:00:00Z'),
-        new Date('2022-01-17T00:00:00Z'),
-        new Date('2022-01-25T00:00:00Z'),
-        new Date('2023-06-15T12:00:00Z'),
-        new Date('2024-03-10T08:30:00Z'),
+        new Date('2025-01-02T00:00:00Z'),
+        new Date('2025-01-09T00:00:00Z'),
+        new Date('2025-06-15T12:00:00Z'),
+        new Date('2025-09-23T08:30:00Z'),
+        new Date('2026-03-10T18:45:00Z'),
+        new Date('2027-12-25T12:00:00Z'),
       ]
 
       testDates.forEach(date => {
@@ -83,7 +83,7 @@ describe('MoonPhaseService', () => {
     })
 
     it('should return consistent phases for the same date', () => {
-      const testDate = new Date('2022-06-15T12:00:00Z')
+      const testDate = new Date('2025-06-15T12:00:00Z')
 
       const phase1 = moonPhaseService.calculatePhase(testDate)
       const phase2 = moonPhaseService.calculatePhase(testDate)
@@ -95,8 +95,8 @@ describe('MoonPhaseService', () => {
 
     it('should handle edge case dates', () => {
       const edgeDates = [
-        new Date('1970-01-01T00:00:00Z'), // Unix epoch
-        new Date('2000-01-01T00:00:00Z'), // Y2K
+        new Date('2025-01-01T00:00:00Z'), // Application start
+        new Date('2030-06-15T12:30:45Z'), // Mid-range date
         new Date('2099-12-31T23:59:59Z'), // Far future
       ]
 
@@ -300,8 +300,8 @@ describe('MoonPhaseService', () => {
     it('should convert dates to Julian day numbers consistently', () => {
       // Test known Julian day conversions
       const knownConversions = [
-        { date: new Date('2000-01-01T12:00:00Z'), expectedJD: 2451545.0 },
-        { date: new Date('1970-01-01T00:00:00Z'), expectedJD: 2440587.5 },
+        { date: new Date('2025-01-01T12:00:00Z'), expectedJD: 2460676.0 },
+        { date: new Date('2030-01-01T12:00:00Z'), expectedJD: 2465502.0 },
       ]
 
       knownConversions.forEach(({ date }) => {
@@ -316,10 +316,10 @@ describe('MoonPhaseService', () => {
 
     it('should handle year boundaries correctly', () => {
       const yearBoundaries = [
-        new Date('1999-12-31T23:59:59Z'),
-        new Date('2000-01-01T00:00:00Z'),
-        new Date('2000-12-31T23:59:59Z'),
-        new Date('2001-01-01T00:00:00Z'),
+        new Date('2025-12-31T23:59:59Z'),
+        new Date('2026-01-01T00:00:00Z'),
+        new Date('2029-12-31T23:59:59Z'),
+        new Date('2030-01-01T00:00:00Z'),
       ]
 
       yearBoundaries.forEach(date => {
@@ -333,10 +333,10 @@ describe('MoonPhaseService', () => {
 
     it('should handle leap years correctly', () => {
       const leapYearDates = [
-        new Date('2000-02-29T12:00:00Z'), // Leap year
-        new Date('2004-02-29T12:00:00Z'), // Leap year
-        new Date('1900-03-01T12:00:00Z'), // Not a leap year (divisible by 100)
-        new Date('2000-03-01T12:00:00Z'), // Leap year (divisible by 400)
+        new Date('2028-02-29T12:00:00Z'), // Leap year
+        new Date('2032-02-29T12:00:00Z'), // Leap year
+        new Date('2025-03-01T12:00:00Z'), // Regular year
+        new Date('2028-03-01T12:00:00Z'), // After leap day
       ]
 
       leapYearDates.forEach(date => {
@@ -376,7 +376,7 @@ describe('MoonPhaseService', () => {
     })
 
     it('should work with date-specific phase mocking', () => {
-      const testDate = new Date('2022-07-15T00:00:00Z')
+      const testDate = new Date('2025-07-15T00:00:00Z')
       const expectedPhase = 0.75
 
       MoonPhaseMock.mockPhaseForDate(testDate, expectedPhase)

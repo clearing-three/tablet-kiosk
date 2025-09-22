@@ -12,7 +12,10 @@ import { WeatherService } from './services/WeatherService'
 import { MoonPhaseService } from './services/MoonPhaseService'
 
 // Configuration
-import { environment } from './config/environment'
+import {
+  weatherServiceConfig,
+  moonPhaseServiceConfig,
+} from './config/environment'
 
 // Asset management
 import {
@@ -49,16 +52,9 @@ class TabletKioskApp {
   private readonly weatherUpdateIntervalMs = 10 * 60 * 1000 // 10 minutes
 
   constructor() {
-    // Initialize services
-    const weatherConfig = {
-      apiKey: environment.openWeatherApiKey,
-      latitude: environment.location.lat,
-      longitude: environment.location.lon,
-      units: 'imperial' as const,
-      language: 'en',
-    }
-    this.weatherService = new WeatherService(weatherConfig)
-    this.moonPhaseService = new MoonPhaseService()
+    // Initialize services using dependency injection configs
+    this.weatherService = new WeatherService(weatherServiceConfig)
+    this.moonPhaseService = new MoonPhaseService(moonPhaseServiceConfig)
 
     // Initialize components
     this.weatherDisplay = new WeatherDisplay(this.weatherService)

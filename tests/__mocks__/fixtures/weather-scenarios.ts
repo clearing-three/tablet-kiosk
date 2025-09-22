@@ -376,6 +376,64 @@ export const extremeHeat: WeatherData = {
 }
 
 /**
+ * Extreme cold scenario - 4 days of very cold weather
+ */
+export const extremeCold: WeatherData = {
+  lat: 40.7128,
+  lon: -74.006,
+  timezone: 'America/New_York',
+  timezone_offset: -18000,
+  current: {
+    ...clearSunnyDay.current,
+    temp: -15.2,
+    feels_like: -25.8,
+    humidity: 45,
+    dew_point: -18.7,
+    wind_speed: 18.5,
+    weather: [
+      {
+        id: 602,
+        main: 'Snow',
+        description: 'heavy snow',
+        icon: '13d',
+      },
+    ],
+  },
+  daily: generateFourDayForecast(
+    {
+      dt: 1640995200,
+      sunrise: 1640966400,
+      sunset: 1641002400,
+      moonrise: 1640980800,
+      moonset: 1641024000,
+      moon_phase: 0.75,
+      temp: {
+        day: -15.2,
+        min: -28.5,
+        max: -8.1,
+        night: -22.3,
+        eve: -12.7,
+        morn: -25.4,
+      },
+      feels_like: { day: -25.8, night: -35.2, eve: -20.1, morn: -32.7 },
+      pressure: 1025,
+      humidity: 45,
+      dew_point: -18.7,
+      wind_speed: 18.5,
+      wind_deg: 315,
+      weather: [
+        { id: 602, main: 'Snow', description: 'heavy snow', icon: '13d' },
+      ],
+      clouds: 95,
+      pop: 0.9,
+      snow: 12.3,
+      uvi: 1.2,
+    },
+    'snowy'
+  ),
+}
+
+/**
  * Multi-day forecast scenario - 4 days with mixed weather
  */
 export const multiDayForecast: WeatherData = {
@@ -497,6 +555,7 @@ export const weatherScenarios = {
   rainyStormyDay,
   snowyWinterDay,
   extremeHeat,
+  extremeCold,
   multiDayForecast,
   missingMoonData,
   nullValuesScenario,

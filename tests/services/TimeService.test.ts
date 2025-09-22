@@ -9,24 +9,20 @@
  * - Clock and weather update intervals
  */
 
-// Mock the environment module before importing TimeService
-jest.mock('../../src/config/environment', () => ({
-  environment: {
-    intervals: {
-      clockUpdate: 1000,
-      weatherUpdate: 600000,
-    },
-  },
-}))
-
 import { TimeService } from '../../src/services/TimeService'
+import type { TimeServiceConfig } from '../../src/types/service-config.types'
 import { TimerMock } from '../__mocks__/dom/browser-apis'
 
 describe('TimeService', () => {
   let timeService: TimeService
+  let testConfig: TimeServiceConfig
 
   beforeEach(() => {
-    timeService = new TimeService()
+    testConfig = {
+      clockUpdateInterval: 1000,
+      weatherUpdateInterval: 600000,
+    }
+    timeService = new TimeService(testConfig)
     TimerMock.clearAll()
 
     // Set up DOM elements for testing
@@ -47,11 +43,31 @@ describe('TimeService', () => {
   })
 
   describe('Constructor and Configuration', () => {
-    it('should initialize with environment configuration', () => {
+    it('should initialize with provided configuration', () => {
       const settings = timeService.getIntervalSettings()
 
-      expect(settings.clockUpdateInterval).toBe(1000) // 1 second from environment
-      expect(settings.weatherUpdateInterval).toBe(600000) // 10 minutes from environment
+      expect(settings.clockUpdateInterval).toBe(1000) // 1 second from config
+      expect(settings.weatherUpdateInterval).toBe(600000) // 10 minutes from config
+    })
+
+    it('should accept different configuration values', () => {
+      const customConfig: TimeServiceConfig = {
+        clockUpdateInterval: 2000,
+        weatherUpdateInterval: 300000,
+      }
+      const customService = new TimeService(customConfig)
+      const settings = customService.getIntervalSettings()
+
+      expect(settings.clockUpdateInterval).toBe(2000)
+      expect(settings.weatherUpdateInterval).toBe(300000)
+    })
+
+    it('should return a copy of configuration to prevent mutation', () => {
+      const config1 = timeService.getConfig()
+      const config2 = timeService.getConfig()
+
+      expect(config1).toEqual(config2)
+      expect(config1).not.toBe(config2) // Different object references
     })
 
     it('should start with no active intervals', () => {
@@ -377,13 +393,13 @@ describe('TimeService', () => {
 
       timeService.startWeatherUpdates(callback)
 
-      // Should update immediately
-      await jest.runOnlyPendingTimersAsync()
+      // Allow the immediate call to complete
+      await Promise.resolve()
       expect(callback).toHaveBeenCalledTimes(1)
 
       // Should update again after interval (10 minutes)
       jest.advanceTimersByTime(600000)
-      await jest.runOnlyPendingTimersAsync()
+      await Promise.resolve()
       expect(callback).toHaveBeenCalledTimes(2)
     })
 
@@ -394,7 +410,9 @@ describe('TimeService', () => {
       })
 
       timeService.startWeatherUpdates(asyncCallback)
-      await jest.runOnlyPendingTimersAsync()
+
+      // Allow the immediate call to complete
+      await Promise.resolve()
 
       expect(asyncCallback).toHaveBeenCalledTimes(1)
     })
@@ -406,7 +424,9 @@ describe('TimeService', () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
 
       timeService.startWeatherUpdates(errorCallback)
-      await jest.runOnlyPendingTimersAsync()
+
+      // Allow the immediate call to complete
+      await Promise.resolve()
 
       expect(errorCallback).toHaveBeenCalledTimes(1)
       expect(consoleSpy).toHaveBeenCalledWith(

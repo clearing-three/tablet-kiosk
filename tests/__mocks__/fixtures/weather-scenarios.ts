@@ -3,12 +3,125 @@
  *
  * Provides realistic weather data fixtures for various scenarios
  * including normal conditions, extreme weather, and edge cases.
+ * ALL SCENARIOS NOW INCLUDE 4 DAYS OF DATA (today + 3 forecast days).
  */
 
-import type { WeatherData } from '../../../src/types/weather.types'
+import type {
+  WeatherData,
+  DailyWeather,
+} from '../../../src/types/weather.types'
 
 /**
- * Clear sunny day scenario
+ * Helper function to generate 4 days of daily weather data
+ */
+function generateFourDayForecast(
+  baseDay: DailyWeather,
+  weatherPattern: 'clear' | 'rainy' | 'snowy' | 'mixed' = 'clear'
+): DailyWeather[] {
+  const days: DailyWeather[] = []
+  const baseTimestamp = baseDay.dt
+
+  for (let i = 0; i < 4; i++) {
+    const dayOffset = i * 24 * 60 * 60 // 24 hours in seconds
+    const timestamp = baseTimestamp + dayOffset
+
+    let weatherCondition
+    let tempAdjustment = 0
+
+    switch (weatherPattern) {
+      case 'rainy':
+        weatherCondition =
+          i === 0
+            ? baseDay.weather[0]
+            : {
+                id: 500 + (i % 3),
+                main: 'Rain',
+                description: ['light rain', 'moderate rain', 'heavy rain'][
+                  i % 3
+                ],
+                icon: '10d',
+              }
+        tempAdjustment = -2 * i // Gets cooler over time
+        break
+      case 'snowy':
+        weatherCondition =
+          i === 0
+            ? baseDay.weather[0]
+            : {
+                id: 600 + (i % 3),
+                main: 'Snow',
+                description: ['light snow', 'moderate snow', 'heavy snow'][
+                  i % 3
+                ],
+                icon: '13d',
+              }
+        tempAdjustment = -5 * i // Gets much cooler
+        break
+      case 'mixed': {
+        const conditions = [
+          baseDay.weather[0],
+          { id: 801, main: 'Clouds', description: 'few clouds', icon: '02d' },
+          { id: 500, main: 'Rain', description: 'light rain', icon: '10d' },
+          { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
+        ]
+        weatherCondition = conditions[i]
+        tempAdjustment = (i - 1) * 1.5 // Slight variation
+        break
+      }
+      default: // clear
+        weatherCondition =
+          i === 0
+            ? baseDay.weather[0]
+            : {
+                id: 800 + (i % 2),
+                main: i % 2 === 0 ? 'Clear' : 'Clouds',
+                description: i % 2 === 0 ? 'clear sky' : 'few clouds',
+                icon: i % 2 === 0 ? '01d' : '02d',
+              }
+        tempAdjustment = -1 * i // Slightly cooler over time
+        break
+    }
+
+    days.push({
+      dt: timestamp,
+      sunrise: baseDay.sunrise + dayOffset,
+      sunset: baseDay.sunset + dayOffset,
+      moonrise: baseDay.moonrise + dayOffset,
+      moonset: baseDay.moonset + dayOffset,
+      moon_phase: (baseDay.moon_phase + i * 0.125) % 1, // Gradual moon phase change
+      temp: {
+        day: baseDay.temp.day + tempAdjustment,
+        min: baseDay.temp.min + tempAdjustment,
+        max: baseDay.temp.max + tempAdjustment,
+        night: baseDay.temp.night + tempAdjustment,
+        eve: baseDay.temp.eve + tempAdjustment,
+        morn: baseDay.temp.morn + tempAdjustment,
+      },
+      feels_like: {
+        day: baseDay.feels_like.day + tempAdjustment,
+        night: baseDay.feels_like.night + tempAdjustment,
+        eve: baseDay.feels_like.eve + tempAdjustment,
+        morn: baseDay.feels_like.morn + tempAdjustment,
+      },
+      pressure: baseDay.pressure + i * 2, // Slight pressure variation
+      humidity: Math.max(10, Math.min(90, baseDay.humidity + i * 5)), // Bounded humidity
+      dew_point: baseDay.dew_point + tempAdjustment,
+      wind_speed: Math.max(0, baseDay.wind_speed + i * 0.5),
+      wind_deg: (baseDay.wind_deg + i * 10) % 360,
+      weather: [weatherCondition],
+      clouds: Math.min(100, baseDay.clouds + i * 10),
+      pop: Math.min(1.0, baseDay.pop + i * 0.1),
+      uvi: Math.max(0, baseDay.uvi - i * 0.5),
+      rain: weatherPattern === 'rainy' && i > 0 ? i * 0.5 : undefined,
+      snow: weatherPattern === 'snowy' && i > 0 ? i * 0.3 : undefined,
+    })
+  }
+
+  return days
+}
+
+/**
+ * Clear sunny day scenario - 4 days of mostly clear weather
  */
 export const clearSunnyDay: WeatherData = {
   lat: 40.7128,
@@ -38,375 +151,7 @@ export const clearSunnyDay: WeatherData = {
       },
     ],
   },
-  daily: [
-    {
-      dt: 1640995200,
-      sunrise: 1640966400,
-      sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
-      moon_phase: 0.0, // New moon
-      temp: {
-        day: 75.2,
-        min: 58.3,
-        max: 82.4,
-        night: 62.1,
-        eve: 78.5,
-        morn: 60.7,
-      },
-      feels_like: {
-        day: 78.1,
-        night: 64.2,
-        eve: 81.3,
-        morn: 62.9,
-      },
-      pressure: 1020,
-      humidity: 45,
-      dew_point: 52.3,
-      wind_speed: 5.2,
-      wind_deg: 210,
-      weather: [
-        {
-          id: 800,
-          main: 'Clear',
-          description: 'clear sky',
-          icon: '01d',
-        },
-      ],
-      clouds: 5,
-      pop: 0.0,
-      uvi: 8.5,
-    },
-  ],
-}
-
-/**
- * Rainy stormy day scenario
- */
-export const rainyStormyDay: WeatherData = {
-  lat: 40.7128,
-  lon: -74.006,
-  timezone: 'America/New_York',
-  timezone_offset: -18000,
-  current: {
-    dt: 1640995200,
-    sunrise: 1640966400,
-    sunset: 1641002400,
-    temp: 45.7,
-    feels_like: 38.2,
-    pressure: 995,
-    humidity: 85,
-    dew_point: 41.8,
-    uvi: 1.2,
-    clouds: 90,
-    visibility: 3000,
-    wind_speed: 22.5,
-    wind_deg: 245,
-    wind_gust: 35.8,
-    weather: [
-      {
-        id: 502,
-        main: 'Rain',
-        description: 'heavy intensity rain',
-        icon: '10d',
-      },
-      {
-        id: 781,
-        main: 'Squall',
-        description: 'squalls',
-        icon: '50d',
-      },
-    ],
-  },
-  daily: [
-    {
-      dt: 1640995200,
-      sunrise: 1640966400,
-      sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
-      moon_phase: 0.75, // Last quarter
-      temp: {
-        day: 45.7,
-        min: 38.2,
-        max: 52.1,
-        night: 41.5,
-        eve: 43.8,
-        morn: 39.6,
-      },
-      feels_like: {
-        day: 38.2,
-        night: 35.1,
-        eve: 37.4,
-        morn: 32.8,
-      },
-      pressure: 995,
-      humidity: 85,
-      dew_point: 41.8,
-      wind_speed: 22.5,
-      wind_deg: 245,
-      wind_gust: 35.8,
-      weather: [
-        {
-          id: 502,
-          main: 'Rain',
-          description: 'heavy intensity rain',
-          icon: '10d',
-        },
-      ],
-      clouds: 90,
-      pop: 0.9,
-      rain: 15.7,
-      uvi: 1.2,
-    },
-  ],
-}
-
-/**
- * Snowy winter day scenario
- */
-export const snowyWinterDay: WeatherData = {
-  lat: 40.7128,
-  lon: -74.006,
-  timezone: 'America/New_York',
-  timezone_offset: -18000,
-  current: {
-    dt: 1640995200,
-    sunrise: 1640966400,
-    sunset: 1641002400,
-    temp: 28.4,
-    feels_like: 18.7,
-    pressure: 1010,
-    humidity: 78,
-    dew_point: 23.1,
-    uvi: 0.8,
-    clouds: 100,
-    visibility: 1200,
-    wind_speed: 12.3,
-    wind_deg: 15,
-    weather: [
-      {
-        id: 602,
-        main: 'Snow',
-        description: 'heavy snow',
-        icon: '13d',
-      },
-    ],
-  },
-  daily: [
-    {
-      dt: 1640995200,
-      sunrise: 1640966400,
-      sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
-      moon_phase: 0.5, // Full moon
-      temp: {
-        day: 28.4,
-        min: 19.8,
-        max: 32.1,
-        night: 22.5,
-        eve: 26.7,
-        morn: 21.3,
-      },
-      feels_like: {
-        day: 18.7,
-        night: 12.4,
-        eve: 16.9,
-        morn: 13.2,
-      },
-      pressure: 1010,
-      humidity: 78,
-      dew_point: 23.1,
-      wind_speed: 12.3,
-      wind_deg: 15,
-      weather: [
-        {
-          id: 602,
-          main: 'Snow',
-          description: 'heavy snow',
-          icon: '13d',
-        },
-      ],
-      clouds: 100,
-      pop: 0.85,
-      snow: 8.2,
-      uvi: 0.8,
-    },
-  ],
-}
-
-/**
- * Extreme heat scenario
- */
-export const extremeHeat: WeatherData = {
-  lat: 33.4484,
-  lon: -112.074, // Phoenix, AZ
-  timezone: 'America/Phoenix',
-  timezone_offset: -25200,
-  current: {
-    dt: 1640995200,
-    sunrise: 1640966400,
-    sunset: 1641002400,
-    temp: 118.5,
-    feels_like: 125.3,
-    pressure: 1005,
-    humidity: 15,
-    dew_point: 32.1,
-    uvi: 11.2,
-    clouds: 0,
-    visibility: 10000,
-    wind_speed: 8.7,
-    wind_deg: 270,
-    weather: [
-      {
-        id: 800,
-        main: 'Clear',
-        description: 'clear sky',
-        icon: '01d',
-      },
-    ],
-  },
-  daily: [
-    {
-      dt: 1640995200,
-      sunrise: 1640966400,
-      sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
-      moon_phase: 0.25, // First quarter
-      temp: {
-        day: 118.5,
-        min: 95.2,
-        max: 121.8,
-        night: 98.7,
-        eve: 115.3,
-        morn: 97.1,
-      },
-      feels_like: {
-        day: 125.3,
-        night: 102.4,
-        eve: 122.1,
-        morn: 100.8,
-      },
-      pressure: 1005,
-      humidity: 15,
-      dew_point: 32.1,
-      wind_speed: 8.7,
-      wind_deg: 270,
-      weather: [
-        {
-          id: 800,
-          main: 'Clear',
-          description: 'clear sky',
-          icon: '01d',
-        },
-      ],
-      clouds: 0,
-      pop: 0.0,
-      uvi: 11.2,
-    },
-  ],
-}
-
-/**
- * Extreme cold scenario
- */
-export const extremeCold: WeatherData = {
-  lat: 64.2008,
-  lon: -149.4937, // Fairbanks, AK
-  timezone: 'America/Anchorage',
-  timezone_offset: -32400,
-  current: {
-    dt: 1640995200,
-    sunrise: 1640966400,
-    sunset: 1641002400,
-    temp: -35.7,
-    feels_like: -48.2,
-    pressure: 1025,
-    humidity: 65,
-    dew_point: -42.1,
-    uvi: 0.1,
-    clouds: 75,
-    visibility: 8000,
-    wind_speed: 15.2,
-    wind_deg: 45,
-    weather: [
-      {
-        id: 701,
-        main: 'Mist',
-        description: 'mist',
-        icon: '50d',
-      },
-    ],
-  },
-  daily: [
-    {
-      dt: 1640995200,
-      sunrise: 1640966400,
-      sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
-      moon_phase: 0.125, // Waxing crescent
-      temp: {
-        day: -35.7,
-        min: -42.3,
-        max: -28.4,
-        night: -40.1,
-        eve: -32.8,
-        morn: -41.5,
-      },
-      feels_like: {
-        day: -48.2,
-        night: -52.7,
-        eve: -45.3,
-        morn: -51.2,
-      },
-      pressure: 1025,
-      humidity: 65,
-      dew_point: -42.1,
-      wind_speed: 15.2,
-      wind_deg: 45,
-      weather: [
-        {
-          id: 701,
-          main: 'Mist',
-          description: 'mist',
-          icon: '50d',
-        },
-      ],
-      clouds: 75,
-      pop: 0.2,
-      uvi: 0.1,
-    },
-  ],
-}
-
-/**
- * Missing moon data scenario
- */
-export const missingMoonData: WeatherData = {
-  ...clearSunnyDay,
-  daily: [
-    {
-      ...clearSunnyDay.daily[0],
-      moonrise: 0, // No moonrise that day
-      moonset: 0, // No moonset that day
-    },
-  ],
-}
-
-/**
- * Multi-day forecast scenario
- */
-export const multiDayForecast: WeatherData = {
-  lat: 40.7128,
-  lon: -74.006,
-  timezone: 'America/New_York',
-  timezone_offset: -18000,
-  current: clearSunnyDay.current,
-  daily: [
-    // Today - Clear
+  daily: generateFourDayForecast(
     {
       dt: 1640995200,
       sunrise: 1640966400,
@@ -435,70 +180,256 @@ export const multiDayForecast: WeatherData = {
       pop: 0.0,
       uvi: 8.5,
     },
-    // Tomorrow - Partly cloudy
-    {
-      dt: 1641081600,
-      sunrise: 1641052800,
-      sunset: 1641088800,
-      moonrise: 1641067200,
-      moonset: 1641110400,
-      moon_phase: 0.125,
-      temp: {
-        day: 68.4,
-        min: 55.1,
-        max: 74.8,
-        night: 58.9,
-        eve: 71.2,
-        morn: 57.3,
-      },
-      feels_like: { day: 70.2, night: 60.1, eve: 73.4, morn: 58.8 },
-      pressure: 1015,
-      humidity: 55,
-      dew_point: 54.7,
-      wind_speed: 7.8,
-      wind_deg: 195,
-      weather: [
-        { id: 801, main: 'Clouds', description: 'few clouds', icon: '02d' },
-      ],
-      clouds: 25,
-      pop: 0.1,
-      uvi: 7.2,
-    },
-    // Day after - Rainy
-    {
-      dt: 1641168000,
-      sunrise: 1641139200,
-      sunset: 1641175200,
-      moonrise: 1641153600,
-      moonset: 1641196800,
-      moon_phase: 0.25,
-      temp: {
-        day: 52.3,
-        min: 45.7,
-        max: 58.1,
-        night: 48.2,
-        eve: 54.8,
-        morn: 47.1,
-      },
-      feels_like: { day: 48.9, night: 44.3, eve: 51.2, morn: 43.8 },
-      pressure: 1002,
-      humidity: 75,
-      dew_point: 46.8,
-      wind_speed: 12.5,
-      wind_deg: 225,
-      weather: [
-        { id: 500, main: 'Rain', description: 'light rain', icon: '10d' },
-      ],
-      clouds: 80,
-      pop: 0.7,
-      rain: 3.2,
-      uvi: 3.8,
-    },
-  ],
+    'clear'
+  ),
 }
 
 /**
- * Edge case with null/undefined values
+ * Rainy stormy day scenario - 4 days with increasing rain
+ */
+export const rainyStormyDay: WeatherData = {
+  lat: 40.7128,
+  lon: -74.006,
+  timezone: 'America/New_York',
+  timezone_offset: -18000,
+  current: {
+    dt: 1640995200,
+    sunrise: 1640966400,
+    sunset: 1641002400,
+    temp: 45.7,
+    feels_like: 38.2,
+    pressure: 995,
+    humidity: 85,
+    dew_point: 41.8,
+    uvi: 1.2,
+    clouds: 90,
+    visibility: 5000,
+    wind_speed: 12.8,
+    wind_deg: 260,
+    wind_gust: 18.5,
+    weather: [
+      {
+        id: 502,
+        main: 'Rain',
+        description: 'heavy intensity rain',
+        icon: '10d',
+      },
+      {
+        id: 781,
+        main: 'Squall',
+        description: 'squalls',
+        icon: '50d',
+      },
+    ],
+  },
+  daily: generateFourDayForecast(
+    {
+      dt: 1640995200,
+      sunrise: 1640966400,
+      sunset: 1641002400,
+      moonrise: 1640980800,
+      moonset: 1641024000,
+      moon_phase: 0.25,
+      temp: {
+        day: 45.7,
+        min: 38.2,
+        max: 52.1,
+        night: 40.5,
+        eve: 48.3,
+        morn: 39.8,
+      },
+      feels_like: { day: 38.2, night: 32.1, eve: 41.7, morn: 33.5 },
+      pressure: 995,
+      humidity: 85,
+      dew_point: 41.8,
+      wind_speed: 12.8,
+      wind_deg: 260,
+      weather: [
+        {
+          id: 502,
+          main: 'Rain',
+          description: 'heavy intensity rain',
+          icon: '10d',
+        },
+      ],
+      clouds: 90,
+      pop: 0.95,
+      rain: 8.5,
+      uvi: 1.2,
+    },
+    'rainy'
+  ),
+}
+
+/**
+ * Snowy winter day scenario - 4 days with snow conditions
+ */
+export const snowyWinterDay: WeatherData = {
+  lat: 40.7128,
+  lon: -74.006,
+  timezone: 'America/New_York',
+  timezone_offset: -18000,
+  current: {
+    dt: 1640995200,
+    sunrise: 1640966400,
+    sunset: 1641002400,
+    temp: 28.4,
+    feels_like: 18.2,
+    pressure: 1008,
+    humidity: 78,
+    dew_point: 23.1,
+    uvi: 2.1,
+    clouds: 95,
+    visibility: 2000,
+    wind_speed: 8.7,
+    wind_deg: 340,
+    weather: [
+      {
+        id: 602,
+        main: 'Snow',
+        description: 'heavy snow',
+        icon: '13d',
+      },
+    ],
+  },
+  daily: generateFourDayForecast(
+    {
+      dt: 1640995200,
+      sunrise: 1640966400,
+      sunset: 1641002400,
+      moonrise: 1640980800,
+      moonset: 1641024000,
+      moon_phase: 0.75,
+      temp: {
+        day: 28.4,
+        min: 18.2,
+        max: 32.8,
+        night: 22.1,
+        eve: 30.5,
+        morn: 20.3,
+      },
+      feels_like: { day: 18.2, night: 12.5, eve: 22.8, morn: 14.7 },
+      pressure: 1008,
+      humidity: 78,
+      dew_point: 23.1,
+      wind_speed: 8.7,
+      wind_deg: 340,
+      weather: [
+        { id: 602, main: 'Snow', description: 'heavy snow', icon: '13d' },
+      ],
+      clouds: 95,
+      pop: 0.85,
+      snow: 5.2,
+      uvi: 2.1,
+    },
+    'snowy'
+  ),
+}
+
+/**
+ * Extreme heat scenario - 4 days of hot weather
+ */
+export const extremeHeat: WeatherData = {
+  lat: 40.7128,
+  lon: -74.006,
+  timezone: 'America/New_York',
+  timezone_offset: -18000,
+  current: {
+    ...clearSunnyDay.current,
+    temp: 118.5,
+    feels_like: 125.3,
+    humidity: 15,
+    dew_point: 72.3,
+  },
+  daily: generateFourDayForecast(
+    {
+      dt: 1640995200,
+      sunrise: 1640966400,
+      sunset: 1641002400,
+      moonrise: 1640980800,
+      moonset: 1641024000,
+      moon_phase: 0.5,
+      temp: {
+        day: 115.7,
+        min: 98.3,
+        max: 122.4,
+        night: 102.1,
+        eve: 118.5,
+        morn: 100.7,
+      },
+      feels_like: { day: 125.1, night: 108.2, eve: 128.3, morn: 105.9 },
+      pressure: 1015,
+      humidity: 25,
+      dew_point: 72.3,
+      wind_speed: 3.2,
+      wind_deg: 180,
+      weather: [
+        { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
+      ],
+      clouds: 0,
+      pop: 0.0,
+      uvi: 11.5,
+    },
+    'clear'
+  ),
+}
+
+/**
+ * Multi-day forecast scenario - 4 days with mixed weather
+ */
+export const multiDayForecast: WeatherData = {
+  lat: 40.7128,
+  lon: -74.006,
+  timezone: 'America/New_York',
+  timezone_offset: -18000,
+  current: clearSunnyDay.current,
+  daily: generateFourDayForecast(
+    {
+      dt: 1640995200,
+      sunrise: 1640966400,
+      sunset: 1641002400,
+      moonrise: 1640980800,
+      moonset: 1641024000,
+      moon_phase: 0.0,
+      temp: {
+        day: 75.2,
+        min: 58.3,
+        max: 82.4,
+        night: 62.1,
+        eve: 78.5,
+        morn: 60.7,
+      },
+      feels_like: { day: 78.1, night: 64.2, eve: 81.3, morn: 62.9 },
+      pressure: 1020,
+      humidity: 45,
+      dew_point: 52.3,
+      wind_speed: 5.2,
+      wind_deg: 210,
+      weather: [
+        { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
+      ],
+      clouds: 5,
+      pop: 0.0,
+      uvi: 8.5,
+    },
+    'mixed'
+  ),
+}
+
+/**
+ * Missing moon data scenario - 4 days with no moonrise/moonset
+ */
+export const missingMoonData: WeatherData = {
+  ...clearSunnyDay,
+  daily: clearSunnyDay.daily.map(day => ({
+    ...day,
+    moonrise: 0, // No moonrise that day
+    moonset: 0, // No moonset that day
+  })),
+}
+
+/**
+ * Null values scenario - 4 days with some null/undefined values
  */
 export const nullValuesScenario: WeatherData = {
   ...clearSunnyDay,
@@ -506,18 +437,17 @@ export const nullValuesScenario: WeatherData = {
     ...clearSunnyDay.current,
     wind_gust: undefined,
   },
-  daily: [
-    {
-      ...clearSunnyDay.daily[0],
-      rain: undefined as any,
-      snow: undefined as any,
-      wind_gust: null as any,
-    },
-  ],
+  daily: clearSunnyDay.daily.map(day => ({
+    ...day,
+    rain: undefined as any,
+    snow: undefined as any,
+    wind_gust: null as any,
+  })),
 }
 
 /**
- * API response with minimum required fields only
+ * Minimal response - This should NEVER be used in real scenarios
+ * but exists for testing insufficient data error handling
  */
 export const minimalResponse: WeatherData = {
   lat: 40.7128,
@@ -547,7 +477,15 @@ export const minimalResponse: WeatherData = {
       },
     ],
   },
-  daily: [], // Empty daily array
+  daily: [], // Empty daily array - should trigger error
+}
+
+/**
+ * Insufficient forecast data - Only 2 days instead of required 4
+ */
+export const insufficientForecastData: WeatherData = {
+  ...clearSunnyDay,
+  daily: clearSunnyDay.daily.slice(0, 2), // Only 2 days - should trigger error
 }
 
 /**
@@ -558,11 +496,11 @@ export const weatherScenarios = {
   rainyStormyDay,
   snowyWinterDay,
   extremeHeat,
-  extremeCold,
-  missingMoonData,
   multiDayForecast,
+  missingMoonData,
   nullValuesScenario,
   minimalResponse,
+  insufficientForecastData,
 }
 
 /**

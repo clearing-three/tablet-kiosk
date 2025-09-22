@@ -10,20 +10,47 @@
  */
 
 import { MoonPhaseService } from '../../src/services/MoonPhaseService'
+import type { MoonPhaseServiceConfig } from '../../src/types/service-config.types'
 import { MoonPhaseMock } from '../__mocks__'
 import { MoonPhaseName } from '../../src/types/astronomy.types'
 
 describe('MoonPhaseService', () => {
   let moonPhaseService: MoonPhaseService
+  let testConfig: MoonPhaseServiceConfig
 
   beforeEach(() => {
-    moonPhaseService = new MoonPhaseService()
+    testConfig = {}
+    moonPhaseService = new MoonPhaseService(testConfig)
     MoonPhaseMock.setup()
   })
 
   afterEach(() => {
     MoonPhaseMock.teardown()
     MoonPhaseMock.reset()
+  })
+
+  describe('Constructor and Configuration', () => {
+    it('should initialize with provided configuration', () => {
+      const config = moonPhaseService.getConfig()
+
+      expect(config).toEqual({})
+    })
+
+    it('should accept empty configuration object', () => {
+      const emptyConfig: MoonPhaseServiceConfig = {}
+      const customService = new MoonPhaseService(emptyConfig)
+      const config = customService.getConfig()
+
+      expect(config).toEqual({})
+    })
+
+    it('should return a copy of configuration to prevent mutation', () => {
+      const config1 = moonPhaseService.getConfig()
+      const config2 = moonPhaseService.getConfig()
+
+      expect(config1).toEqual(config2)
+      expect(config1).not.toBe(config2) // Different object references
+    })
   })
 
   describe('Phase Calculations', () => {
@@ -69,7 +96,8 @@ describe('MoonPhaseService', () => {
           const phase = moonPhaseService.calculatePhase(date)
           expect(phase.phase).toBeGreaterThanOrEqual(0)
           expect(phase.phase).toBeLessThanOrEqual(1)
-          expect(phase.illumination).toBeWithinRange(0, 100)
+          expect(phase.illumination).toBeGreaterThanOrEqual(0)
+          expect(phase.illumination).toBeLessThanOrEqual(100)
         }).not.toThrow()
       })
     })

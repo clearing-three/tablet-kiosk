@@ -194,8 +194,8 @@ describe('WeatherService', () => {
         Math.round(mockData.daily[0].temp.max)
       )
 
-      // Check forecast processing (next 2 days for multiDayForecast scenario)
-      expect(processed.forecast).toHaveLength(2)
+      // Check forecast processing (next 3 days, excluding today)
+      expect(processed.forecast).toHaveLength(3)
       processed.forecast.forEach((day, index) => {
         const originalDay = mockData.daily[index + 1] // Skip today
         expect(day.dayName).toBeDefined()
@@ -221,7 +221,7 @@ describe('WeatherService', () => {
       const result = await weatherService.getProcessedWeatherData()
 
       expect(result.current).toBeDefined()
-      expect(result.forecast).toHaveLength(2)
+      expect(result.forecast).toHaveLength(3)
       expect(result.astronomy).toBeDefined()
     })
   })
@@ -314,6 +314,16 @@ describe('WeatherService', () => {
         /Invalid API response.*missing required data fields/i
       )
     })
+
+    it('should handle insufficient daily forecast data (less than 4 days)', async () => {
+      OpenWeatherMapMock.mockSuccess(
+        getWeatherScenario('insufficientForecastData')
+      )
+
+      await expect(weatherService.fetchWeatherData()).rejects.toThrow(
+        /Invalid API response.*insufficient forecast data.*Expected at least 4 days, got 2 days/i
+      )
+    })
   })
 
   describe('Data Processing Edge Cases', () => {
@@ -364,17 +374,27 @@ describe('WeatherService', () => {
       expect(processed.current.maxTemp).toBe(79) // 78.9 rounded
     })
 
-    it('should handle minimum required forecast days', () => {
-      const dataWithMinimalForecast = {
-        ...getWeatherScenario('multiDayForecast'),
-        daily: getWeatherScenario('multiDayForecast').daily.slice(0, 2), // Only today + 1 day
+    it('should process exactly 4 days of forecast data correctly', () => {
+      const dataWithFourDays = getWeatherScenario('clearSunnyDay')
+
+      // Verify we have exactly 4 days
+      expect(dataWithFourDays.daily).toHaveLength(4)
+
+      const processed = weatherService.processWeatherData(dataWithFourDays)
+
+      expect(processed.forecast).toHaveLength(3) // 3 forecast days (excluding today)
+    })
+
+    it('should reject data with insufficient forecast days during processing', () => {
+      const dataWithInsufficientDays = {
+        ...getWeatherScenario('clearSunnyDay'),
+        daily: getWeatherScenario('clearSunnyDay').daily.slice(0, 2), // Only 2 days
       }
 
-      const processed = weatherService.processWeatherData(
-        dataWithMinimalForecast
-      )
-
-      expect(processed.forecast).toHaveLength(1) // Only 1 forecast day (excluding today)
+      // This should throw when trying to process insufficient data
+      expect(() => {
+        weatherService.processWeatherData(dataWithInsufficientDays)
+      }).toThrow(/Expected at least 4 days/)
     })
   })
 
@@ -399,7 +419,7 @@ describe('WeatherService', () => {
   })
 
   describe('Integration with Mocks', () => {
-    it('should work with all weather scenario fixtures', () => {
+    it('should work with all valid weather scenario fixtures', () => {
       const scenarios = Object.keys(weatherScenarios) as Array<
         keyof typeof weatherScenarios
       >
@@ -407,15 +427,38 @@ describe('WeatherService', () => {
       scenarios.forEach(scenarioName => {
         const scenario = getWeatherScenario(scenarioName)
 
-        // Skip scenarios that don't have sufficient daily data for testing
-        if (scenarioName === 'minimalResponse' || scenario.daily.length === 0) {
+        // Skip scenarios designed to test insufficient data error handling
+        if (
+          scenarioName === 'minimalResponse' ||
+          scenarioName === 'insufficientForecastData'
+        ) {
           return
         }
 
         expect(() => {
           weatherService.processWeatherData(scenario)
         }).not.toThrow()
+
+        // All valid scenarios should now have exactly 4 days
+        expect(scenario.daily).toHaveLength(4)
+
+        // And should produce exactly 3 forecast days
+        const processed = weatherService.processWeatherData(scenario)
+        expect(processed.forecast).toHaveLength(3)
       })
+    })
+
+    it('should reject scenarios with insufficient forecast data', () => {
+      // Test the scenarios specifically designed to have insufficient data
+      expect(() => {
+        weatherService.processWeatherData(getWeatherScenario('minimalResponse'))
+      }).toThrow(/insufficient forecast data/)
+
+      expect(() => {
+        weatherService.processWeatherData(
+          getWeatherScenario('insufficientForecastData')
+        )
+      }).toThrow(/insufficient forecast data/)
     })
 
     it('should maintain data integrity through processing', async () => {

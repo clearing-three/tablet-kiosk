@@ -74,6 +74,12 @@ export class WeatherService {
         throw new Error('Invalid API response: no daily forecast data')
       }
 
+      if (data.daily.length < 4) {
+        throw new Error(
+          `Invalid API response: insufficient forecast data. Expected at least 4 days, got ${data.daily.length} days`
+        )
+      }
+
       return data
     } catch (error) {
       if (error instanceof TypeError && error.message.includes('fetch')) {
@@ -89,6 +95,17 @@ export class WeatherService {
    * @returns ProcessedWeatherData Processed data ready for display
    */
   processWeatherData(data: WeatherData): ProcessedWeatherData {
+    // Validate that we have sufficient forecast data
+    if (!data.daily || !Array.isArray(data.daily)) {
+      throw new Error('Invalid weather data: missing daily forecast array')
+    }
+
+    if (data.daily.length < 4) {
+      throw new Error(
+        `Invalid weather data: insufficient forecast data. Expected at least 4 days, got ${data.daily.length} days`
+      )
+    }
+
     const current = data.current
     const todaysForecast = data.daily[0]
 

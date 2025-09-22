@@ -4,7 +4,7 @@ This plan outlines the incremental steps to refactor service classes to use depe
 
 ## Todo List
 
-1. **Design service config interfaces**
+1. **Design service config interfaces** ✅ COMPLETED
    - Design a configuration interface/type for WeatherService, MoonPhaseService, and TimeService. Specify required environment variables and structure.
 
 2. **Refactor WeatherService for DI**

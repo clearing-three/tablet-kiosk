@@ -7,7 +7,7 @@ This plan outlines the incremental steps to refactor service classes to use depe
 1. **Design service config interfaces** ✅ COMPLETED
    - Design a configuration interface/type for WeatherService, MoonPhaseService, and TimeService. Specify required environment variables and structure.
 
-2. **Refactor WeatherService for DI**
+2. **Refactor WeatherService for DI** ✅ COMPLETED
    - Refactor WeatherService to accept config via constructor. Remove direct environment.ts dependency.
 
 3. **Update WeatherService tests**

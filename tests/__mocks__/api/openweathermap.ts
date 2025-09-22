@@ -386,7 +386,7 @@ export class OpenWeatherMapMock {
 
   static mockNetworkFailure() {
     ;(global.fetch as jest.Mock).mockRejectedValueOnce(
-      new Error('Network request failed')
+      new TypeError('fetch failed')
     )
   }
 

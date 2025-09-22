@@ -9,156 +9,12 @@ import type {
   WeatherData,
   WeatherApiError,
 } from '../../../src/types/weather.types'
+import { clearSunnyDay } from '../fixtures/weather-scenarios'
 
 /**
- * Mock successful weather data response
+ * Mock successful weather data response - now uses 4-day clearSunnyDay scenario
  */
-export const mockSuccessResponse: WeatherData = {
-  lat: 40.7128,
-  lon: -74.006,
-  timezone: 'America/New_York',
-  timezone_offset: -18000,
-  current: {
-    dt: 1640995200, // 2022-01-01 00:00:00 UTC
-    sunrise: 1640966400, // 06:00:00 UTC
-    sunset: 1641002400, // 16:00:00 UTC
-    temp: 32.5,
-    feels_like: 28.9,
-    pressure: 1013,
-    humidity: 65,
-    dew_point: 23.4,
-    uvi: 2.5,
-    clouds: 20,
-    visibility: 10000,
-    wind_speed: 8.5,
-    wind_deg: 180,
-    weather: [
-      {
-        id: 800,
-        main: 'Clear',
-        description: 'clear sky',
-        icon: '01d',
-      },
-    ],
-  },
-  daily: [
-    {
-      dt: 1640995200,
-      sunrise: 1640966400,
-      sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
-      moon_phase: 0.25,
-      temp: {
-        day: 35.2,
-        min: 28.1,
-        max: 42.3,
-        night: 30.5,
-        eve: 38.7,
-        morn: 29.8,
-      },
-      feels_like: {
-        day: 32.1,
-        night: 27.3,
-        eve: 35.4,
-        morn: 26.9,
-      },
-      pressure: 1013,
-      humidity: 65,
-      dew_point: 23.4,
-      wind_speed: 8.5,
-      wind_deg: 180,
-      weather: [
-        {
-          id: 800,
-          main: 'Clear',
-          description: 'clear sky',
-          icon: '01d',
-        },
-      ],
-      clouds: 20,
-      pop: 0.1,
-      uvi: 2.5,
-    },
-    {
-      dt: 1641081600,
-      sunrise: 1641052800,
-      sunset: 1641088800,
-      moonrise: 1641067200,
-      moonset: 1641110400,
-      moon_phase: 0.5,
-      temp: {
-        day: 38.7,
-        min: 31.2,
-        max: 45.6,
-        night: 34.1,
-        eve: 41.8,
-        morn: 32.5,
-      },
-      feels_like: {
-        day: 35.2,
-        night: 30.1,
-        eve: 38.3,
-        morn: 29.7,
-      },
-      pressure: 1010,
-      humidity: 70,
-      dew_point: 26.8,
-      wind_speed: 9.2,
-      wind_deg: 200,
-      weather: [
-        {
-          id: 801,
-          main: 'Clouds',
-          description: 'few clouds',
-          icon: '02d',
-        },
-      ],
-      clouds: 40,
-      pop: 0.3,
-      uvi: 3.1,
-    },
-    {
-      dt: 1641168000,
-      sunrise: 1641139200,
-      sunset: 1641175200,
-      moonrise: 1641153600,
-      moonset: 1641196800,
-      moon_phase: 0.75,
-      temp: {
-        day: 29.3,
-        min: 22.1,
-        max: 36.7,
-        night: 25.4,
-        eve: 32.8,
-        morn: 23.9,
-      },
-      feels_like: {
-        day: 26.1,
-        night: 22.3,
-        eve: 29.5,
-        morn: 20.7,
-      },
-      pressure: 1008,
-      humidity: 80,
-      dew_point: 28.3,
-      wind_speed: 12.1,
-      wind_deg: 220,
-      weather: [
-        {
-          id: 500,
-          main: 'Rain',
-          description: 'light rain',
-          icon: '10d',
-        },
-      ],
-      clouds: 75,
-      pop: 0.8,
-      rain: 2.5,
-      uvi: 1.8,
-    },
-  ],
-}
+export const mockSuccessResponse: WeatherData = clearSunnyDay
 
 /**
  * Mock API error responses
@@ -386,7 +242,7 @@ export class OpenWeatherMapMock {
 
   static mockNetworkFailure() {
     ;(global.fetch as jest.Mock).mockRejectedValueOnce(
-      new Error('Network request failed')
+      new TypeError('fetch failed')
     )
   }
 

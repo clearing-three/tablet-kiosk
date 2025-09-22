@@ -19,7 +19,7 @@ This plan outlines the incremental steps to refactor service classes to use depe
 5. **Update MoonPhaseService & TimeService tests** ✅ COMPLETED
    - Update MoonPhaseService and TimeService tests to use DI config.
 
-6. **Update environment.ts for DI**
+6. **Update environment.ts for DI** ✅ COMPLETED
    - Update environment.ts to export config objects for each service, not direct values. Ensure Vite and Jest compatibility.
 
 7. **Update service instantiation code**

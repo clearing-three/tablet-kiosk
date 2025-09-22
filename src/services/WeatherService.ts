@@ -12,6 +12,7 @@ import type {
 } from '../types/weather.types'
 import type { WeatherServiceConfig } from '../types/service-config.types'
 import { mapOWMIconToSVG } from '../utils/iconMapper'
+import { REQUIRED_FORECAST_DAYS } from '../constants/weather.constants'
 
 export class WeatherService {
   private readonly config: WeatherServiceConfig
@@ -74,9 +75,9 @@ export class WeatherService {
         throw new Error('Invalid API response: no daily forecast data')
       }
 
-      if (data.daily.length < 4) {
+      if (data.daily.length < REQUIRED_FORECAST_DAYS) {
         throw new Error(
-          `Invalid API response: insufficient forecast data. Expected at least 4 days, got ${data.daily.length} days`
+          `Invalid API response: insufficient forecast data. Expected at least ${REQUIRED_FORECAST_DAYS} days, got ${data.daily.length} days`
         )
       }
 
@@ -100,9 +101,9 @@ export class WeatherService {
       throw new Error('Invalid weather data: missing daily forecast array')
     }
 
-    if (data.daily.length < 4) {
+    if (data.daily.length < REQUIRED_FORECAST_DAYS) {
       throw new Error(
-        `Invalid weather data: insufficient forecast data. Expected at least 4 days, got ${data.daily.length} days`
+        `Invalid weather data: insufficient forecast data. Expected at least ${REQUIRED_FORECAST_DAYS} days, got ${data.daily.length} days`
       )
     }
 
@@ -119,7 +120,7 @@ export class WeatherService {
     }
 
     // Process forecast (next 3 days, skipping today)
-    const forecast = data.daily.slice(1, 4).map(day => {
+    const forecast = data.daily.slice(1, REQUIRED_FORECAST_DAYS).map(day => {
       const date = new Date(day.dt * 1000)
       return {
         dayName: date.toLocaleDateString(undefined, { weekday: 'short' }),

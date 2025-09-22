@@ -3,16 +3,17 @@
  *
  * Provides realistic weather data fixtures for various scenarios
  * including normal conditions, extreme weather, and edge cases.
- * ALL SCENARIOS NOW INCLUDE 4 DAYS OF DATA (today + 3 forecast days).
+ * ALL SCENARIOS NOW INCLUDE REQUIRED_FORECAST_DAYS DAYS OF DATA (today + forecast days).
  */
 
 import type {
   WeatherData,
   DailyWeather,
 } from '../../../src/types/weather.types'
+import { REQUIRED_FORECAST_DAYS } from '../../../src/constants/weather.constants'
 
 /**
- * Helper function to generate 4 days of daily weather data
+ * Helper function to generate forecast data for the required number of days
  */
 function generateFourDayForecast(
   baseDay: DailyWeather,
@@ -21,7 +22,7 @@ function generateFourDayForecast(
   const days: DailyWeather[] = []
   const baseTimestamp = baseDay.dt
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < REQUIRED_FORECAST_DAYS; i++) {
     const dayOffset = i * 24 * 60 * 60 // 24 hours in seconds
     const timestamp = baseTimestamp + dayOffset
 

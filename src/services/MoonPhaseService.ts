@@ -193,7 +193,14 @@ export class MoonPhaseService implements MoonPhaseServiceInterface {
     // Moon phase calculation based on astronomical formulas
     const daysSinceNewMoon = julianDay - 2451549.5 // J2000.0 epoch new moon
     const lunarMonths = daysSinceNewMoon / 29.53058867 // Average lunar month length
-    return lunarMonths % 1
+    let phase = lunarMonths % 1
+
+    // Ensure phase is always between 0 and 1
+    if (phase < 0) {
+      phase += 1
+    }
+
+    return phase
   }
 
   /**

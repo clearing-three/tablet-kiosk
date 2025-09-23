@@ -208,10 +208,16 @@ describe('MoonPhaseService', () => {
     })
 
     it('should return illumination values between 0 and 100', () => {
-      const testPhases = [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1.0]
+      const testDates = [
+        new Date('2025-01-02T00:00:00Z'), // New moon period
+        new Date('2025-01-09T00:00:00Z'), // First quarter
+        new Date('2025-01-16T00:00:00Z'), // Full moon period
+        new Date('2025-01-24T00:00:00Z'), // Last quarter
+        new Date('2025-02-01T00:00:00Z'), // Another new moon
+      ]
 
-      testPhases.forEach(() => {
-        const moonPhase = moonPhaseService.calculatePhase(new Date())
+      testDates.forEach(date => {
+        const moonPhase = moonPhaseService.calculatePhase(date)
         // We can't directly test private methods, but we can test through calculatePhase
         expect(moonPhase.illumination).toBeGreaterThanOrEqual(0)
         expect(moonPhase.illumination).toBeLessThanOrEqual(100)

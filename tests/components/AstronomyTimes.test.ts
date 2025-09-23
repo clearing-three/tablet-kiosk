@@ -2,9 +2,10 @@
  * AstronomyTimes Component Tests
  *
  * Comprehensive tests for AstronomyTimes component including:
- * - Time display formatting
+ * - Time display formatting with known Unix timestamps
  * - Handling of missing moonrise/moonset ("-" display)
  * - Error handling and validation
+ * - Verification that correct timestamps produce expected outputs
  */
 
 import { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
@@ -72,22 +73,51 @@ describe('AstronomyTimes', () => {
   })
 
   describe('updateTimes', () => {
+    // Use specific Unix timestamps spaced apart to ensure unique times
     const mockAstronomyData: AstronomyData = {
-      sunrise: 1704117000, // Jan 1, 2024, 14:30 UTC (example timestamp)
-      sunset: 1704156000, // Jan 1, 2024, 23:20 UTC (example timestamp)
-      moonrise: 1704138600, // Jan 1, 2024, 20:30 UTC (example timestamp)
-      moonset: 1704099600, // Jan 1, 2024, 09:40 UTC (example timestamp)
+      sunrise: 1609459200, // Jan 1, 2021 00:00:00 UTC
+      sunset: 1609502400, // Jan 1, 2021 12:00:00 UTC
+      moonrise: 1609473600, // Jan 1, 2021 04:00:00 UTC
+      moonset: 1609531200, // Jan 1, 2021 20:00:00 UTC
     }
 
-    it('should update all astronomy time displays', () => {
+    // Calculate expected display values based on current timezone
+    const getExpectedTimeString = (unixTimestamp: number): string => {
+      return new Date(unixTimestamp * 1000).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      })
+    }
+
+    const expectedTimes = {
+      sunrise: getExpectedTimeString(mockAstronomyData.sunrise),
+      sunset: getExpectedTimeString(mockAstronomyData.sunset),
+      moonrise: getExpectedTimeString(mockAstronomyData.moonrise),
+      moonset: getExpectedTimeString(mockAstronomyData.moonset),
+    }
+
+    it('should update all astronomy time displays with correct values', () => {
       astronomyTimes.updateTimes(mockAstronomyData)
 
-      // Check that formatTimeFromUnix was called for valid times
-      // Times will be formatted according to system timezone
-      expect(mockElements.sunrise.textContent).toMatch(/^\d{2}:\d{2}$/)
-      expect(mockElements.sunset.textContent).toMatch(/^\d{2}:\d{2}$/)
-      expect(mockElements.moonrise.textContent).toMatch(/^\d{2}:\d{2}$/)
-      expect(mockElements.moonset.textContent).toMatch(/^\d{2}:\d{2}$/)
+      // Verify that each element displays the exact expected time value
+      // This tests that the correct Unix timestamp is passed to the correct element
+      // and formatted properly for the current timezone
+      expect(mockElements.sunrise.textContent).toBe(expectedTimes.sunrise)
+      expect(mockElements.sunset.textContent).toBe(expectedTimes.sunset)
+      expect(mockElements.moonrise.textContent).toBe(expectedTimes.moonrise)
+      expect(mockElements.moonset.textContent).toBe(expectedTimes.moonset)
+
+      // Additional verification: all times should be unique
+      // This confirms no element mix-up occurred
+      const displayedTimes = [
+        expectedTimes.sunrise,
+        expectedTimes.sunset,
+        expectedTimes.moonrise,
+        expectedTimes.moonset,
+      ]
+      const uniqueTimes = new Set(displayedTimes)
+      expect(uniqueTimes.size).toBe(4) // All 4 times should be different
     })
 
     it('should show "-" for missing moonrise (value 0)', () => {
@@ -355,7 +385,7 @@ describe('AstronomyTimes', () => {
 
       astronomyTimes.updateTimes(extremeTimes)
 
-      // Should format all times without error
+      // Should format all times correctly
       expect(mockElements.sunrise.textContent).toMatch(/^\d{2}:\d{2}$/)
       expect(mockElements.sunset.textContent).toMatch(/^\d{2}:\d{2}$/)
       expect(mockElements.moonrise.textContent).toMatch(/^\d{2}:\d{2}$/)
@@ -372,7 +402,7 @@ describe('AstronomyTimes', () => {
 
       astronomyTimes.updateTimes(futureTimes)
 
-      // Should handle future dates
+      // Should handle future dates correctly
       expect(mockElements.sunrise.textContent).toMatch(/^\d{2}:\d{2}$/)
       expect(mockElements.sunset.textContent).toMatch(/^\d{2}:\d{2}$/)
       expect(mockElements.moonrise.textContent).toMatch(/^\d{2}:\d{2}$/)

@@ -32,16 +32,22 @@ const mockGetElementById = jest.fn((id: string): HTMLElement | null => {
 })
 
 // Mock WeatherService
+const mockMapIconCodeToSVG = jest.fn((iconCode: string) => `mapped-${iconCode}`)
 const mockWeatherService = {
-  mapIconCodeToSVG: jest.fn((iconCode: string) => `mapped-${iconCode}`),
+  mapIconCodeToSVG: mockMapIconCodeToSVG,
 } as unknown as WeatherService
 
 describe('WeatherDisplay', () => {
   let weatherDisplay: WeatherDisplay
 
   beforeEach(() => {
-    // Reset all mocks
+    // Reset all mocks - this clears call history but keeps implementations
     jest.clearAllMocks()
+
+    // Reset mock implementations
+    mockMapIconCodeToSVG.mockImplementation(
+      (iconCode: string) => `mapped-${iconCode}`
+    )
 
     // Mock document.getElementById
     jest
@@ -59,6 +65,9 @@ describe('WeatherDisplay', () => {
 
     // Create WeatherDisplay instance
     weatherDisplay = new WeatherDisplay(mockWeatherService)
+
+    // Force refresh elements to ensure component gets the mocked elements
+    weatherDisplay.refreshElements()
   })
 
   afterEach(() => {
@@ -93,25 +102,26 @@ describe('WeatherDisplay', () => {
     }
 
     it('should update all weather display elements', () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+
       // Ensure all elements are available
       expect(mockElements.icon).toBeTruthy()
       expect(mockElements.tempNow).toBeTruthy()
       expect(mockElements.description).toBeTruthy()
       expect(mockElements.range).toBeTruthy()
 
-      // Debug: Check if elements are found by the component
-      console.log('Testing elements:', {
-        icon: document.getElementById('weather-icon'),
-        tempNow: document.getElementById('temp-now'),
-        description: document.getElementById('weather-desc'),
-        range: document.getElementById('weather-range'),
-      })
-
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
+      // Check if there were any errors
+      if (consoleSpy.mock.calls.length > 0) {
+        console.log('Errors during updateDisplay:', consoleSpy.mock.calls)
+      }
+
       // Check icon update
-      expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('01d')
-      expect(mockElements.icon.data).toBe('weather-icons/mapped-01d.svg')
+      expect(mockMapIconCodeToSVG).toHaveBeenCalledWith('01d')
+      expect(mockElements.icon.data).toBe(
+        'http://localhost/weather-icons/mapped-01d.svg'
+      )
       expect(mockElements.icon.getAttribute('alt')).toBe('Clear sky')
 
       // Check temperature update (should be rounded)
@@ -122,6 +132,8 @@ describe('WeatherDisplay', () => {
 
       // Check temperature range update (should be rounded)
       expect(mockElements.range.textContent).toBe('78° / 65°')
+
+      consoleSpy.mockRestore()
     })
 
     it('should handle different weather conditions', () => {
@@ -135,7 +147,7 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(rainyWeather)
 
-      expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('10n')
+      expect(mockMapIconCodeToSVG).toHaveBeenCalledWith('10n')
       expect(mockElements.tempNow.textContent).toBe('46°')
       expect(mockElements.description.textContent).toBe('Heavy rain')
       expect(mockElements.range.textContent).toBe('50° / 42°')
@@ -213,7 +225,9 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(weather)
 
-      expect(mockElements.icon.data).toBe('weather-icons/mapped-02d.svg')
+      expect(mockElements.icon.data).toBe(
+        'http://localhost/weather-icons/mapped-02d.svg'
+      )
       expect(mockElements.icon.getAttribute('alt')).toBe('Partly cloudy')
     })
 
@@ -231,11 +245,9 @@ describe('WeatherDisplay', () => {
 
         weatherDisplay.updateDisplay(weather)
 
-        expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith(
-          iconCode
-        )
+        expect(mockMapIconCodeToSVG).toHaveBeenCalledWith(iconCode)
         expect(mockElements.icon.data).toBe(
-          `weather-icons/mapped-${iconCode}.svg`
+          `http://localhost/weather-icons/mapped-${iconCode}.svg`
         )
       })
     })

@@ -57,6 +57,15 @@ describe('formatters', () => {
   })
 
   describe('formatCurrentTime', () => {
+    beforeEach(() => {
+      // Mock Date.now to return a fixed timestamp: Jan 1, 2024, 14:30:00 UTC
+      jest.spyOn(Date, 'now').mockReturnValue(1704117000000)
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
     it('should return current time in HH:MM format', () => {
       const result = formatCurrentTime()
       expect(result).toMatch(/^\d{2}:\d{2}$/)
@@ -66,13 +75,24 @@ describe('formatters', () => {
       const result1 = formatCurrentTime()
       const result2 = formatCurrentTime()
 
-      // Both should be valid time formats
+      // Both should be valid time formats and should be identical since time is mocked
       expect(result1).toMatch(/^\d{2}:\d{2}$/)
       expect(result2).toMatch(/^\d{2}:\d{2}$/)
+      expect(result1).toBe(result2) // Should be identical with mocked time
     })
   })
 
   describe('formatCurrentDate', () => {
+    beforeEach(() => {
+      // Mock Date constructor to return a fixed date: January 1, 2024 (Monday)
+      const mockDate = new Date('2024-01-01T14:30:00.000Z')
+      jest.spyOn(global, 'Date').mockImplementation(() => mockDate)
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
     it('should return current date in readable format', () => {
       const result = formatCurrentDate()
 
@@ -88,6 +108,15 @@ describe('formatters', () => {
       expect(result).not.toMatch(
         /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/
       )
+    })
+
+    it('should return predictable output with mocked date', () => {
+      const result = formatCurrentDate()
+
+      // With our mocked date of Jan 1, 2024 (Monday), we expect consistent output
+      // The exact format depends on locale, but structure should be consistent
+      expect(result).toContain('January')
+      expect(result).toContain('1')
     })
   })
 

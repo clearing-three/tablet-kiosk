@@ -16,7 +16,28 @@
 
 ## Development
 
-Since this is a client-side HTML/JS/CSS application, there are no build commands or package managers. Development is file-based.
+This is a TypeScript application built with Vite. Here are the common development commands:
+
+### Setup
+```bash
+npm install
+```
+
+### Development Commands
+- `npm run dev`: Start development server with hot reload
+- `npm run build`: Build for production (TypeScript compilation + Vite build)
+- `npm run preview`: Preview production build locally
+
+### Testing
+- `npm test`: Run tests once
+- `npm run test:watch`: Run tests in watch mode
+- `npm run test:coverage`: Run tests with coverage report
+
+### Code Quality
+- `npm run lint`: Check code with ESLint
+- `npm run lint:fix`: Fix ESLint issues automatically
+- `npm run format`: Format code with Prettier
+- `npm run type-check`: Type check without emitting files
 
 ## Deployment
 

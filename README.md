@@ -14,13 +14,22 @@
 3. Settings → Developer options
     * Turn on USB debugging
 
+
 ## Development
 
-This is a TypeScript application built with Vite. Here are the common development commands:
+### Kiosk environment setup
 
-### Setup
 ```bash
-npm install
+cp .env.example .env.local
+```
+
+Edit `.env.local` and set OpenWeatherMap API key and coordinates.
+
+### Initialization 
+
+```bash
+nvm use
+npm ci
 ```
 
 ### Development Commands
@@ -31,7 +40,7 @@ npm install
 ### Testing
 - `npm test`: Run tests once
 - `npm run test:watch`: Run tests in watch mode
-- `npm run test:coverage`: Run tests with coverage report
+- `npm run test:coverage`: Run tests with coverage report (open `coverage/index.html` to view)
 
 ### Code Quality
 - `npm run lint`: Check code with ESLint

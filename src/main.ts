@@ -281,17 +281,11 @@ class TabletKioskApp {
   public async refresh(): Promise<void> {
     console.log('Refreshing all displays...')
 
-    // Refresh component element references
-    this.weatherDisplay.refreshElements()
-    this.astronomyTimes.refreshElements()
-    this.moonPhase.refreshElements()
-    this.timeDisplay.refreshElements()
-
     // Force weather data update
     await this.updateWeatherData()
 
     // Force time display update
-    this.timeDisplay.updateOnce()
+    this.timeDisplay.updateDisplay()
 
     console.log('Display refresh complete')
   }

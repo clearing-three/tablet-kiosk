@@ -7,28 +7,29 @@
 
 import type { AstronomyTimes as AstronomyData } from '../../types/astronomy.types'
 import { formatTimeFromUnix } from '../../utils/formatters'
+import { getElement } from '../../utils/dom'
 
 export class AstronomyTimes {
   private elements: {
-    sunrise?: HTMLElement
-    sunset?: HTMLElement
-    moonrise?: HTMLElement
-    moonset?: HTMLElement
-  } = {}
+    sunrise: HTMLElement
+    sunset: HTMLElement
+    moonrise: HTMLElement
+    moonset: HTMLElement
+  }
 
   constructor() {
-    this.initializeElements()
+    this.elements = this.initializeElements()
   }
 
   /**
-   * Initialize DOM element references
+   * Initialize DOM element references. Throws if any required element is missing.
    */
-  private initializeElements(): void {
-    this.elements = {
-      sunrise: document.getElementById('sunrise-time') as HTMLElement,
-      sunset: document.getElementById('sunset-time') as HTMLElement,
-      moonrise: document.getElementById('moonrise-time') as HTMLElement,
-      moonset: document.getElementById('moonset-time') as HTMLElement,
+  private initializeElements() {
+    return {
+      sunrise: getElement('sunrise-time'),
+      sunset: getElement('sunset-time'),
+      moonrise: getElement('moonrise-time'),
+      moonset: getElement('moonset-time'),
     }
   }
 
@@ -37,14 +38,11 @@ export class AstronomyTimes {
    * @param sunriseUnix Unix timestamp for sunrise
    */
   private updateSunriseTime(sunriseUnix: number): void {
-    const { sunrise } = this.elements
-    if (!sunrise) return
-
     try {
-      sunrise.textContent = formatTimeFromUnix(sunriseUnix)
+      this.elements.sunrise.textContent = formatTimeFromUnix(sunriseUnix)
     } catch (error) {
       console.error('Error formatting sunrise time:', error)
-      sunrise.textContent = '--'
+      this.elements.sunrise.textContent = '--'
     }
   }
 
@@ -53,14 +51,11 @@ export class AstronomyTimes {
    * @param sunsetUnix Unix timestamp for sunset
    */
   private updateSunsetTime(sunsetUnix: number): void {
-    const { sunset } = this.elements
-    if (!sunset) return
-
     try {
-      sunset.textContent = formatTimeFromUnix(sunsetUnix)
+      this.elements.sunset.textContent = formatTimeFromUnix(sunsetUnix)
     } catch (error) {
       console.error('Error formatting sunset time:', error)
-      sunset.textContent = '--'
+      this.elements.sunset.textContent = '--'
     }
   }
 
@@ -70,18 +65,12 @@ export class AstronomyTimes {
    * @param moonriseUnix Unix timestamp for moonrise
    */
   private updateMoonriseTime(moonriseUnix: number): void {
-    const { moonrise } = this.elements
-    if (!moonrise) return
-
     try {
-      if (moonriseUnix === 0) {
-        moonrise.textContent = '-'
-      } else {
-        moonrise.textContent = formatTimeFromUnix(moonriseUnix)
-      }
+      this.elements.moonrise.textContent =
+        moonriseUnix === 0 ? '-' : formatTimeFromUnix(moonriseUnix)
     } catch (error) {
       console.error('Error formatting moonrise time:', error)
-      moonrise.textContent = '--'
+      this.elements.moonrise.textContent = '--'
     }
   }
 
@@ -91,18 +80,12 @@ export class AstronomyTimes {
    * @param moonsetUnix Unix timestamp for moonset
    */
   private updateMoonsetTime(moonsetUnix: number): void {
-    const { moonset } = this.elements
-    if (!moonset) return
-
     try {
-      if (moonsetUnix === 0) {
-        moonset.textContent = '-'
-      } else {
-        moonset.textContent = formatTimeFromUnix(moonsetUnix)
-      }
+      this.elements.moonset.textContent =
+        moonsetUnix === 0 ? '-' : formatTimeFromUnix(moonsetUnix)
     } catch (error) {
       console.error('Error formatting moonset time:', error)
-      moonset.textContent = '--'
+      this.elements.moonset.textContent = '--'
     }
   }
 
@@ -142,41 +125,25 @@ export class AstronomyTimes {
    * @param astronomy Astronomy times data
    */
   updateTimes(astronomy: AstronomyData): void {
-    try {
-      // Validate input data
-      if (!this.validateAstronomyData(astronomy)) {
-        this.showErrorState()
-        return
-      }
-
-      // Update all time displays
-      this.updateSunriseTime(astronomy.sunrise)
-      this.updateSunsetTime(astronomy.sunset)
-      this.updateMoonriseTime(astronomy.moonrise)
-      this.updateMoonsetTime(astronomy.moonset)
-    } catch (error) {
-      console.error('Error updating astronomy times:', error)
+    if (!this.validateAstronomyData(astronomy)) {
       this.showErrorState()
+      return
     }
+
+    this.updateSunriseTime(astronomy.sunrise)
+    this.updateSunsetTime(astronomy.sunset)
+    this.updateMoonriseTime(astronomy.moonrise)
+    this.updateMoonsetTime(astronomy.moonset)
   }
 
   /**
    * Shows error state for all astronomy time displays
    */
   private showErrorState(): void {
-    const { sunrise, sunset, moonrise, moonset } = this.elements
-
-    if (sunrise) sunrise.textContent = '--'
-    if (sunset) sunset.textContent = '--'
-    if (moonrise) moonrise.textContent = '--'
-    if (moonset) moonset.textContent = '--'
-  }
-
-  /**
-   * Refreshes DOM element references (useful if DOM changes)
-   */
-  refreshElements(): void {
-    this.initializeElements()
+    this.elements.sunrise.textContent = '--'
+    this.elements.sunset.textContent = '--'
+    this.elements.moonrise.textContent = '--'
+    this.elements.moonset.textContent = '--'
   }
 
   /**
@@ -190,10 +157,10 @@ export class AstronomyTimes {
     moonset: string | null
   } {
     return {
-      sunrise: this.elements.sunrise?.textContent || null,
-      sunset: this.elements.sunset?.textContent || null,
-      moonrise: this.elements.moonrise?.textContent || null,
-      moonset: this.elements.moonset?.textContent || null,
+      sunrise: this.elements.sunrise.textContent,
+      sunset: this.elements.sunset.textContent,
+      moonrise: this.elements.moonrise.textContent,
+      moonset: this.elements.moonset.textContent,
     }
   }
 }

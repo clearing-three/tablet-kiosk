@@ -13,30 +13,35 @@ import {
   formatTemperatureRange,
 } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
+import { getElement } from '../../utils/dom'
+
+export const WEATHER_ERROR_TEMP = '--°'
+export const WEATHER_ERROR_DESCRIPTION = 'Weather data unavailable'
+export const WEATHER_ERROR_RANGE = '--° / --°'
 
 export class WeatherDisplay {
   private weatherService: WeatherService
   private elements: {
-    icon?: HTMLObjectElement
-    tempNow?: HTMLElement
-    description?: HTMLElement
-    range?: HTMLElement
-  } = {}
+    icon: HTMLObjectElement
+    tempNow: HTMLElement
+    description: HTMLElement
+    range: HTMLElement
+  }
 
   constructor(weatherService: WeatherService) {
     this.weatherService = weatherService
-    this.initializeElements()
+    this.elements = this.initializeElements()
   }
 
   /**
-   * Initialize DOM element references
+   * Initialize DOM element references. Throws if any required element is missing.
    */
-  private initializeElements(): void {
-    this.elements = {
-      icon: document.getElementById('weather-icon') as HTMLObjectElement,
-      tempNow: document.getElementById('temp-now') as HTMLElement,
-      description: document.getElementById('weather-desc') as HTMLElement,
-      range: document.getElementById('weather-range') as HTMLElement,
+  private initializeElements() {
+    return {
+      icon: getElement<HTMLObjectElement>('weather-icon'),
+      tempNow: getElement('temp-now'),
+      description: getElement('weather-desc'),
+      range: getElement('weather-range'),
     }
   }
 
@@ -46,12 +51,9 @@ export class WeatherDisplay {
    * @param description Weather description for alt text
    */
   private updateWeatherIcon(iconCode: string, description: string): void {
-    const { icon } = this.elements
-    if (!icon) return
-
     const iconFile = this.weatherService.mapIconCodeToSVG(iconCode)
-    icon.data = `weather-icons/${iconFile}.svg`
-    icon.setAttribute('alt', description)
+    this.elements.icon.data = `weather-icons/${iconFile}.svg`
+    this.elements.icon.setAttribute('alt', description)
   }
 
   /**
@@ -59,10 +61,7 @@ export class WeatherDisplay {
    * @param temperature Current temperature value
    */
   private updateCurrentTemperature(temperature: number): void {
-    const { tempNow } = this.elements
-    if (!tempNow) return
-
-    tempNow.textContent = formatTemperatureDisplay(temperature)
+    this.elements.tempNow.textContent = formatTemperatureDisplay(temperature)
   }
 
   /**
@@ -70,10 +69,7 @@ export class WeatherDisplay {
    * @param description Weather condition description
    */
   private updateWeatherDescription(description: string): void {
-    const { description: descElement } = this.elements
-    if (!descElement) return
-
-    descElement.textContent = description
+    this.elements.description.textContent = description
   }
 
   /**
@@ -82,10 +78,7 @@ export class WeatherDisplay {
    * @param minTemp Minimum temperature
    */
   private updateTemperatureRange(maxTemp: number, minTemp: number): void {
-    const { range } = this.elements
-    if (!range) return
-
-    range.textContent = formatTemperatureRange(maxTemp, minTemp)
+    this.elements.range.textContent = formatTemperatureRange(maxTemp, minTemp)
   }
 
   /**
@@ -114,17 +107,8 @@ export class WeatherDisplay {
    * Shows error state in the weather display
    */
   private showErrorState(): void {
-    const { tempNow, description, range } = this.elements
-
-    if (tempNow) tempNow.textContent = '--°'
-    if (description) description.textContent = 'Weather data unavailable'
-    if (range) range.textContent = '--° / --°'
-  }
-
-  /**
-   * Refreshes DOM element references (useful if DOM changes)
-   */
-  refreshElements(): void {
-    this.initializeElements()
+    this.elements.tempNow.textContent = WEATHER_ERROR_TEMP
+    this.elements.description.textContent = WEATHER_ERROR_DESCRIPTION
+    this.elements.range.textContent = WEATHER_ERROR_RANGE
   }
 }

@@ -6,26 +6,27 @@
  */
 
 import { formatCurrentTime, formatCurrentDate } from '../../utils/formatters'
+import { getElement } from '../../utils/dom'
 
 export class TimeDisplay {
   private elements: {
-    time?: HTMLElement
-    date?: HTMLElement
-  } = {}
+    time: HTMLElement
+    date: HTMLElement
+  }
   private updateInterval: number | null = null
   private readonly updateIntervalMs = 1000 // Update every second
 
   constructor() {
-    this.initializeElements()
+    this.elements = this.initializeElements()
   }
 
   /**
-   * Initialize DOM element references
+   * Initialize DOM element references. Throws if any required element is missing.
    */
-  private initializeElements(): void {
-    this.elements = {
-      time: document.getElementById('time') as HTMLElement,
-      date: document.getElementById('date') as HTMLElement,
+  private initializeElements() {
+    return {
+      time: getElement('time'),
+      date: getElement('date'),
     }
   }
 
@@ -33,38 +34,20 @@ export class TimeDisplay {
    * Updates the time display with current time
    */
   private updateTimeDisplay(): void {
-    const { time } = this.elements
-    if (!time) return
-
-    try {
-      const currentTime = formatCurrentTime()
-      time.textContent = currentTime
-    } catch (error) {
-      console.error('Error updating time display:', error)
-      time.textContent = '--:--'
-    }
+    this.elements.time.textContent = formatCurrentTime()
   }
 
   /**
    * Updates the date display with current date
    */
   private updateDateDisplay(): void {
-    const { date } = this.elements
-    if (!date) return
-
-    try {
-      const currentDate = formatCurrentDate()
-      date.textContent = currentDate
-    } catch (error) {
-      console.error('Error updating date display:', error)
-      date.textContent = 'Date unavailable'
-    }
+    this.elements.date.textContent = formatCurrentDate()
   }
 
   /**
    * Updates both time and date displays
    */
-  private updateDisplay(): void {
+  updateDisplay(): void {
     this.updateTimeDisplay()
     this.updateDateDisplay()
   }
@@ -96,30 +79,6 @@ export class TimeDisplay {
   }
 
   /**
-   * Performs a one-time update of time and date displays
-   */
-  updateOnce(): void {
-    this.updateDisplay()
-  }
-
-  /**
-   * Refreshes DOM element references (useful if DOM changes)
-   */
-  refreshElements(): void {
-    this.initializeElements()
-  }
-
-  /**
-   * Shows error state for time and date displays
-   */
-  showErrorState(): void {
-    const { time, date } = this.elements
-
-    if (time) time.textContent = '--:--'
-    if (date) date.textContent = 'Date unavailable'
-  }
-
-  /**
    * Gets the current time and date values from the display
    * @returns Object with current displayed time and date values
    */
@@ -128,8 +87,8 @@ export class TimeDisplay {
     date: string | null
   } {
     return {
-      time: this.elements.time?.textContent || null,
-      date: this.elements.date?.textContent || null,
+      time: this.elements.time.textContent,
+      date: this.elements.date.textContent,
     }
   }
 
@@ -147,14 +106,6 @@ export class TimeDisplay {
    */
   getUpdateInterval(): number {
     return this.updateIntervalMs
-  }
-
-  /**
-   * Checks if the time display elements are available
-   * @returns boolean True if display elements are found
-   */
-  isInitialized(): boolean {
-    return !!(this.elements.time && this.elements.date)
   }
 
   /**

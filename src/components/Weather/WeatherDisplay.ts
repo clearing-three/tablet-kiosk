@@ -14,6 +14,10 @@ import {
 } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 
+export const WEATHER_ERROR_TEMP = '--°'
+export const WEATHER_ERROR_DESCRIPTION = 'Weather data unavailable'
+export const WEATHER_ERROR_RANGE = '--° / --°'
+
 export class WeatherDisplay {
   private weatherService: WeatherService
   private elements: {
@@ -106,19 +110,19 @@ export class WeatherDisplay {
       )
     } catch (error) {
       console.error('Error updating weather display:', error)
-      this.showErrorState()
+      this.showErrorState(this.elements)
     }
   }
 
   /**
    * Shows error state in the weather display
    */
-  private showErrorState(): void {
-    const { tempNow, description, range } = this.elements
+  private showErrorState(elements: typeof this.elements): void {
+    const { tempNow, description, range } = elements
 
-    if (tempNow) tempNow.textContent = '--°'
-    if (description) description.textContent = 'Weather data unavailable'
-    if (range) range.textContent = '--° / --°'
+    if (tempNow) tempNow.textContent = WEATHER_ERROR_TEMP
+    if (description) description.textContent = WEATHER_ERROR_DESCRIPTION
+    if (range) range.textContent = WEATHER_ERROR_RANGE
   }
 
   /**

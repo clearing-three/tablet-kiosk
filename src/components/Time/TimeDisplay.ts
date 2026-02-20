@@ -34,30 +34,20 @@ export class TimeDisplay {
    * Updates the time display with current time
    */
   private updateTimeDisplay(): void {
-    try {
-      this.elements.time.textContent = formatCurrentTime()
-    } catch (error) {
-      console.error('Error updating time display:', error)
-      this.elements.time.textContent = '--:--'
-    }
+    this.elements.time.textContent = formatCurrentTime()
   }
 
   /**
    * Updates the date display with current date
    */
   private updateDateDisplay(): void {
-    try {
-      this.elements.date.textContent = formatCurrentDate()
-    } catch (error) {
-      console.error('Error updating date display:', error)
-      this.elements.date.textContent = 'Date unavailable'
-    }
+    this.elements.date.textContent = formatCurrentDate()
   }
 
   /**
    * Updates both time and date displays
    */
-  private updateDisplay(): void {
+  updateDisplay(): void {
     this.updateTimeDisplay()
     this.updateDateDisplay()
   }
@@ -86,21 +76,6 @@ export class TimeDisplay {
       window.clearInterval(this.updateInterval)
       this.updateInterval = null
     }
-  }
-
-  /**
-   * Performs a one-time update of time and date displays
-   */
-  updateOnce(): void {
-    this.updateDisplay()
-  }
-
-  /**
-   * Shows error state for time and date displays
-   */
-  showErrorState(): void {
-    this.elements.time.textContent = '--:--'
-    this.elements.date.textContent = 'Date unavailable'
   }
 
   /**

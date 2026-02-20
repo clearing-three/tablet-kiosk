@@ -285,7 +285,7 @@ class TabletKioskApp {
     await this.updateWeatherData()
 
     // Force time display update
-    this.timeDisplay.updateOnce()
+    this.timeDisplay.updateDisplay()
 
     console.log('Display refresh complete')
   }

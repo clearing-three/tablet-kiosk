@@ -13,6 +13,8 @@ export default {
     'src/**/*.ts',
     '!src/**/*.d.ts',
     '!src/main.ts', // Entry point, tested via integration
+    '!src/config/environment.ts',
+    '!src/types/app.types.ts',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],

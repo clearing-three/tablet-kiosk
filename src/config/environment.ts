@@ -9,6 +9,13 @@ import type {
   TimeServiceConfig,
   MoonPhaseServiceConfig,
 } from '../types/service-config.types'
+import {
+  validateRequiredEnvVar,
+  validateNumericEnvVar,
+  validateLatitude,
+  validateLongitude,
+  checkApiKeyLength,
+} from './env-validators'
 
 export interface EnvironmentConfig {
   openWeatherApiKey: string
@@ -20,43 +27,6 @@ export interface EnvironmentConfig {
     weatherUpdate: number
     clockUpdate: number
   }
-}
-
-/**
- * Validates that a required environment variable exists and is not empty
- */
-function validateRequiredEnvVar(
-  name: string,
-  value: string | undefined
-): string {
-  if (!value || value.trim() === '') {
-    throw new Error(
-      `Required environment variable ${name} is not set or is empty`
-    )
-  }
-  return value.trim()
-}
-
-/**
- * Validates that a numeric environment variable is a valid number
- */
-function validateNumericEnvVar(
-  name: string,
-  value: string | undefined,
-  defaultValue: number
-): number {
-  if (!value) {
-    return defaultValue
-  }
-
-  const numValue = parseInt(value, 10)
-  if (isNaN(numValue) || numValue <= 0) {
-    throw new Error(
-      `Environment variable ${name} must be a positive number, got: ${value}`
-    )
-  }
-
-  return numValue
 }
 
 /**
@@ -94,28 +64,9 @@ export function loadEnvironmentConfig(): EnvironmentConfig {
       },
     }
 
-    // Additional validation for API key format (basic check)
-    if (config.openWeatherApiKey.length < 32) {
-      console.warn(
-        'OpenWeatherMap API key appears to be too short. Please verify it is correct.'
-      )
-    }
-
-    // Validate location coordinates
-    const lat = parseFloat(config.location.lat)
-    const lon = parseFloat(config.location.lon)
-
-    if (isNaN(lat) || lat < -90 || lat > 90) {
-      throw new Error(
-        `Invalid latitude: ${config.location.lat}. Must be between -90 and 90.`
-      )
-    }
-
-    if (isNaN(lon) || lon < -180 || lon > 180) {
-      throw new Error(
-        `Invalid longitude: ${config.location.lon}. Must be between -180 and 180.`
-      )
-    }
+    checkApiKeyLength(config.openWeatherApiKey)
+    validateLatitude(config.location.lat)
+    validateLongitude(config.location.lon)
 
     return config
   } catch (error) {

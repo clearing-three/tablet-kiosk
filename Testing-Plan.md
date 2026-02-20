@@ -98,43 +98,25 @@ Implement comprehensive testing suite and quality assurance measures to ensure c
   - Date formatting accuracy
   - Interval management
 
-### 3.6 Integration Testing
-**Task**: End-to-end testing of critical workflows
-**Details**:
-- Weather data flow test:
-  - API call → data processing → DOM updates
-  - Verify complete weather display pipeline
-- Application initialization test:
-  - Services start correctly
-  - Initial data loads properly
-  - Intervals are established
-- Error recovery test:
-  - API failure handling
-  - Graceful degradation
-  - User-visible error messages
-- Configuration test:
-  - Environment variables loaded correctly
-  - API key validation works
-  - Invalid configuration handled properly
+### ~~3.6 Integration Testing~~ — N/A
+**Decision**: Not doing. Real breakages will come from vendor API changes, which mocked
+integration tests cannot catch. Service and component unit tests already cover the
+data transformation and rendering paths sufficiently.
 
-### 3.7 Performance Testing
-**Task**: Ensure no performance regressions
-**Details**:
-- Initial load time benchmarks
-- Memory usage monitoring
-- Update interval performance (10-minute weather, 1-second clock)
-- DOM manipulation efficiency
-- API call timing and caching
+### ~~3.7 Performance Testing~~ — N/A
+**Decision**: Not doing. Single kiosk device with no performance concerns.
 
-### 3.8 Error Scenario Testing
-**Task**: Comprehensive error handling validation
+### ✅ 3.8 Coverage Gaps
+**Task**: Fill remaining test coverage gaps
 **Details**:
-- Network failure scenarios
-- Invalid API responses
-- Missing environment variables
-- DOM element not found errors
-- Invalid moon phase data
-- Browser compatibility issues
+1. ✅ Test `src/config/environment.ts`:
+   - ✅ `validateRequiredEnvVar` — missing and empty values throw, valid values pass
+   - ✅ `validateNumericEnvVar` — invalid/non-positive values throw, missing uses default
+   - ✅ `loadEnvironmentConfig` — invalid lat/lon throws, short API key warns
+   - Extracted validators to `src/config/env-validators.ts` for testability
+2. ✅ Review coverage report and address any remaining untested paths in services/utilities
+   - Added `tests/utils/assets.test.ts`
+   - Excluded `environment.ts` and `app.types.ts` from coverage (untestable in Jest)
 
 ### 3.9 Test Automation Integration
 **Task**: Integrate testing into development workflow

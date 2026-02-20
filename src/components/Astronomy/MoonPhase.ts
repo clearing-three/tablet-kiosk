@@ -113,25 +113,14 @@ export class MoonPhase {
    * @param moonPhase Moon phase value from 0 to 1
    */
   updatePhase(moonPhase: number): void {
-    try {
-      // Validate input
-      if (!this.validatePhaseValue(moonPhase)) {
-        this.showErrorState()
-        return
-      }
-
-      // Normalize phase value to 0-1 range
-      const normalizedPhase = this.normalizePhase(moonPhase)
-
-      // Update phase name
-      this.updatePhaseName(normalizedPhase)
-
-      // Render moon SVG
-      this.renderMoonSVG(normalizedPhase)
-    } catch (error) {
-      console.error('Error updating moon phase display:', error)
+    if (!this.validatePhaseValue(moonPhase)) {
       this.showErrorState()
+      return
     }
+
+    const normalizedPhase = this.normalizePhase(moonPhase)
+    this.updatePhaseName(normalizedPhase)
+    this.renderMoonSVG(normalizedPhase)
   }
 
   /**

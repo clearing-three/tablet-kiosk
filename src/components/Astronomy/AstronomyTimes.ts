@@ -125,22 +125,15 @@ export class AstronomyTimes {
    * @param astronomy Astronomy times data
    */
   updateTimes(astronomy: AstronomyData): void {
-    try {
-      // Validate input data
-      if (!this.validateAstronomyData(astronomy)) {
-        this.showErrorState()
-        return
-      }
-
-      // Update all time displays
-      this.updateSunriseTime(astronomy.sunrise)
-      this.updateSunsetTime(astronomy.sunset)
-      this.updateMoonriseTime(astronomy.moonrise)
-      this.updateMoonsetTime(astronomy.moonset)
-    } catch (error) {
-      console.error('Error updating astronomy times:', error)
+    if (!this.validateAstronomyData(astronomy)) {
       this.showErrorState()
+      return
     }
+
+    this.updateSunriseTime(astronomy.sunrise)
+    this.updateSunsetTime(astronomy.sunset)
+    this.updateMoonriseTime(astronomy.moonrise)
+    this.updateMoonsetTime(astronomy.moonset)
   }
 
   /**

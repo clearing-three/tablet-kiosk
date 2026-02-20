@@ -87,7 +87,7 @@ Implement comprehensive testing suite and quality assurance measures to ensure c
   - Forecast list generation
   - Correct number of forecast days
   - Proper date formatting for each day
-- 3.5.3 Test `AstronomyTimes.ts`:
+- ✅ 3.5.3 Test `AstronomyTimes.ts`:
   - Time display formatting
   - Handling of missing moonrise/moonset ("-" display)
 - 3.5.4 Test `MoonPhase.ts`:

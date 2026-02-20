@@ -6,26 +6,27 @@
  */
 
 import { MoonPhaseService } from '../../services/MoonPhaseService'
+import { getElement } from '../../utils/dom'
 
 export class MoonPhase {
   private moonPhaseService: MoonPhaseService
   private elements: {
-    moonContainer?: HTMLElement
-    phaseName?: HTMLElement
-  } = {}
+    moonContainer: HTMLElement
+    phaseName: HTMLElement
+  }
 
   constructor(moonPhaseService: MoonPhaseService) {
     this.moonPhaseService = moonPhaseService
-    this.initializeElements()
+    this.elements = this.initializeElements()
   }
 
   /**
-   * Initialize DOM element references
+   * Initialize DOM element references. Throws if any required element is missing.
    */
-  private initializeElements(): void {
-    this.elements = {
-      moonContainer: document.getElementById('moon') as HTMLElement,
-      phaseName: document.getElementById('moon-phase-name') as HTMLElement,
+  private initializeElements() {
+    return {
+      moonContainer: getElement('moon'),
+      phaseName: getElement('moon-phase-name'),
     }
   }
 
@@ -66,15 +67,12 @@ export class MoonPhase {
    * @param phase Moon phase value
    */
   private updatePhaseName(phase: number): void {
-    const { phaseName } = this.elements
-    if (!phaseName) return
-
     try {
-      const name = this.moonPhaseService.getPhaseNameLegacy(phase)
-      phaseName.textContent = name
+      this.elements.phaseName.textContent =
+        this.moonPhaseService.getPhaseNameLegacy(phase)
     } catch (error) {
       console.error('Error updating moon phase name:', error)
-      phaseName.textContent = 'Unknown Phase'
+      this.elements.phaseName.textContent = 'Unknown Phase'
     }
   }
 
@@ -82,11 +80,11 @@ export class MoonPhase {
    * Updates the moon SVG container attributes
    */
   private updateSVGAttributes(): void {
-    const { moonContainer } = this.elements
-    if (!moonContainer) return
-
-    moonContainer.setAttribute('viewBox', '0 0 200 200')
-    moonContainer.setAttribute('preserveAspectRatio', 'xMidYMid meet')
+    this.elements.moonContainer.setAttribute('viewBox', '0 0 200 200')
+    this.elements.moonContainer.setAttribute(
+      'preserveAspectRatio',
+      'xMidYMid meet'
+    )
   }
 
   /**
@@ -140,42 +138,28 @@ export class MoonPhase {
    * Shows error state for moon phase display
    */
   private showErrorState(): void {
-    const { moonContainer, phaseName } = this.elements
+    this.elements.phaseName.textContent = 'Phase Unknown'
 
-    if (phaseName) {
-      phaseName.textContent = 'Phase Unknown'
-    }
+    // Clear the container and show a simple placeholder
+    this.elements.moonContainer.innerHTML = ''
 
-    if (moonContainer) {
-      // Clear the container and show a simple placeholder
-      moonContainer.innerHTML = ''
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.setAttribute('viewBox', '0 0 200 200')
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
 
-      // Create a simple circle as fallback
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-      svg.setAttribute('viewBox', '0 0 200 200')
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
+    const circle = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'circle'
+    )
+    circle.setAttribute('cx', '100')
+    circle.setAttribute('cy', '100')
+    circle.setAttribute('r', '80')
+    circle.setAttribute('fill', 'none')
+    circle.setAttribute('stroke', '#ffffff')
+    circle.setAttribute('stroke-width', '2')
 
-      const circle = document.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'circle'
-      )
-      circle.setAttribute('cx', '100')
-      circle.setAttribute('cy', '100')
-      circle.setAttribute('r', '80')
-      circle.setAttribute('fill', 'none')
-      circle.setAttribute('stroke', '#ffffff')
-      circle.setAttribute('stroke-width', '2')
-
-      svg.appendChild(circle)
-      moonContainer.appendChild(svg)
-    }
-  }
-
-  /**
-   * Refreshes DOM element references (useful if DOM changes)
-   */
-  refreshElements(): void {
-    this.initializeElements()
+    svg.appendChild(circle)
+    this.elements.moonContainer.appendChild(svg)
   }
 
   /**
@@ -183,23 +167,6 @@ export class MoonPhase {
    * @returns string Current phase name or null if not available
    */
   getCurrentPhaseName(): string | null {
-    const { phaseName } = this.elements
-    return phaseName?.textContent || null
-  }
-
-  /**
-   * Checks if the moon phase display has been initialized
-   * @returns boolean True if display elements are available
-   */
-  isInitialized(): boolean {
-    return !!(this.elements.moonContainer && this.elements.phaseName)
-  }
-
-  /**
-   * Checks if the moon phase library is available for rendering
-   * @returns boolean True if moon-phase.js library is loaded
-   */
-  isLibraryAvailable(): boolean {
-    return this.moonPhaseService.isLibraryAvailable()
+    return this.elements.phaseName.textContent
   }
 }

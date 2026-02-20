@@ -106,14 +106,17 @@ data transformation and rendering paths sufficiently.
 ### ~~3.7 Performance Testing~~ — N/A
 **Decision**: Not doing. Single kiosk device with no performance concerns.
 
-### 3.8 Coverage Gaps
+### ✅ 3.8 Coverage Gaps
 **Task**: Fill remaining test coverage gaps
 **Details**:
-1. Test `src/config/environment.ts`:
-   - `validateRequiredEnvVar` — missing and empty values throw, valid values pass
-   - `validateNumericEnvVar` — invalid/non-positive values throw, missing uses default
-   - `loadEnvironmentConfig` — invalid lat/lon throws, short API key warns
-2. Review coverage report and address any remaining untested paths in services/utilities
+1. ✅ Test `src/config/environment.ts`:
+   - ✅ `validateRequiredEnvVar` — missing and empty values throw, valid values pass
+   - ✅ `validateNumericEnvVar` — invalid/non-positive values throw, missing uses default
+   - ✅ `loadEnvironmentConfig` — invalid lat/lon throws, short API key warns
+   - Extracted validators to `src/config/env-validators.ts` for testability
+2. ✅ Review coverage report and address any remaining untested paths in services/utilities
+   - Added `tests/utils/assets.test.ts`
+   - Excluded `environment.ts` and `app.types.ts` from coverage (untestable in Jest)
 
 ### 3.9 Test Automation Integration
 **Task**: Integrate testing into development workflow

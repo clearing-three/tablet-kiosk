@@ -13,11 +13,18 @@ import { WeatherService } from '../../services/WeatherService'
 
 export class WeatherForecast {
   private weatherService: WeatherService
-  private forecastContainer: HTMLElement | null
+  private forecastContainer: HTMLElement
 
   constructor(weatherService: WeatherService) {
+    const container = document.getElementById('forecast')
+    if (!container) {
+      throw new Error(
+        'WeatherForecast: required element #forecast not found in DOM'
+      )
+    }
+
     this.weatherService = weatherService
-    this.forecastContainer = document.getElementById('forecast')
+    this.forecastContainer = container
   }
 
   /**
@@ -81,9 +88,7 @@ export class WeatherForecast {
    * Clears the forecast container
    */
   private clearForecast(): void {
-    if (this.forecastContainer) {
-      this.forecastContainer.innerHTML = ''
-    }
+    this.forecastContainer.innerHTML = ''
   }
 
   /**
@@ -91,11 +96,6 @@ export class WeatherForecast {
    * @param forecast Array of daily weather forecast data (next 3 days)
    */
   updateForecast(forecast: ForecastDay[]): void {
-    if (!this.forecastContainer) {
-      console.error('Forecast container element not found')
-      return
-    }
-
     try {
       // Validate forecast data
       if (!this.validateForecastData(forecast)) {
@@ -124,8 +124,6 @@ export class WeatherForecast {
    * Shows error state in the forecast display
    */
   private showErrorState(): void {
-    if (!this.forecastContainer) return
-
     this.clearForecast()
 
     const errorDiv = document.createElement('div')
@@ -136,19 +134,10 @@ export class WeatherForecast {
   }
 
   /**
-   * Refreshes the forecast container reference (useful if DOM changes)
-   */
-  refreshContainer(): void {
-    this.forecastContainer = document.getElementById('forecast')
-  }
-
-  /**
    * Gets the current number of forecast days displayed
    * @returns number Number of forecast days currently displayed
    */
   getForecastDayCount(): number {
-    if (!this.forecastContainer) return 0
-
     return this.forecastContainer.querySelectorAll('.forecast-day').length
   }
 }

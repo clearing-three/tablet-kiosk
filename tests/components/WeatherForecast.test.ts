@@ -7,6 +7,7 @@
  * - Proper date formatting for each day
  */
 
+import type { Mock } from 'vitest'
 import { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
 import { WeatherService } from '../../src/services/WeatherService'
 import type { ProcessedWeatherData } from '../../src/types/weather.types'
@@ -57,7 +58,7 @@ describe('WeatherForecast', () => {
     document.body.innerHTML = '<div id="forecast"></div>'
 
     mockWeatherService = {
-      mapIconCodeToSVG: jest.fn().mockReturnValue('clear-day'),
+      mapIconCodeToSVG: vi.fn().mockReturnValue('clear-day'),
     }
 
     weatherForecast = new WeatherForecast(
@@ -119,7 +120,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should set the icon SVG path using the mapped icon code', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as jest.Mock)
+      ;(mockWeatherService.mapIconCodeToSVG as Mock)
         .mockReturnValueOnce('clear-day')
         .mockReturnValueOnce('partly-cloudy')
         .mockReturnValueOnce('rain')
@@ -236,7 +237,7 @@ describe('WeatherForecast', () => {
 
   describe('Validation and error handling', () => {
     it('should show error state when forecast is not an array', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       weatherForecast.updateForecast(null as any)
 
@@ -255,7 +256,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should show error state when a day is missing dayName', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       const invalid = [makeForecastDay({ dayName: '' })]
 
       weatherForecast.updateForecast(invalid)
@@ -265,7 +266,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should show error state when a day is missing iconCode', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       const invalid = [makeForecastDay({ iconCode: '' })]
 
       weatherForecast.updateForecast(invalid)
@@ -275,7 +276,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should show error state when a day is missing description', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       const invalid = [makeForecastDay({ description: '' })]
 
       weatherForecast.updateForecast(invalid)
@@ -285,11 +286,9 @@ describe('WeatherForecast', () => {
     })
 
     it('should show error state when mapIconCodeToSVG throws', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as jest.Mock).mockImplementation(
-        () => {
-          throw new Error('mapping failed')
-        }
-      )
+      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
+        throw new Error('mapping failed')
+      })
 
       weatherForecast.updateForecast(THREE_DAYS)
 

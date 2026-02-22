@@ -165,19 +165,19 @@ describe('TimeService', () => {
 
     it('should handle time boundaries correctly', () => {
       // Mock specific times to test boundaries
-      jest.useFakeTimers()
+      vi.useFakeTimers()
 
       // Test midnight boundary
-      jest.setSystemTime(new Date('2022-01-01T00:00:00Z'))
+      vi.setSystemTime(new Date('2022-01-01T00:00:00Z'))
       const midnight = timeService.getCurrentTimeAndDate()
       expect(midnight.time).toMatch(/^\d{2}:\d{2}$/)
 
       // Test noon boundary
-      jest.setSystemTime(new Date('2022-01-01T12:00:00Z'))
+      vi.setSystemTime(new Date('2022-01-01T12:00:00Z'))
       const noon = timeService.getCurrentTimeAndDate()
       expect(noon.time).toMatch(/^\d{2}:\d{2}$/)
 
-      jest.useRealTimers()
+      vi.useRealTimers()
     })
   })
 
@@ -308,15 +308,15 @@ describe('TimeService', () => {
 
   describe('Clock Interval Management', () => {
     beforeEach(() => {
-      jest.useFakeTimers()
+      vi.useFakeTimers()
     })
 
     afterEach(() => {
-      jest.useRealTimers()
+      vi.useRealTimers()
     })
 
     it('should start clock updates with correct interval', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
 
       timeService.startClockUpdates(callback)
 
@@ -324,11 +324,11 @@ describe('TimeService', () => {
       expect(callback).toHaveBeenCalledTimes(1)
 
       // Should update again after interval
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
       expect(callback).toHaveBeenCalledTimes(2)
 
       // And again
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
       expect(callback).toHaveBeenCalledTimes(3)
     })
 
@@ -343,13 +343,13 @@ describe('TimeService', () => {
     })
 
     it('should stop existing intervals before starting new ones', () => {
-      const callback1 = jest.fn()
-      const callback2 = jest.fn()
+      const callback1 = vi.fn()
+      const callback2 = vi.fn()
 
       timeService.startClockUpdates(callback1)
       timeService.startClockUpdates(callback2)
 
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       // Only the second callback should be called
       expect(callback1).toHaveBeenCalledTimes(1) // Only initial call
@@ -357,12 +357,12 @@ describe('TimeService', () => {
     })
 
     it('should stop clock updates correctly', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
 
       timeService.startClockUpdates(callback)
       timeService.stopClockUpdates()
 
-      jest.advanceTimersByTime(5000) // Advance 5 seconds
+      vi.advanceTimersByTime(5000) // Advance 5 seconds
 
       // Should only have been called once (initially)
       expect(callback).toHaveBeenCalledTimes(1)
@@ -381,15 +381,15 @@ describe('TimeService', () => {
 
   describe('Weather Interval Management', () => {
     beforeEach(() => {
-      jest.useFakeTimers()
+      vi.useFakeTimers()
     })
 
     afterEach(() => {
-      jest.useRealTimers()
+      vi.useRealTimers()
     })
 
     it('should start weather updates with correct interval', async () => {
-      const callback = jest.fn().mockResolvedValue(undefined)
+      const callback = vi.fn().mockResolvedValue(undefined)
 
       timeService.startWeatherUpdates(callback)
 
@@ -398,13 +398,13 @@ describe('TimeService', () => {
       expect(callback).toHaveBeenCalledTimes(1)
 
       // Should update again after interval (10 minutes)
-      jest.advanceTimersByTime(600000)
+      vi.advanceTimersByTime(600000)
       await Promise.resolve()
       expect(callback).toHaveBeenCalledTimes(2)
     })
 
     it('should handle async weather update callbacks', async () => {
-      const asyncCallback = jest.fn().mockImplementation(async () => {
+      const asyncCallback = vi.fn().mockImplementation(async () => {
         await new Promise(resolve => setTimeout(resolve, 100))
         return 'completed'
       })
@@ -418,10 +418,10 @@ describe('TimeService', () => {
     })
 
     it('should handle weather callback errors gracefully', async () => {
-      const errorCallback = jest
+      const errorCallback = vi
         .fn()
         .mockRejectedValue(new Error('Weather update failed'))
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       timeService.startWeatherUpdates(errorCallback)
 
@@ -438,20 +438,20 @@ describe('TimeService', () => {
     })
 
     it('should stop weather updates correctly', async () => {
-      const callback = jest.fn().mockResolvedValue(undefined)
+      const callback = vi.fn().mockResolvedValue(undefined)
 
       timeService.startWeatherUpdates(callback)
       timeService.stopWeatherUpdates()
 
-      jest.advanceTimersByTime(600000) // Advance 10 minutes
-      await jest.runOnlyPendingTimersAsync()
+      vi.advanceTimersByTime(600000) // Advance 10 minutes
+      await vi.runAllTimersAsync()
 
       // Should only have been called once (initially)
       expect(callback).toHaveBeenCalledTimes(1)
     })
 
     it('should track weather interval status correctly', () => {
-      const callback = jest.fn().mockResolvedValue(undefined)
+      const callback = vi.fn().mockResolvedValue(undefined)
 
       expect(timeService.getIntervalStatus().weatherRunning).toBe(false)
 
@@ -465,16 +465,16 @@ describe('TimeService', () => {
 
   describe('Interval Management Integration', () => {
     beforeEach(() => {
-      jest.useFakeTimers()
+      vi.useFakeTimers()
     })
 
     afterEach(() => {
-      jest.useRealTimers()
+      vi.useRealTimers()
     })
 
     it('should stop all intervals at once', () => {
-      const clockCallback = jest.fn()
-      const weatherCallback = jest.fn().mockResolvedValue(undefined)
+      const clockCallback = vi.fn()
+      const weatherCallback = vi.fn().mockResolvedValue(undefined)
 
       timeService.startClockUpdates(clockCallback)
       timeService.startWeatherUpdates(weatherCallback)
@@ -489,7 +489,7 @@ describe('TimeService', () => {
     })
 
     it('should handle multiple start/stop cycles correctly', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
 
       // Start and stop multiple times
       timeService.startClockUpdates(callback)
@@ -500,7 +500,7 @@ describe('TimeService', () => {
 
       expect(timeService.getIntervalStatus().clockRunning).toBe(true)
 
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
       expect(callback).toHaveBeenCalledTimes(4) // 3 initial calls + 1 interval call
     })
   })
@@ -570,25 +570,25 @@ describe('TimeService', () => {
     })
 
     it('should handle system clock changes during interval operation', () => {
-      jest.useFakeTimers()
-      const callback = jest.fn()
+      vi.useFakeTimers()
+      const callback = vi.fn()
 
       timeService.startClockUpdates(callback)
 
       // Simulate system clock change
-      jest.setSystemTime(new Date('2025-01-01T00:00:00Z'))
-      jest.advanceTimersByTime(1000)
+      vi.setSystemTime(new Date('2025-01-01T00:00:00Z'))
+      vi.advanceTimersByTime(1000)
 
       expect(callback).toHaveBeenCalledTimes(2) // Initial + 1 interval call
       expect(() => {
         timeService.updateTimeAndDateDisplay()
       }).not.toThrow()
 
-      jest.useRealTimers()
+      vi.useRealTimers()
     })
 
     it('should handle rapid start/stop operations', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
 
       // Rapid start/stop operations
       for (let i = 0; i < 10; i++) {

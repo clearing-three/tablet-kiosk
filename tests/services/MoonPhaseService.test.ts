@@ -408,7 +408,7 @@ describe('MoonPhaseService', () => {
       // Simulate library not being available
       delete (globalThis as any).phase_junk
 
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
       moonPhaseService.generateSVG(0.5)
 
@@ -428,7 +428,7 @@ describe('MoonPhaseService', () => {
       // Simulate library not being available
       delete (globalThis as any).phase_junk
 
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhaseService.updateMoonPhaseDisplay(0.5)
 

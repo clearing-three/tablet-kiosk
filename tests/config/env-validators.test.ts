@@ -9,6 +9,7 @@
  *   - checkApiKeyLength
  */
 
+import type { MockInstance } from 'vitest'
 import {
   validateRequiredEnvVar,
   validateNumericEnvVar,
@@ -154,10 +155,10 @@ describe('validateLongitude', () => {
 })
 
 describe('checkApiKeyLength', () => {
-  let warnSpy: jest.SpyInstance
+  let warnSpy: MockInstance
 
   beforeEach(() => {
-    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
   })
 
   afterEach(() => {

@@ -83,7 +83,7 @@ describe('iconMapper', () => {
     })
 
     it('should warn for unknown codes', () => {
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
       mapOWMIconToSVG('unknown-code')
 

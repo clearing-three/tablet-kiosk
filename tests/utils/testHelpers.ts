@@ -1,5 +1,6 @@
 // Test utility functions and helpers
 
+import type { Mock } from 'vitest'
 import type { WeatherData } from '../../src/types/weather.types'
 import type { AstronomyTimes, MoonPhase } from '../../src/types/astronomy.types'
 
@@ -200,14 +201,14 @@ export const mockApiResponses = {
  * Helper to mock fetch responses
  */
 export function mockFetch(response: Partial<Response>) {
-  ;(global.fetch as jest.Mock).mockResolvedValueOnce(response)
+  ;(global.fetch as Mock).mockResolvedValueOnce(response)
 }
 
 /**
  * Helper to mock fetch rejections
  */
 export function mockFetchRejection(error: Error) {
-  ;(global.fetch as jest.Mock).mockRejectedValueOnce(error)
+  ;(global.fetch as Mock).mockRejectedValueOnce(error)
 }
 
 /**
@@ -279,7 +280,7 @@ export function expectErrorHandling(
   expectedError?: string | RegExp
 ) {
   return async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     try {
       await testFn()

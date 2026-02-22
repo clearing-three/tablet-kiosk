@@ -48,8 +48,7 @@ export function resetAllMocks() {
   MoonPhaseMock.reset()
   BrowserApiMock.reset()
 
-  // Clear all Jest mocks
-  jest.clearAllMocks()
+  vi.clearAllMocks()
 }
 
 /**

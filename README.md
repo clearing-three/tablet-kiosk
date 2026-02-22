@@ -37,11 +37,11 @@ npm run format && npm run lint:fix && npm run lint && npm test && npm run build
 Requires tablet setup — see [Tablet](#tablet) section below.
 
 1. Install Android Debug Bridge.
-```
+```bash
 sudo apt install android-tools-adb
 adb devices
 ```
-2. Use `deploy.sh`, see instructions below.
+2. Use `deploy.sh`.
 
 ### Deployment Commands
 - `./deploy.sh`: Deploy files to connected Android tablet via ADB
@@ -66,5 +66,5 @@ The SVG weather icons in `public/weather-icons/` are sourced from [basmilius/wea
 ### Enable Developer Mode
 1. Settings → About tablet → Software information
     * Tap Build Number 7 times
-3. Settings → Developer options
+2. Settings → Developer options
     * Turn on USB debugging

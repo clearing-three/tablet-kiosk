@@ -8,6 +8,7 @@
  * - Data processing and validation
  */
 
+import type { Mock } from 'vitest'
 import { WeatherService } from '../../src/services/WeatherService'
 import type { WeatherServiceConfig } from '../../src/types/service-config.types'
 import {
@@ -87,7 +88,7 @@ describe('WeatherService', () => {
 
       // Verify the fetch was called and check the URL contains expected parts
       expect(global.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (global.fetch as jest.Mock).mock.calls[0][0]
+      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
 
       expect(fetchCall).toContain(
         'https://api.openweathermap.org/data/3.0/onecall'
@@ -115,7 +116,7 @@ describe('WeatherService', () => {
 
       // Verify the fetch was called and check the URL contains expected parts
       expect(global.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (global.fetch as jest.Mock).mock.calls[0][0]
+      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
 
       expect(fetchCall).toContain('lat=51.5074')
       expect(fetchCall).toContain('lon=-0.1278')
@@ -138,7 +139,7 @@ describe('WeatherService', () => {
 
       // Verify the fetch was called and check the URL does not contain lang parameter
       expect(global.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (global.fetch as jest.Mock).mock.calls[0][0]
+      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
 
       expect(fetchCall).not.toContain('lang=')
     })

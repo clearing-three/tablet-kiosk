@@ -54,8 +54,8 @@ export class MockSVGObjectElement {
     // Create mock contentDocument
     this.contentDocument = {
       documentElement: {
-        setAttribute: jest.fn(),
-        getAttribute: jest.fn(() => '100'),
+        setAttribute: vi.fn(),
+        getAttribute: vi.fn(() => '100'),
         style: {
           width: '100%',
           height: '100%',
@@ -184,11 +184,11 @@ export class LocalStorageMock {
  * Mock console for testing console output
  */
 export class ConsoleMock {
-  log = jest.fn()
-  error = jest.fn()
-  warn = jest.fn()
-  info = jest.fn()
-  debug = jest.fn()
+  log = vi.fn()
+  error = vi.fn()
+  warn = vi.fn()
+  info = vi.fn()
+  debug = vi.fn()
 
   clear(): void {
     this.log.mockClear()
@@ -203,9 +203,9 @@ export class ConsoleMock {
  * Mock geolocation API
  */
 export class GeolocationMock {
-  getCurrentPosition = jest.fn()
-  watchPosition = jest.fn()
-  clearWatch = jest.fn()
+  getCurrentPosition = vi.fn()
+  watchPosition = vi.fn()
+  clearWatch = vi.fn()
 
   mockSuccess(position: GeolocationPosition) {
     this.getCurrentPosition.mockImplementationOnce(success => {
@@ -226,9 +226,9 @@ export class GeolocationMock {
  * Mock ResizeObserver for responsive behavior testing
  */
 export class ResizeObserverMock {
-  observe = jest.fn()
-  unobserve = jest.fn()
-  disconnect = jest.fn()
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
 
   constructor(callback: ResizeObserverCallback) {
     // Store callback for potential triggering in tests
@@ -245,9 +245,9 @@ export class ResizeObserverMock {
  * Mock IntersectionObserver for visibility testing
  */
 export class IntersectionObserverMock {
-  observe = jest.fn()
-  unobserve = jest.fn()
-  disconnect = jest.fn()
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
 
   constructor(callback: IntersectionObserverCallback) {
     ;(this as any).callback = callback
@@ -279,10 +279,10 @@ export class BrowserApiMock {
     this.originalApis.set('setTimeout', global.setTimeout)
     this.originalApis.set('clearTimeout', global.clearTimeout)
 
-    global.setInterval = jest.fn(TimerMock.mockSetInterval) as any
-    global.clearInterval = jest.fn(TimerMock.mockClearInterval) as any
-    global.setTimeout = jest.fn(TimerMock.mockSetTimeout) as any
-    global.clearTimeout = jest.fn(TimerMock.mockClearTimeout) as any
+    global.setInterval = vi.fn(TimerMock.mockSetInterval) as any
+    global.clearInterval = vi.fn(TimerMock.mockClearInterval) as any
+    global.setTimeout = vi.fn(TimerMock.mockSetTimeout) as any
+    global.clearTimeout = vi.fn(TimerMock.mockClearTimeout) as any
 
     // Mock localStorage
     this.originalApis.set('localStorage', global.localStorage)
@@ -330,8 +330,8 @@ export class BrowserApiMock {
     TimerMock.clearAll()
     ;(global.localStorage as any).clear()
 
-    // Reset jest mocks
-    jest.clearAllMocks()
+    // Reset vi mocks
+    vi.clearAllMocks()
   }
 }
 
@@ -387,8 +387,8 @@ export const browserApiHelpers = {
 
   // Fast forward timers (if using fake timers)
   fastForwardTimers: (ms: number) => {
-    if (jest.isMockFunction(setTimeout)) {
-      jest.advanceTimersByTime(ms)
+    if (vi.isMockFunction(setTimeout)) {
+      vi.advanceTimersByTime(ms)
     }
   },
 }

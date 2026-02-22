@@ -5,6 +5,8 @@
  * and SVG generation for testing purposes.
  */
 
+import type { Mock } from 'vitest'
+
 /**
  * Mock moon phase calculation function
  * Replaces the global phase_junk function from moon-phase.js
@@ -131,12 +133,12 @@ export class MoonPhaseMock {
     }
 
     // Replace with mocks
-    ;(global as any).phase_junk = jest.fn(mockPhaseJunk)
-    ;(global as any).moon_day = jest.fn(mockMoonDay)
+    ;(global as any).phase_junk = vi.fn(mockPhaseJunk)
+    ;(global as any).moon_day = vi.fn(mockMoonDay)
 
     // Mock Date.prototype.getJulian if it exists
     if (typeof (Date.prototype as any).getJulian !== 'undefined') {
-      ;(Date.prototype as any).getJulian = jest.fn(function (this: Date) {
+      ;(Date.prototype as any).getJulian = vi.fn(function (this: Date) {
         return mockGetJulian(this)
       })
     }
@@ -164,15 +166,15 @@ export class MoonPhaseMock {
    */
   static mockPhase(phase: number, svgPath?: string) {
     const mockSvgPath = svgPath || mockPhaseJunk(phase)
-    ;(global as any).phase_junk = jest.fn(() => mockSvgPath)
-    ;(global as any).moon_day = jest.fn(() => phase)
+    ;(global as any).phase_junk = vi.fn(() => mockSvgPath)
+    ;(global as any).moon_day = vi.fn(() => phase)
   }
 
   /**
    * Mock moon phase for specific date
    */
   static mockPhaseForDate(date: Date, phase: number) {
-    ;(global as any).moon_day = jest.fn((inputDate: Date) => {
+    ;(global as any).moon_day = vi.fn((inputDate: Date) => {
       if (inputDate.getTime() === date.getTime()) {
         return phase
       }
@@ -185,7 +187,7 @@ export class MoonPhaseMock {
    */
   static mockEdgeCases() {
     // Mock invalid inputs
-    ;(global as any).phase_junk = jest.fn((phase: number) => {
+    ;(global as any).phase_junk = vi.fn((phase: number) => {
       if (typeof phase !== 'number' || isNaN(phase)) {
         return '' // Empty path for invalid input
       }
@@ -194,7 +196,7 @@ export class MoonPhaseMock {
       }
       return mockPhaseJunk(phase)
     })
-    ;(global as any).moon_day = jest.fn((date: unknown) => {
+    ;(global as any).moon_day = vi.fn((date: unknown) => {
       if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
         return 0 // Default to new moon for invalid dates
       }
@@ -225,15 +227,15 @@ export class MoonPhaseMock {
   static reset() {
     if (
       (global as any).phase_junk &&
-      jest.isMockFunction((global as any).phase_junk)
+      vi.isMockFunction((global as any).phase_junk)
     ) {
-      ;((global as any).phase_junk as jest.Mock).mockReset()
+      ;((global as any).phase_junk as Mock).mockReset()
     }
     if (
       (global as any).moon_day &&
-      jest.isMockFunction((global as any).moon_day)
+      vi.isMockFunction((global as any).moon_day)
     ) {
-      ;((global as any).moon_day as jest.Mock).mockReset()
+      ;((global as any).moon_day as Mock).mockReset()
     }
   }
 }

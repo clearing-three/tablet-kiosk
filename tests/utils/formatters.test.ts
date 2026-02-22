@@ -59,11 +59,11 @@ describe('formatters', () => {
   describe('formatCurrentTime', () => {
     beforeEach(() => {
       // Mock Date.now to return a fixed timestamp: Jan 1, 2024, 14:30:00 UTC
-      jest.spyOn(Date, 'now').mockReturnValue(1704117000000)
+      vi.spyOn(Date, 'now').mockReturnValue(1704117000000)
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.restoreAllMocks()
     })
 
     it('should return current time in HH:MM format', () => {
@@ -84,13 +84,13 @@ describe('formatters', () => {
 
   describe('formatCurrentDate', () => {
     beforeEach(() => {
-      // Mock Date constructor to return a fixed date: January 1, 2024 (Monday)
-      const mockDate = new Date('2024-01-01T14:30:00.000Z')
-      jest.spyOn(global, 'Date').mockImplementation(() => mockDate)
+      // Use fake timers to control what new Date() returns: January 1, 2024
+      vi.useFakeTimers()
+      vi.setSystemTime(new Date('2024-01-01T14:30:00.000Z'))
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      vi.useRealTimers()
     })
 
     it('should return current date in readable format', () => {

@@ -8,6 +8,7 @@
  * - Error state handling
  */
 
+import type { Mock } from 'vitest'
 import {
   WeatherDisplay,
   WEATHER_ERROR_TEMP,
@@ -31,7 +32,7 @@ describe('WeatherDisplay', () => {
     `
 
     mockWeatherService = {
-      mapIconCodeToSVG: jest.fn().mockReturnValue('clear-day'),
+      mapIconCodeToSVG: vi.fn().mockReturnValue('clear-day'),
     }
 
     weatherDisplay = new WeatherDisplay(
@@ -68,9 +69,7 @@ describe('WeatherDisplay', () => {
         minTemp: 38,
         maxTemp: 52,
       }
-      ;(mockWeatherService.mapIconCodeToSVG as jest.Mock).mockReturnValue(
-        'rain'
-      )
+      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('rain')
 
       weatherDisplay.updateDisplay(rainyWeather)
 
@@ -107,7 +106,7 @@ describe('WeatherDisplay', () => {
 
   describe('Icon loading and display', () => {
     it('should set the icon data attribute to the mapped SVG path', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as jest.Mock).mockReturnValue(
+      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue(
         'clear-day'
       )
 
@@ -138,9 +137,7 @@ describe('WeatherDisplay', () => {
         minTemp: 18,
         maxTemp: 32,
       }
-      ;(mockWeatherService.mapIconCodeToSVG as jest.Mock).mockReturnValue(
-        'snow'
-      )
+      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('snow')
 
       weatherDisplay.updateDisplay(snowWeather)
 
@@ -212,11 +209,9 @@ describe('WeatherDisplay', () => {
 
   describe('Error state handling', () => {
     it('should show error placeholders when updateDisplay throws', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as jest.Mock).mockImplementation(
-        () => {
-          throw new Error('Icon mapping failed')
-        }
-      )
+      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
+        throw new Error('Icon mapping failed')
+      })
 
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
@@ -232,13 +227,11 @@ describe('WeatherDisplay', () => {
     })
 
     it('should log the error to console when updateDisplay throws', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       const thrownError = new Error('Icon mapping failed')
-      ;(mockWeatherService.mapIconCodeToSVG as jest.Mock).mockImplementation(
-        () => {
-          throw thrownError
-        }
-      )
+      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
+        throw thrownError
+      })
 
       weatherDisplay.updateDisplay(mockCurrentWeather)
 

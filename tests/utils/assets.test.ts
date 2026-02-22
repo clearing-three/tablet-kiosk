@@ -2,6 +2,7 @@
  * Unit tests for src/utils/assets.ts
  */
 
+import type { Mock, MockInstance } from 'vitest'
 import {
   preloadCriticalAssets,
   getWeatherIconUrl,
@@ -60,27 +61,25 @@ describe('getWeatherIconUrl', () => {
 
 describe('validateAssetExists', () => {
   it('returns true when fetch responds with ok', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true })
+    ;(global.fetch as Mock).mockResolvedValueOnce({ ok: true })
     const result = await validateAssetExists('/weather-icons/clear-day.svg')
     expect(result).toBe(true)
   })
 
   it('returns false when fetch responds with not ok', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false })
+    ;(global.fetch as Mock).mockResolvedValueOnce({ ok: false })
     const result = await validateAssetExists('/weather-icons/missing.svg')
     expect(result).toBe(false)
   })
 
   it('returns false when fetch throws', async () => {
-    ;(global.fetch as jest.Mock).mockRejectedValueOnce(
-      new Error('network error')
-    )
+    ;(global.fetch as Mock).mockRejectedValueOnce(new Error('network error'))
     const result = await validateAssetExists('/weather-icons/clear-day.svg')
     expect(result).toBe(false)
   })
 
   it('calls fetch with HEAD method', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true })
+    ;(global.fetch as Mock).mockResolvedValueOnce({ ok: true })
     await validateAssetExists('/some-asset.svg')
     expect(global.fetch).toHaveBeenCalledWith('/some-asset.svg', {
       method: 'HEAD',
@@ -110,10 +109,10 @@ describe('getCriticalAssetUrls', () => {
 })
 
 describe('reportMissingAssets', () => {
-  let warnSpy: jest.SpyInstance
+  let warnSpy: MockInstance
 
   beforeEach(() => {
-    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
   })
 
   afterEach(() => {

@@ -6,10 +6,11 @@
  * - Phase name display updates
  */
 
+import type { Mocked } from 'vitest'
 import { MoonPhase } from '../../src/components/Astronomy/MoonPhase'
 import { MoonPhaseService } from '../../src/services/MoonPhaseService'
 
-type MockMoonPhaseService = jest.Mocked<
+type MockMoonPhaseService = Mocked<
   Pick<
     MoonPhaseService,
     'getPhaseNameLegacy' | 'isLibraryAvailable' | 'updateMoonPhaseDisplay'
@@ -27,9 +28,9 @@ describe('MoonPhase', () => {
     `
 
     mockService = {
-      getPhaseNameLegacy: jest.fn().mockReturnValue('Full Moon'),
-      isLibraryAvailable: jest.fn().mockReturnValue(true),
-      updateMoonPhaseDisplay: jest.fn(),
+      getPhaseNameLegacy: vi.fn().mockReturnValue('Full Moon'),
+      isLibraryAvailable: vi.fn().mockReturnValue(true),
+      updateMoonPhaseDisplay: vi.fn(),
     }
 
     moonPhase = new MoonPhase(mockService as unknown as MoonPhaseService)
@@ -78,7 +79,7 @@ describe('MoonPhase', () => {
 
     it('should show error state when the moon phase library is not available', () => {
       mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -90,7 +91,7 @@ describe('MoonPhase', () => {
 
     it('should log an error when the moon phase library is not available', () => {
       mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -104,7 +105,7 @@ describe('MoonPhase', () => {
       mockService.updateMoonPhaseDisplay.mockImplementation(() => {
         throw new Error('SVG render failed')
       })
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -119,7 +120,7 @@ describe('MoonPhase', () => {
       mockService.updateMoonPhaseDisplay.mockImplementation(() => {
         throw err
       })
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -132,7 +133,7 @@ describe('MoonPhase', () => {
 
     it('should place a placeholder SVG in the container during error state', () => {
       mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -145,7 +146,7 @@ describe('MoonPhase', () => {
       document.getElementById('moon')!.innerHTML =
         '<path d="M 50 50 L 150 150" />'
       mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -176,7 +177,7 @@ describe('MoonPhase', () => {
       mockService.getPhaseNameLegacy.mockImplementation(() => {
         throw new Error('calculation error')
       })
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -191,7 +192,7 @@ describe('MoonPhase', () => {
       mockService.getPhaseNameLegacy.mockImplementation(() => {
         throw err
       })
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 
@@ -224,7 +225,7 @@ describe('MoonPhase', () => {
     })
 
     it('should warn when phase value is outside 0-1 range', () => {
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
       moonPhase.updatePhase(1.5)
 
@@ -241,7 +242,7 @@ describe('MoonPhase', () => {
     })
 
     it('should handle phase value of exactly 1', () => {
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
       moonPhase.updatePhase(1)
 
@@ -253,7 +254,7 @@ describe('MoonPhase', () => {
 
   describe('phase value validation', () => {
     it('should show error state when phase is NaN', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(NaN)
 
@@ -264,7 +265,7 @@ describe('MoonPhase', () => {
     })
 
     it('should log an error when phase is NaN', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(NaN)
 
@@ -275,7 +276,7 @@ describe('MoonPhase', () => {
     })
 
     it('should show error state when phase is Infinity', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(Infinity)
 
@@ -286,7 +287,7 @@ describe('MoonPhase', () => {
     })
 
     it('should show error state when phase is not a number type', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase('invalid' as unknown as number)
 
@@ -297,7 +298,7 @@ describe('MoonPhase', () => {
     })
 
     it('should log an error when phase is not a number type', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase('invalid' as unknown as number)
 
@@ -306,7 +307,7 @@ describe('MoonPhase', () => {
     })
 
     it('should not call service methods when phase is invalid', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(NaN)
 
@@ -331,7 +332,7 @@ describe('MoonPhase', () => {
 
     it('should return "Phase Unknown" after an error state', () => {
       mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       moonPhase.updatePhase(0.5)
 

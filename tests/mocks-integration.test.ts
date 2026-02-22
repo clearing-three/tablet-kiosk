@@ -5,6 +5,7 @@
  * and can be used together for testing the tablet kiosk application.
  */
 
+import type { Mock } from 'vitest'
 import {
   OpenWeatherMapMock,
   MoonPhaseMock,
@@ -140,7 +141,7 @@ describe('Mock Integration', () => {
     })
 
     it('should mock timer functions', () => {
-      const callback = jest.fn()
+      const callback = vi.fn()
 
       const intervalId = setInterval(callback, 1000)
       expect(typeof intervalId).toBe('number')
@@ -219,16 +220,14 @@ describe('Mock Integration', () => {
       MoonPhaseMock.mockPhase(0.5)
 
       // Verify initial state
-      expect(
-        (global.fetch as jest.Mock).mock.calls.length
-      ).toBeGreaterThanOrEqual(0)
+      expect((global.fetch as Mock).mock.calls.length).toBeGreaterThanOrEqual(0)
 
       // Reset should clear mock state
       OpenWeatherMapMock.reset()
       MoonPhaseMock.reset()
 
       // Verify reset
-      expect((global.fetch as jest.Mock).mock.calls.length).toBe(0)
+      expect((global.fetch as Mock).mock.calls.length).toBe(0)
     })
 
     it('should handle multiple mock setups without conflicts', () => {

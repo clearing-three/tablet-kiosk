@@ -9,6 +9,7 @@ import type {
   WeatherData,
   WeatherApiError,
 } from '../../../src/types/weather.types'
+import type { Mock } from 'vitest'
 import { clearSunnyDay } from '../fixtures/weather-scenarios'
 
 /**
@@ -215,7 +216,7 @@ export class OpenWeatherMapMock {
 
   static setup() {
     this.originalFetch = global.fetch
-    global.fetch = jest.fn()
+    global.fetch = vi.fn()
   }
 
   static teardown() {
@@ -223,31 +224,29 @@ export class OpenWeatherMapMock {
   }
 
   static mockSuccess(data: WeatherData = mockSuccessResponse) {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(
-      createMockFetchResponse(data)
-    )
+    ;(global.fetch as Mock).mockResolvedValueOnce(createMockFetchResponse(data))
   }
 
   static mockError(errorType: keyof typeof mockErrorResponses) {
     const errorResponse = mockErrorResponses[errorType]
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(errorResponse)
+    ;(global.fetch as Mock).mockResolvedValueOnce(errorResponse)
   }
 
   static mockEdgeCase(caseType: keyof typeof mockEdgeCaseResponses) {
     const edgeCaseData = mockEdgeCaseResponses[caseType]
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce(
+    ;(global.fetch as Mock).mockResolvedValueOnce(
       createMockFetchResponse(edgeCaseData)
     )
   }
 
   static mockNetworkFailure() {
-    ;(global.fetch as jest.Mock).mockRejectedValueOnce(
+    ;(global.fetch as Mock).mockRejectedValueOnce(
       new TypeError('Network request failed')
     )
   }
 
   static mockCustomResponse(response: Partial<Response>) {
-    ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+    ;(global.fetch as Mock).mockResolvedValueOnce({
       ok: true,
       status: 200,
       statusText: 'OK',
@@ -265,6 +264,6 @@ export class OpenWeatherMapMock {
   }
 
   static reset() {
-    ;(global.fetch as jest.Mock).mockReset()
+    ;(global.fetch as Mock).mockReset()
   }
 }

@@ -1,16 +1,9 @@
 // Global test setup file
-import 'jest-environment-jsdom'
 import {
   setupAllMocks,
   teardownAllMocks,
   resetAllMocks,
 } from './__mocks__/setup'
-import './testEnvironment'
-
-// Mock environment variables for tests
-process.env.VITE_API_KEY = 'test-api-key'
-process.env.VITE_LAT = '40.7128'
-process.env.VITE_LON = '-74.0060'
 
 // Set up all mocks before tests start
 beforeAll(() => {
@@ -81,3 +74,9 @@ expect.extend({
     }
   },
 })
+
+declare module 'vitest' {
+  interface Assertion<T = any> {
+    toBeWithinRange(floor: number, ceiling: number): T
+  }
+}

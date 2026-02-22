@@ -1,3 +1,7 @@
+## Dependencies
+
+All dependencies must be pinned to exact versions.
+
 ## Configuration
 
 - API key and coordinates are in `.env.local` (gitignored — never commit this file)

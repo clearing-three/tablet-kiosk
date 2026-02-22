@@ -7,6 +7,7 @@
  * - Interval management
  */
 
+import type { Mock } from 'vitest'
 import { TimeDisplay } from '../../src/components/Time/TimeDisplay'
 import * as formatters from '../../src/utils/formatters'
 
@@ -18,18 +19,18 @@ describe('TimeDisplay', () => {
       <div id="time"></div>
       <div id="date"></div>
     `
-    jest.useFakeTimers()
-    jest.spyOn(formatters, 'formatCurrentTime').mockReturnValue('14:30')
-    jest
-      .spyOn(formatters, 'formatCurrentDate')
-      .mockReturnValue('Friday, February 20')
+    vi.useFakeTimers()
+    vi.spyOn(formatters, 'formatCurrentTime').mockReturnValue('14:30')
+    vi.spyOn(formatters, 'formatCurrentDate').mockReturnValue(
+      'Friday, February 20'
+    )
     timeDisplay = new TimeDisplay()
   })
 
   afterEach(() => {
     timeDisplay.destroy()
-    jest.useRealTimers()
-    jest.restoreAllMocks()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   describe('constructor', () => {
@@ -74,10 +75,8 @@ describe('TimeDisplay', () => {
     })
 
     it('should reflect updated formatter output on each call', () => {
-      ;(formatters.formatCurrentTime as jest.Mock).mockReturnValue('09:05')
-      ;(formatters.formatCurrentDate as jest.Mock).mockReturnValue(
-        'Monday, March 2'
-      )
+      ;(formatters.formatCurrentTime as Mock).mockReturnValue('09:05')
+      ;(formatters.formatCurrentDate as Mock).mockReturnValue('Monday, March 2')
 
       timeDisplay.updateDisplay()
 
@@ -99,20 +98,20 @@ describe('TimeDisplay', () => {
     })
 
     it('should update the display after one second', () => {
-      ;(formatters.formatCurrentTime as jest.Mock).mockReturnValue('14:31')
+      ;(formatters.formatCurrentTime as Mock).mockReturnValue('14:31')
       timeDisplay.startUpdates()
 
-      jest.advanceTimersByTime(1000)
+      vi.advanceTimersByTime(1000)
 
       expect(document.getElementById('time')!.textContent).toBe('14:31')
     })
 
     it('should update the display on each subsequent tick', () => {
       timeDisplay.startUpdates()
-      ;(formatters.formatCurrentTime as jest.Mock).mockReturnValue('14:31')
-      jest.advanceTimersByTime(1000)
-      ;(formatters.formatCurrentTime as jest.Mock).mockReturnValue('14:32')
-      jest.advanceTimersByTime(1000)
+      ;(formatters.formatCurrentTime as Mock).mockReturnValue('14:31')
+      vi.advanceTimersByTime(1000)
+      ;(formatters.formatCurrentTime as Mock).mockReturnValue('14:32')
+      vi.advanceTimersByTime(1000)
 
       expect(document.getElementById('time')!.textContent).toBe('14:32')
     })
@@ -144,10 +143,10 @@ describe('TimeDisplay', () => {
       timeDisplay.startUpdates()
       timeDisplay.stopUpdates()
 
-      const callsBefore = (formatters.formatCurrentTime as jest.Mock).mock.calls
+      const callsBefore = (formatters.formatCurrentTime as Mock).mock.calls
         .length
 
-      jest.advanceTimersByTime(3000)
+      vi.advanceTimersByTime(3000)
 
       expect(formatters.formatCurrentTime).toHaveBeenCalledTimes(callsBefore)
     })
@@ -156,7 +155,7 @@ describe('TimeDisplay', () => {
       timeDisplay.startUpdates()
       timeDisplay.startUpdates()
 
-      expect(jest.getTimerCount()).toBe(1)
+      expect(vi.getTimerCount()).toBe(1)
     })
 
     it('should be safe to call stopUpdates when not running', () => {
@@ -174,10 +173,10 @@ describe('TimeDisplay', () => {
       timeDisplay.startUpdates()
       timeDisplay.destroy()
 
-      const callsBefore = (formatters.formatCurrentTime as jest.Mock).mock.calls
+      const callsBefore = (formatters.formatCurrentTime as Mock).mock.calls
         .length
 
-      jest.advanceTimersByTime(3000)
+      vi.advanceTimersByTime(3000)
 
       expect(formatters.formatCurrentTime).toHaveBeenCalledTimes(callsBefore)
     })

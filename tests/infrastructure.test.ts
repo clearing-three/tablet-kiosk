@@ -1,5 +1,5 @@
 /**
- * Infrastructure smoke tests to verify Jest setup is working correctly
+ * Infrastructure smoke tests to verify Vitest setup is working correctly
  */
 
 import {
@@ -10,7 +10,7 @@ import {
 } from './utils/testHelpers'
 
 describe('Testing Infrastructure', () => {
-  describe('Jest Configuration', () => {
+  describe('Vitest Configuration', () => {
     it('should have DOM environment available', () => {
       expect(document).toBeDefined()
       expect(document.body).toBeDefined()
@@ -26,23 +26,23 @@ describe('Testing Infrastructure', () => {
     })
 
     it('should have environment variables configured', () => {
-      expect(process.env.VITE_API_KEY).toBe('test-api-key')
-      expect(process.env.VITE_LAT).toBe('40.7128')
-      expect(process.env.VITE_LON).toBe('-74.0060')
+      expect(import.meta.env.VITE_OPENWEATHER_API_KEY).toBe('test-api-key')
+      expect(import.meta.env.VITE_LOCATION_LAT).toBe('40.7128')
+      expect(import.meta.env.VITE_LOCATION_LON).toBe('-74.0060')
     })
   })
 
   describe('Mock Functions', () => {
     it('should have fetch mock available', () => {
       expect(global.fetch).toBeDefined()
-      expect(jest.isMockFunction(global.fetch)).toBe(true)
+      expect(vi.isMockFunction(global.fetch)).toBe(true)
     })
 
     it('should have timer mocks available', () => {
       expect(global.setInterval).toBeDefined()
       expect(global.clearInterval).toBeDefined()
-      expect(jest.isMockFunction(global.setInterval)).toBe(true)
-      expect(jest.isMockFunction(global.clearInterval)).toBe(true)
+      expect(vi.isMockFunction(global.setInterval)).toBe(true)
+      expect(vi.isMockFunction(global.clearInterval)).toBe(true)
     })
 
     it('should have Image mock available', () => {

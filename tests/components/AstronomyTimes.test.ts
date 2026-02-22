@@ -133,7 +133,7 @@ describe('AstronomyTimes', () => {
     })
 
     it('should log an error when sunrise or sunset is zero', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       astronomyTimes.updateTimes({ ...mockData, sunrise: 0 })
 
@@ -144,7 +144,7 @@ describe('AstronomyTimes', () => {
     })
 
     it('should show error state when a field is not a number', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       astronomyTimes.updateTimes({
         ...mockData,
@@ -159,7 +159,7 @@ describe('AstronomyTimes', () => {
     })
 
     it('should show error state when data is null', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       astronomyTimes.updateTimes(null as unknown as AstronomyData)
 
@@ -195,8 +195,8 @@ describe('AstronomyTimes', () => {
 
   describe('formatting error handling', () => {
     it('should display "--" for each field that fails to format', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
-      jest.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      vi.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
         throw new Error('format failed')
       })
 
@@ -210,8 +210,8 @@ describe('AstronomyTimes', () => {
     })
 
     it('should log a specific error for each field that fails to format', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
-      jest.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      vi.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
         throw new Error('format failed')
       })
 

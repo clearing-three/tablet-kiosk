@@ -14,6 +14,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{ts,css,html}\"",
+    "format:check": "prettier --check \"**/*.{ts,css,html}\"",
     "type-check": "tsc --noEmit",
     "deploy": "./deploy.sh",
     "deploy:list": "./deploy.sh -l",

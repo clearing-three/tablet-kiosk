@@ -21,8 +21,7 @@ jobs:
       - run: npm ci
 
       - run: |
-          npm run format
-          npm run lint:fix
+          npm run format:check
           npm run lint
           npm test
           npm run build

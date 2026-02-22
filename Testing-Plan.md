@@ -121,10 +121,13 @@ data transformation and rendering paths sufficiently.
 ### 3.9 Test Automation Integration
 **Task**: Integrate testing into development workflow
 **Details**:
-- Add test execution to pre-commit hooks
+- Keep existing pre-commit hook (lint-staged: ESLint + Prettier on staged files)
+- Add `validate` script to `package.json` chaining lint, type-check, and test:coverage
+- Add pre-push hook running `npm run validate`
+  - Pre-push chosen over pre-commit to allow free incremental commits without friction
+  - Coverage thresholds already configured in `jest.config.js` act as the quality gate
 - Configure test coverage reporting
-- Set up continuous testing during development
-- Create test script for full test suite
+- Set up continuous testing during development (`npm run test:watch`)
 - Document testing standards and practices
 
 ## Validation Steps

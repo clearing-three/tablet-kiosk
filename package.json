@@ -32,15 +32,15 @@
   },
   "homepage": "https://github.com/relsam-atinersier/tablet-kiosk#readme",
   "devDependencies": {
-    "@types/node": "24.5.2",
+    "@types/node": "25.3.0",
     "@typescript-eslint/eslint-plugin": "8.44.0",
-    "@typescript-eslint/parser": "8.44.0",
+    "@typescript-eslint/parser": "8.56.0",
     "@vitest/coverage-v8": "4.0.18",
     "eslint": "9.35.0",
     "eslint-config-prettier": "10.1.8",
     "jsdom": "28.1.0",
     "prettier": "3.8.1",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "vite": "7.3.1",
     "vitest": "4.0.18"
   },

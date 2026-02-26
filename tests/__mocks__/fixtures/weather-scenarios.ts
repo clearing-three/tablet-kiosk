@@ -27,7 +27,7 @@ function generateFourDayForecast(
     const timestamp = baseTimestamp + dayOffset
 
     let weatherCondition
-    let tempAdjustment = 0
+    let tempAdjustment
 
     switch (weatherPattern) {
       case 'rainy':

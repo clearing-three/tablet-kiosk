@@ -88,7 +88,9 @@ export class WeatherService {
         (error.message.includes('fetch') ||
           error.message.includes('Network request'))
       ) {
-        throw new Error('Network error: Unable to connect to weather service')
+        throw new Error('Network error: Unable to connect to weather service', {
+          cause: error,
+        })
       }
       throw error
     }

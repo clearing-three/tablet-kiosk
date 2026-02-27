@@ -25,6 +25,9 @@ import {
   reportMissingAssets,
 } from './utils/assets'
 
+// Constants
+import { DOM_IDS } from './utils/constants'
+
 // Components
 import { WeatherDisplay } from './components/Weather/WeatherDisplay'
 import { WeatherForecast } from './components/Weather/WeatherForecast'
@@ -35,22 +38,6 @@ import { ErrorDisplay } from './components/ErrorDisplay'
 
 // Types
 import type { ProcessedWeatherData } from './types/weather.types'
-
-export const REQUIRED_DOM_ELEMENTS = [
-  'time',
-  'date',
-  'weather-icon',
-  'temp-now',
-  'weather-desc',
-  'weather-range',
-  'forecast',
-  'sunrise-time',
-  'sunset-time',
-  'moonrise-time',
-  'moonset-time',
-  'moon',
-  'moon-phase-name',
-] as const
 
 class TabletKioskApp {
   // Services
@@ -214,7 +201,7 @@ class TabletKioskApp {
   private validateDOMElements(): boolean {
     const missingElements: string[] = []
 
-    for (const elementId of REQUIRED_DOM_ELEMENTS) {
+    for (const elementId of Object.values(DOM_IDS)) {
       const element = document.getElementById(elementId)
       if (!element) {
         missingElements.push(elementId)

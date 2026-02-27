@@ -1,11 +1,12 @@
-import { TabletKioskApp, REQUIRED_DOM_ELEMENTS } from '../src/main'
+import { TabletKioskApp } from '../src/main'
 import { ErrorDisplay } from '../src/components/ErrorDisplay'
+import { DOM_IDS } from '../src/utils/constants'
 
 describe('TabletKioskApp', () => {
   describe('validateDOMElements', () => {
     it('returns true when all required elements are present', () => {
       // Setup: Create all required DOM elements
-      REQUIRED_DOM_ELEMENTS.forEach(id => {
+      Object.values(DOM_IDS).forEach(id => {
         const element = document.createElement('div')
         element.id = id
         document.body.appendChild(element)
@@ -23,7 +24,7 @@ describe('TabletKioskApp', () => {
 
     it('returns false when a required element is missing', () => {
       // Setup: Create all required DOM elements EXCEPT 'time'
-      const requiredIds = REQUIRED_DOM_ELEMENTS.filter(id => id !== 'time')
+      const requiredIds = Object.values(DOM_IDS).filter(id => id !== 'time')
 
       requiredIds.forEach(id => {
         const element = document.createElement('div')

@@ -31,37 +31,50 @@ import { WeatherForecast } from './components/Weather/WeatherForecast'
 import { AstronomyTimes } from './components/Astronomy/AstronomyTimes'
 import { MoonPhase } from './components/Astronomy/MoonPhase'
 import { TimeDisplay } from './components/Time/TimeDisplay'
+import { ErrorDisplay } from './components/ErrorDisplay'
 
 // Types
 import type { ProcessedWeatherData } from './types/weather.types'
+
+export const REQUIRED_DOM_ELEMENTS = [
+  'time',
+  'date',
+  'weather-icon',
+  'temp-now',
+  'weather-desc',
+  'weather-range',
+  'forecast',
+  'sunrise-time',
+  'sunset-time',
+  'moonrise-time',
+  'moonset-time',
+  'moon',
+  'moon-phase-name',
+] as const
 
 class TabletKioskApp {
   // Services
   private weatherService: WeatherService
   private moonPhaseService: MoonPhaseService
 
-  // Components
-  private weatherDisplay: WeatherDisplay
-  private weatherForecast: WeatherForecast
-  private astronomyTimes: AstronomyTimes
-  private moonPhase: MoonPhase
-  private timeDisplay: TimeDisplay
+  // Components (initialized in initialize() method)
+  private weatherDisplay!: WeatherDisplay
+  private weatherForecast!: WeatherForecast
+  private astronomyTimes!: AstronomyTimes
+  private moonPhase!: MoonPhase
+  private timeDisplay!: TimeDisplay
 
   // Update intervals
   private weatherUpdateInterval: number | null = null
   private readonly weatherUpdateIntervalMs = 10 * 60 * 1000 // 10 minutes
 
-  constructor() {
+  private errorDisplay: ErrorDisplay
+
+  constructor(errorDisplay: ErrorDisplay) {
+    this.errorDisplay = errorDisplay
     // Initialize services using dependency injection configs
     this.weatherService = new WeatherService(weatherServiceConfig)
     this.moonPhaseService = new MoonPhaseService(moonPhaseServiceConfig)
-
-    // Initialize components
-    this.weatherDisplay = new WeatherDisplay(this.weatherService)
-    this.weatherForecast = new WeatherForecast(this.weatherService)
-    this.astronomyTimes = new AstronomyTimes()
-    this.moonPhase = new MoonPhase(this.moonPhaseService)
-    this.timeDisplay = new TimeDisplay()
   }
 
   /**
@@ -86,8 +99,10 @@ class TabletKioskApp {
       this.moonPhase.updatePhase(weatherData.astronomy.moonPhase)
 
       console.log('Weather data updated successfully')
+      this.errorDisplay.remove('weather-update')
     } catch (error) {
       console.error('Failed to update weather data:', error)
+      this.errorDisplay.show('weather-update', error)
     }
   }
 
@@ -171,6 +186,13 @@ class TabletKioskApp {
         throw new Error('Required DOM elements not found')
       }
 
+      this.weatherDisplay = new WeatherDisplay(this.weatherService)
+      this.weatherForecast = new WeatherForecast(this.weatherService)
+      this.astronomyTimes = new AstronomyTimes()
+      this.moonPhase = new MoonPhase(this.moonPhaseService)
+      this.timeDisplay = new TimeDisplay()
+      console.log('Components initialized')
+
       // Start time display updates
       this.timeDisplay.startUpdates()
       console.log('Time display started')
@@ -190,25 +212,9 @@ class TabletKioskApp {
    * @returns boolean True if all elements are found
    */
   private validateDOMElements(): boolean {
-    const requiredElements = [
-      'time',
-      'date',
-      'weather-icon',
-      'temp-now',
-      'weather-desc',
-      'weather-range',
-      'forecast',
-      'sunrise-time',
-      'sunset-time',
-      'moonrise-time',
-      'moonset-time',
-      'moon',
-      'moon-phase-name',
-    ]
-
     const missingElements: string[] = []
 
-    for (const elementId of requiredElements) {
+    for (const elementId of REQUIRED_DOM_ELEMENTS) {
       const element = document.getElementById(elementId)
       if (!element) {
         missingElements.push(elementId)
@@ -250,24 +256,6 @@ class TabletKioskApp {
 
     console.log('Display refresh complete')
   }
-
-  /**
-   * Gets application status information
-   * @returns Object with current application status
-   */
-  public getStatus(): {
-    weatherUpdating: boolean
-    timeUpdating: boolean
-    componentsInitialized: boolean
-    lastUpdate: string
-  } {
-    return {
-      weatherUpdating: this.weatherUpdateInterval !== null,
-      timeUpdating: this.timeDisplay.isUpdating(),
-      componentsInitialized: this.validateDOMElements(),
-      lastUpdate: new Date().toISOString(),
-    }
-  }
 }
 
 // Global app instance
@@ -277,10 +265,12 @@ let app: TabletKioskApp | null = null
  * Initialize the application when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', async () => {
+  const errorDisplay = new ErrorDisplay()
+
   try {
     console.log('DOM loaded, initializing tablet kiosk application...')
 
-    app = new TabletKioskApp()
+    app = new TabletKioskApp(errorDisplay)
     await app.initialize()
 
     // Make app globally available for debugging
@@ -288,16 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       app
   } catch (error) {
     console.error('Failed to start application:', error)
-
-    // Show error message to user
-    document.body.innerHTML = `
-      <div style="padding: 20px; color: red; font-family: sans-serif;">
-        <h1>Application Error</h1>
-        <p>Failed to start the weather kiosk application.</p>
-        <p>Error: ${error instanceof Error ? error.message : 'Unknown error'}</p>
-        <p>Please check the console for more details.</p>
-      </div>
-    `
+    errorDisplay.show('init', error)
   }
 })
 

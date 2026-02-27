@@ -3,6 +3,18 @@ import { ErrorDisplay } from '../src/components/ErrorDisplay'
 import { DOM_IDS } from '../src/utils/constants'
 
 describe('TabletKioskApp', () => {
+  describe('constructor', () => {
+    it('initializes services but not components', () => {
+      const errorDisplay = new ErrorDisplay()
+      const app = new TabletKioskApp(errorDisplay)
+
+      // Services should be initialized
+      expect((app as any).weatherService).toBeDefined()
+      expect((app as any).moonPhaseService).toBeDefined()
+      expect((app as any).errorDisplay).toBe(errorDisplay)
+    })
+  })
+
   describe('validateDOMElements', () => {
     it('returns true when all required elements are present', () => {
       // Setup: Create all required DOM elements

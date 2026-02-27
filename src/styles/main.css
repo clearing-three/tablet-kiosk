@@ -245,3 +245,77 @@ body,
 #sunset-time {
   color: var(--fg-sun);
 }
+
+/* ---------- Error Display ---------- */
+.error-display {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.error-bar {
+  width: 100%;
+  background: #7a1a1a;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+}
+
+.error-bar-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  min-height: 44px;
+}
+
+.error-bar-label {
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.error-bar-message {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.error-bar-toggle,
+.error-bar-dismiss {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.error-bar-toggle:hover,
+.error-bar-dismiss:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.error-bar-detail {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-family: monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-y: auto;
+  max-height: 30vh;
+  background: #4a0f0f;
+  color: #ffcccc;
+}

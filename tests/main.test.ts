@@ -41,4 +41,47 @@ describe('TabletKioskApp', () => {
       expect(result).toBe(false)
     })
   })
+
+  describe('stopWeatherUpdates', () => {
+    it('clears the interval and sets it to null when interval exists', () => {
+      const errorDisplay = new ErrorDisplay()
+      const app = new TabletKioskApp(errorDisplay)
+
+      // Set up an interval
+      const intervalId = 123
+      ;(app as any).weatherUpdateInterval = intervalId
+
+      // Spy on clearInterval
+      const clearIntervalSpy = vi.spyOn(window, 'clearInterval')
+
+      // Call the method
+      ;(app as any).stopWeatherUpdates()
+
+      // Verify interval was cleared
+      expect(clearIntervalSpy).toHaveBeenCalledWith(intervalId)
+      expect((app as any).weatherUpdateInterval).toBeNull()
+
+      clearIntervalSpy.mockRestore()
+    })
+
+    it('does nothing when interval is already null', () => {
+      const errorDisplay = new ErrorDisplay()
+      const app = new TabletKioskApp(errorDisplay)
+
+      // Ensure interval is null
+      ;(app as any).weatherUpdateInterval = null
+
+      // Spy on clearInterval
+      const clearIntervalSpy = vi.spyOn(window, 'clearInterval')
+
+      // Call the method
+      ;(app as any).stopWeatherUpdates()
+
+      // Verify clearInterval was NOT called
+      expect(clearIntervalSpy).not.toHaveBeenCalled()
+      expect((app as any).weatherUpdateInterval).toBeNull()
+
+      clearIntervalSpy.mockRestore()
+    })
+  })
 })

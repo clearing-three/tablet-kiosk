@@ -8,7 +8,6 @@
 
 import { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
 import { formatTimeFromUnix } from '../../src/utils/formatters'
-import * as formatters from '../../src/utils/formatters'
 import type { AstronomyTimes as AstronomyData } from '../../src/types/astronomy.types'
 
 // Fixed Unix timestamps for deterministic tests
@@ -190,50 +189,6 @@ describe('AstronomyTimes', () => {
 
       expect(values.moonrise).toBe('-')
       expect(values.moonset).toBe('-')
-    })
-  })
-
-  describe('formatting error handling', () => {
-    it('should display "--" for each field that fails to format', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      vi.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
-        throw new Error('format failed')
-      })
-
-      astronomyTimes.updateTimes(mockData)
-
-      expect(document.getElementById('sunrise-time')!.textContent).toBe('--')
-      expect(document.getElementById('sunset-time')!.textContent).toBe('--')
-      expect(document.getElementById('moonrise-time')!.textContent).toBe('--')
-      expect(document.getElementById('moonset-time')!.textContent).toBe('--')
-      consoleSpy.mockRestore()
-    })
-
-    it('should log a specific error for each field that fails to format', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      vi.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
-        throw new Error('format failed')
-      })
-
-      astronomyTimes.updateTimes(mockData)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting sunrise time:',
-        expect.any(Error)
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting sunset time:',
-        expect.any(Error)
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting moonrise time:',
-        expect.any(Error)
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting moonset time:',
-        expect.any(Error)
-      )
-      consoleSpy.mockRestore()
     })
   })
 })

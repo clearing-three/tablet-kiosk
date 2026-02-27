@@ -88,45 +88,6 @@ class TabletKioskApp {
       console.log('Weather data updated successfully')
     } catch (error) {
       console.error('Failed to update weather data:', error)
-      this.handleWeatherError(error as Error)
-    }
-  }
-
-  /**
-   * Handles weather update errors gracefully
-   * @param error The error that occurred during weather update
-   */
-  private handleWeatherError(error: Error): void {
-    console.error('Weather update error:', error.message)
-
-    // Show error states in components that support it
-    if (
-      this.weatherDisplay &&
-      typeof this.weatherDisplay['showErrorState'] === 'function'
-    ) {
-      // Note: showErrorState is private, but this demonstrates error handling approach
-      console.warn('Weather display error state would be shown here')
-    }
-
-    if (
-      this.weatherForecast &&
-      typeof this.weatherForecast['showErrorState'] === 'function'
-    ) {
-      console.warn('Weather forecast error state would be shown here')
-    }
-
-    if (
-      this.astronomyTimes &&
-      typeof this.astronomyTimes['showErrorState'] === 'function'
-    ) {
-      console.warn('Astronomy times error state would be shown here')
-    }
-
-    if (
-      this.moonPhase &&
-      typeof this.moonPhase['showErrorState'] === 'function'
-    ) {
-      console.warn('Moon phase error state would be shown here')
     }
   }
 

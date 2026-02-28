@@ -235,65 +235,36 @@ describe('WeatherForecast', () => {
     })
   })
 
-  describe('Validation and error handling', () => {
-    it('should show error state when forecast is not an array', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      weatherForecast.updateForecast(null as any)
-
-      expect(document.querySelector('.forecast-error')).not.toBeNull()
-      consoleSpy.mockRestore()
-    })
-
-    it('should show error state when forecast array is empty', () => {
-      weatherForecast.updateForecast([])
-
-      expect(document.querySelector('.forecast-error')).not.toBeNull()
-      expect(document.querySelector('.forecast-error')!.textContent).toBe(
-        'Forecast data unavailable'
+  describe('Validation and error propagation', () => {
+    it('should throw with a descriptive message when forecast array is empty', () => {
+      expect(() => weatherForecast.updateForecast([])).toThrow(
+        'Forecast data is empty'
       )
-      expect(getForecastDays()).toHaveLength(0)
     })
 
-    it('should show error state when a day is missing dayName', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    it('should throw with a descriptive message when forecast data is not an array', () => {
+      expect(() => weatherForecast.updateForecast(null as any)).toThrow(
+        'Forecast data is not an array'
+      )
+    })
+
+    it('should throw with a descriptive message when a day has malformed properties', () => {
       const invalid = [makeForecastDay({ dayName: '' })]
 
-      weatherForecast.updateForecast(invalid)
-
-      expect(document.querySelector('.forecast-error')).not.toBeNull()
-      consoleSpy.mockRestore()
+      expect(() => weatherForecast.updateForecast(invalid)).toThrow(
+        'Invalid forecast day data'
+      )
     })
 
-    it('should show error state when a day is missing iconCode', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      const invalid = [makeForecastDay({ iconCode: '' })]
-
-      weatherForecast.updateForecast(invalid)
-
-      expect(document.querySelector('.forecast-error')).not.toBeNull()
-      consoleSpy.mockRestore()
-    })
-
-    it('should show error state when a day is missing description', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      const invalid = [makeForecastDay({ description: '' })]
-
-      weatherForecast.updateForecast(invalid)
-
-      expect(document.querySelector('.forecast-error')).not.toBeNull()
-      consoleSpy.mockRestore()
-    })
-
-    it('should show error state when mapIconCodeToSVG throws', () => {
+    it('should propagate errors thrown during rendering', () => {
+      const thrownError = new Error('mapping failed')
       ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
-        throw new Error('mapping failed')
+        throw thrownError
       })
 
-      weatherForecast.updateForecast(THREE_DAYS)
-
-      expect(document.querySelector('.forecast-error')).not.toBeNull()
-      expect(getForecastDays()).toHaveLength(0)
+      expect(() => weatherForecast.updateForecast(THREE_DAYS)).toThrow(
+        thrownError
+      )
     })
   })
 })

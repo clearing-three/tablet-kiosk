@@ -48,6 +48,19 @@ adb devices
 - `./deploy.sh -l`: List deployed files on device
 - `./deploy.sh -c`: Clean/remove all deployed files from device
 
+## Design
+
+### Call Stack Roots
+
+There are two recurring call stack roots and one startup root. Error handling
+is consolidated at these points.
+
+| Root | Location | Trigger |
+|---|---|---|
+| App startup | `DOMContentLoaded` handler in `main.ts` | Page load |
+| Weather update | `updateWeatherData()` in `main.ts` | `setInterval` every 10 min |
+| Clock update | `startUpdates()` interval in `TimeDisplay.ts` | `setInterval` every 1 sec |
+
 ## Third-Party Assets
 
 ### Weather Icons

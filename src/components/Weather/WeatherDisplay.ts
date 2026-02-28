@@ -15,10 +15,6 @@ import {
 import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'
 
-export const WEATHER_ERROR_TEMP = '--°'
-export const WEATHER_ERROR_DESCRIPTION = 'Weather data unavailable'
-export const WEATHER_ERROR_RANGE = '--° / --°'
-
 export class WeatherDisplay {
   private weatherService: WeatherService
   private elements: {
@@ -86,29 +82,9 @@ export class WeatherDisplay {
    * @param currentWeather Current weather data
    */
   updateDisplay(currentWeather: CurrentWeatherDisplay): void {
-    try {
-      this.updateWeatherIcon(
-        currentWeather.iconCode,
-        currentWeather.description
-      )
-      this.updateCurrentTemperature(currentWeather.temperature)
-      this.updateWeatherDescription(currentWeather.description)
-      this.updateTemperatureRange(
-        currentWeather.maxTemp,
-        currentWeather.minTemp
-      )
-    } catch (error) {
-      console.error('Error updating weather display:', error)
-      this.showErrorState()
-    }
-  }
-
-  /**
-   * Shows error state in the weather display
-   */
-  private showErrorState(): void {
-    this.elements.tempNow.textContent = WEATHER_ERROR_TEMP
-    this.elements.description.textContent = WEATHER_ERROR_DESCRIPTION
-    this.elements.range.textContent = WEATHER_ERROR_RANGE
+    this.updateWeatherIcon(currentWeather.iconCode, currentWeather.description)
+    this.updateCurrentTemperature(currentWeather.temperature)
+    this.updateWeatherDescription(currentWeather.description)
+    this.updateTemperatureRange(currentWeather.maxTemp, currentWeather.minTemp)
   }
 }

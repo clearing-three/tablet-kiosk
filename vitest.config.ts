@@ -29,9 +29,9 @@ export default defineConfig({
       include: ['src/**/*.ts'],
       exclude: [
         '**/*.d.ts',
-        'src/main.ts',
         'src/config/environment.ts',
-        'src/types/app.types.ts',
+        'src/types/**',
+        'src/main.ts',
       ],
       thresholds: {
         branches: 80,

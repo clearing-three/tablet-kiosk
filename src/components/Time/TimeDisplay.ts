@@ -55,16 +55,25 @@ export class TimeDisplay {
   /**
    * Starts the automatic time update interval
    */
-  startUpdates(): void {
-    // Clear any existing interval first
+  startUpdates(
+    onError?: (error: unknown) => void,
+    onSuccess?: () => void
+  ): void {
     this.stopUpdates()
-
-    // Perform initial update
     this.updateDisplay()
 
-    // Set up recurring updates
+    let lastUpdateFailed = false
     this.updateInterval = window.setInterval(() => {
-      this.updateDisplay()
+      try {
+        this.updateDisplay()
+        if (lastUpdateFailed) {
+          lastUpdateFailed = false
+          onSuccess?.()
+        }
+      } catch (error) {
+        lastUpdateFailed = true
+        onError?.(error)
+      }
     }, this.updateIntervalMs)
   }
 

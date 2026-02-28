@@ -8,7 +8,6 @@
 
 import { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
 import { formatTimeFromUnix } from '../../src/utils/formatters'
-import * as formatters from '../../src/utils/formatters'
 import type { AstronomyTimes as AstronomyData } from '../../src/types/astronomy.types'
 
 // Fixed Unix timestamps for deterministic tests
@@ -115,59 +114,32 @@ describe('AstronomyTimes', () => {
     })
   })
 
-  describe('data validation', () => {
-    it('should show error state when sunrise is 0', () => {
-      astronomyTimes.updateTimes({ ...mockData, sunrise: 0 })
-
-      expect(document.getElementById('sunrise-time')!.textContent).toBe('--')
-      expect(document.getElementById('sunset-time')!.textContent).toBe('--')
-      expect(document.getElementById('moonrise-time')!.textContent).toBe('--')
-      expect(document.getElementById('moonset-time')!.textContent).toBe('--')
+  describe('data validation and error propagation', () => {
+    it('should throw with a descriptive message when data is null', () => {
+      expect(() =>
+        astronomyTimes.updateTimes(null as unknown as AstronomyData)
+      ).toThrow('Astronomy data is null or undefined')
     })
 
-    it('should show error state when sunset is 0', () => {
-      astronomyTimes.updateTimes({ ...mockData, sunset: 0 })
-
-      expect(document.getElementById('sunrise-time')!.textContent).toBe('--')
-      expect(document.getElementById('sunset-time')!.textContent).toBe('--')
+    it('should throw with a descriptive message when a field is not a number', () => {
+      expect(() =>
+        astronomyTimes.updateTimes({
+          ...mockData,
+          sunrise: 'invalid' as unknown as number,
+        })
+      ).toThrow('Invalid astronomy data: sunrise is not a number')
     })
 
-    it('should log an error when sunrise or sunset is zero', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      astronomyTimes.updateTimes({ ...mockData, sunrise: 0 })
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Invalid astronomy data: sunrise or sunset is zero or negative'
-      )
-      consoleSpy.mockRestore()
+    it('should throw with a descriptive message when sunrise is zero or negative', () => {
+      expect(() =>
+        astronomyTimes.updateTimes({ ...mockData, sunrise: 0 })
+      ).toThrow('Invalid astronomy data: sunrise or sunset is zero or negative')
     })
 
-    it('should show error state when a field is not a number', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      astronomyTimes.updateTimes({
-        ...mockData,
-        sunrise: 'invalid' as unknown as number,
-      })
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Invalid astronomy data: sunrise is not a number'
-      )
-      expect(document.getElementById('sunrise-time')!.textContent).toBe('--')
-      consoleSpy.mockRestore()
-    })
-
-    it('should show error state when data is null', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      astronomyTimes.updateTimes(null as unknown as AstronomyData)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Astronomy data is null or undefined'
-      )
-      expect(document.getElementById('sunrise-time')!.textContent).toBe('--')
-      consoleSpy.mockRestore()
+    it('should throw with a descriptive message when sunset is zero or negative', () => {
+      expect(() =>
+        astronomyTimes.updateTimes({ ...mockData, sunset: 0 })
+      ).toThrow('Invalid astronomy data: sunrise or sunset is zero or negative')
     })
   })
 
@@ -190,50 +162,6 @@ describe('AstronomyTimes', () => {
 
       expect(values.moonrise).toBe('-')
       expect(values.moonset).toBe('-')
-    })
-  })
-
-  describe('formatting error handling', () => {
-    it('should display "--" for each field that fails to format', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      vi.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
-        throw new Error('format failed')
-      })
-
-      astronomyTimes.updateTimes(mockData)
-
-      expect(document.getElementById('sunrise-time')!.textContent).toBe('--')
-      expect(document.getElementById('sunset-time')!.textContent).toBe('--')
-      expect(document.getElementById('moonrise-time')!.textContent).toBe('--')
-      expect(document.getElementById('moonset-time')!.textContent).toBe('--')
-      consoleSpy.mockRestore()
-    })
-
-    it('should log a specific error for each field that fails to format', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      vi.spyOn(formatters, 'formatTimeFromUnix').mockImplementation(() => {
-        throw new Error('format failed')
-      })
-
-      astronomyTimes.updateTimes(mockData)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting sunrise time:',
-        expect.any(Error)
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting sunset time:',
-        expect.any(Error)
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting moonrise time:',
-        expect.any(Error)
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error formatting moonset time:',
-        expect.any(Error)
-      )
-      consoleSpy.mockRestore()
     })
   })
 })

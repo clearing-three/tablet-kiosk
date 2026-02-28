@@ -35,22 +35,18 @@ export class MoonPhase {
    * @param phase Moon phase value to validate
    * @returns boolean True if phase value is valid
    */
-  private validatePhaseValue(phase: number): boolean {
+  private validatePhaseValue(phase: number): void {
     if (typeof phase !== 'number') {
-      console.error('Moon phase must be a number')
-      return false
+      throw new Error('Moon phase must be a number')
     }
 
     if (isNaN(phase) || !isFinite(phase)) {
-      console.error('Moon phase must be a finite number')
-      return false
+      throw new Error('Moon phase must be a finite number')
     }
 
     if (phase < 0 || phase > 1) {
       console.warn('Moon phase value should be between 0 and 1, normalizing...')
     }
-
-    return true
   }
 
   /**
@@ -67,13 +63,8 @@ export class MoonPhase {
    * @param phase Moon phase value
    */
   private updatePhaseName(phase: number): void {
-    try {
-      this.elements.phaseName.textContent =
-        this.moonPhaseService.getPhaseNameLegacy(phase)
-    } catch (error) {
-      console.error('Error updating moon phase name:', error)
-      this.elements.phaseName.textContent = 'Unknown Phase'
-    }
+    this.elements.phaseName.textContent =
+      this.moonPhaseService.getPhaseNameLegacy(phase)
   }
 
   /**
@@ -93,19 +84,11 @@ export class MoonPhase {
    */
   private renderMoonSVG(phase: number): void {
     if (!this.moonPhaseService.isLibraryAvailable()) {
-      console.error('Moon phase library (phase_junk) not available')
-      this.showErrorState()
-      return
+      throw new Error('Moon phase library (phase_junk) not available')
     }
 
-    try {
-      // Clear existing SVG and render new one
-      this.moonPhaseService.updateMoonPhaseDisplay(phase)
-      this.updateSVGAttributes()
-    } catch (error) {
-      console.error('Error rendering moon phase SVG:', error)
-      this.showErrorState()
-    }
+    this.moonPhaseService.updateMoonPhaseDisplay(phase)
+    this.updateSVGAttributes()
   }
 
   /**
@@ -113,42 +96,10 @@ export class MoonPhase {
    * @param moonPhase Moon phase value from 0 to 1
    */
   updatePhase(moonPhase: number): void {
-    if (!this.validatePhaseValue(moonPhase)) {
-      this.showErrorState()
-      return
-    }
-
+    this.validatePhaseValue(moonPhase)
     const normalizedPhase = this.normalizePhase(moonPhase)
     this.updatePhaseName(normalizedPhase)
     this.renderMoonSVG(normalizedPhase)
-  }
-
-  /**
-   * Shows error state for moon phase display
-   */
-  private showErrorState(): void {
-    this.elements.phaseName.textContent = 'Phase Unknown'
-
-    // Clear the container and show a simple placeholder
-    this.elements.moonContainer.innerHTML = ''
-
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    svg.setAttribute('viewBox', '0 0 200 200')
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
-
-    const circle = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'circle'
-    )
-    circle.setAttribute('cx', '100')
-    circle.setAttribute('cy', '100')
-    circle.setAttribute('r', '80')
-    circle.setAttribute('fill', 'none')
-    circle.setAttribute('stroke', '#ffffff')
-    circle.setAttribute('stroke-width', '2')
-
-    svg.appendChild(circle)
-    this.elements.moonContainer.appendChild(svg)
   }
 
   /**

@@ -77,82 +77,21 @@ describe('MoonPhase', () => {
       ).toBe('xMidYMid meet')
     })
 
-    it('should show error state when the moon phase library is not available', () => {
+    it('should throw when the moon phase library is not available', () => {
       mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-      moonPhase.updatePhase(0.5)
-
-      expect(document.getElementById('moon-phase-name')!.textContent).toBe(
-        'Phase Unknown'
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('should log an error when the moon phase library is not available', () => {
-      mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(0.5)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(() => moonPhase.updatePhase(0.5)).toThrow(
         'Moon phase library (phase_junk) not available'
       )
-      consoleSpy.mockRestore()
     })
 
-    it('should show error state when updateMoonPhaseDisplay throws', () => {
+    it('should propagate errors from updateMoonPhaseDisplay', () => {
+      const thrownError = new Error('SVG render failed')
       mockService.updateMoonPhaseDisplay.mockImplementation(() => {
-        throw new Error('SVG render failed')
+        throw thrownError
       })
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-      moonPhase.updatePhase(0.5)
-
-      expect(document.getElementById('moon-phase-name')!.textContent).toBe(
-        'Phase Unknown'
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('should log an error when updateMoonPhaseDisplay throws', () => {
-      const err = new Error('SVG render failed')
-      mockService.updateMoonPhaseDisplay.mockImplementation(() => {
-        throw err
-      })
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(0.5)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error rendering moon phase SVG:',
-        err
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('should place a placeholder SVG in the container during error state', () => {
-      mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(0.5)
-
-      const moonEl = document.getElementById('moon')!
-      expect(moonEl.querySelector('svg')).not.toBeNull()
-      consoleSpy.mockRestore()
-    })
-
-    it('should clear the moon container before rendering the placeholder SVG', () => {
-      document.getElementById('moon')!.innerHTML =
-        '<path d="M 50 50 L 150 150" />'
-      mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(0.5)
-
-      const moonEl = document.getElementById('moon')!
-      expect(moonEl.querySelectorAll('path')).toHaveLength(0)
-      consoleSpy.mockRestore()
+      expect(() => moonPhase.updatePhase(0.5)).toThrow(thrownError)
     })
   })
 
@@ -173,34 +112,13 @@ describe('MoonPhase', () => {
       expect(mockService.getPhaseNameLegacy).toHaveBeenCalledWith(0.75)
     })
 
-    it('should display "Unknown Phase" when getPhaseNameLegacy throws', () => {
+    it('should propagate errors from getPhaseNameLegacy', () => {
+      const thrownError = new Error('calculation error')
       mockService.getPhaseNameLegacy.mockImplementation(() => {
-        throw new Error('calculation error')
+        throw thrownError
       })
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-      moonPhase.updatePhase(0.5)
-
-      expect(document.getElementById('moon-phase-name')!.textContent).toBe(
-        'Unknown Phase'
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('should log an error when getPhaseNameLegacy throws', () => {
-      const err = new Error('calculation error')
-      mockService.getPhaseNameLegacy.mockImplementation(() => {
-        throw err
-      })
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(0.5)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error updating moon phase name:',
-        err
-      )
-      consoleSpy.mockRestore()
+      expect(() => moonPhase.updatePhase(0.5)).toThrow(thrownError)
     })
 
     it('should overwrite the previous phase name on subsequent calls', () => {
@@ -253,67 +171,29 @@ describe('MoonPhase', () => {
   })
 
   describe('phase value validation', () => {
-    it('should show error state when phase is NaN', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(NaN)
-
-      expect(document.getElementById('moon-phase-name')!.textContent).toBe(
-        'Phase Unknown'
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('should log an error when phase is NaN', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(NaN)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
+    it('should throw with a descriptive message when phase is NaN', () => {
+      expect(() => moonPhase.updatePhase(NaN)).toThrow(
         'Moon phase must be a finite number'
       )
-      consoleSpy.mockRestore()
     })
 
-    it('should show error state when phase is Infinity', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(Infinity)
-
-      expect(document.getElementById('moon-phase-name')!.textContent).toBe(
-        'Phase Unknown'
+    it('should throw with a descriptive message when phase is Infinity', () => {
+      expect(() => moonPhase.updatePhase(Infinity)).toThrow(
+        'Moon phase must be a finite number'
       )
-      consoleSpy.mockRestore()
     })
 
-    it('should show error state when phase is not a number type', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase('invalid' as unknown as number)
-
-      expect(document.getElementById('moon-phase-name')!.textContent).toBe(
-        'Phase Unknown'
-      )
-      consoleSpy.mockRestore()
-    })
-
-    it('should log an error when phase is not a number type', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase('invalid' as unknown as number)
-
-      expect(consoleSpy).toHaveBeenCalledWith('Moon phase must be a number')
-      consoleSpy.mockRestore()
+    it('should throw with a descriptive message when phase is not a number type', () => {
+      expect(() =>
+        moonPhase.updatePhase('invalid' as unknown as number)
+      ).toThrow('Moon phase must be a number')
     })
 
     it('should not call service methods when phase is invalid', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(NaN)
+      expect(() => moonPhase.updatePhase(NaN)).toThrow()
 
       expect(mockService.getPhaseNameLegacy).not.toHaveBeenCalled()
       expect(mockService.updateMoonPhaseDisplay).not.toHaveBeenCalled()
-      consoleSpy.mockRestore()
     })
   })
 
@@ -328,16 +208,6 @@ describe('MoonPhase', () => {
       moonPhase.updatePhase(0.75)
 
       expect(moonPhase.getCurrentPhaseName()).toBe('Last Quarter')
-    })
-
-    it('should return "Phase Unknown" after an error state', () => {
-      mockService.isLibraryAvailable.mockReturnValue(false)
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      moonPhase.updatePhase(0.5)
-
-      expect(moonPhase.getCurrentPhaseName()).toBe('Phase Unknown')
-      consoleSpy.mockRestore()
     })
 
     it('should reflect the most recent update', () => {

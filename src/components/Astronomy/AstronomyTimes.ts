@@ -38,12 +38,7 @@ export class AstronomyTimes {
    * @param sunriseUnix Unix timestamp for sunrise
    */
   private updateSunriseTime(sunriseUnix: number): void {
-    try {
-      this.elements.sunrise.textContent = formatTimeFromUnix(sunriseUnix)
-    } catch (error) {
-      console.error('Error formatting sunrise time:', error)
-      this.elements.sunrise.textContent = '--'
-    }
+    this.elements.sunrise.textContent = formatTimeFromUnix(sunriseUnix)
   }
 
   /**
@@ -51,12 +46,7 @@ export class AstronomyTimes {
    * @param sunsetUnix Unix timestamp for sunset
    */
   private updateSunsetTime(sunsetUnix: number): void {
-    try {
-      this.elements.sunset.textContent = formatTimeFromUnix(sunsetUnix)
-    } catch (error) {
-      console.error('Error formatting sunset time:', error)
-      this.elements.sunset.textContent = '--'
-    }
+    this.elements.sunset.textContent = formatTimeFromUnix(sunsetUnix)
   }
 
   /**
@@ -65,13 +55,8 @@ export class AstronomyTimes {
    * @param moonriseUnix Unix timestamp for moonrise
    */
   private updateMoonriseTime(moonriseUnix: number): void {
-    try {
-      this.elements.moonrise.textContent =
-        moonriseUnix === 0 ? '-' : formatTimeFromUnix(moonriseUnix)
-    } catch (error) {
-      console.error('Error formatting moonrise time:', error)
-      this.elements.moonrise.textContent = '--'
-    }
+    this.elements.moonrise.textContent =
+      moonriseUnix === 0 ? '-' : formatTimeFromUnix(moonriseUnix)
   }
 
   /**
@@ -80,44 +65,31 @@ export class AstronomyTimes {
    * @param moonsetUnix Unix timestamp for moonset
    */
   private updateMoonsetTime(moonsetUnix: number): void {
-    try {
-      this.elements.moonset.textContent =
-        moonsetUnix === 0 ? '-' : formatTimeFromUnix(moonsetUnix)
-    } catch (error) {
-      console.error('Error formatting moonset time:', error)
-      this.elements.moonset.textContent = '--'
-    }
+    this.elements.moonset.textContent =
+      moonsetUnix === 0 ? '-' : formatTimeFromUnix(moonsetUnix)
   }
 
   /**
-   * Validates astronomy times data
+   * Validates astronomy times data. Throws if data is invalid.
    * @param astronomy Astronomy times data
-   * @returns boolean True if data is valid
    */
-  private validateAstronomyData(astronomy: AstronomyData): boolean {
+  private validateAstronomyData(astronomy: AstronomyData): void {
     if (!astronomy) {
-      console.error('Astronomy data is null or undefined')
-      return false
+      throw new Error('Astronomy data is null or undefined')
     }
 
-    // Check for required numeric properties
     const requiredProps = ['sunrise', 'sunset', 'moonrise', 'moonset']
     for (const prop of requiredProps) {
       if (typeof astronomy[prop as keyof AstronomyData] !== 'number') {
-        console.error(`Invalid astronomy data: ${prop} is not a number`)
-        return false
+        throw new Error(`Invalid astronomy data: ${prop} is not a number`)
       }
     }
 
-    // Validate that sunrise and sunset are reasonable timestamps (not 0)
     if (astronomy.sunrise <= 0 || astronomy.sunset <= 0) {
-      console.error(
+      throw new Error(
         'Invalid astronomy data: sunrise or sunset is zero or negative'
       )
-      return false
     }
-
-    return true
   }
 
   /**
@@ -125,25 +97,11 @@ export class AstronomyTimes {
    * @param astronomy Astronomy times data
    */
   updateTimes(astronomy: AstronomyData): void {
-    if (!this.validateAstronomyData(astronomy)) {
-      this.showErrorState()
-      return
-    }
-
+    this.validateAstronomyData(astronomy)
     this.updateSunriseTime(astronomy.sunrise)
     this.updateSunsetTime(astronomy.sunset)
     this.updateMoonriseTime(astronomy.moonrise)
     this.updateMoonsetTime(astronomy.moonset)
-  }
-
-  /**
-   * Shows error state for all astronomy time displays
-   */
-  private showErrorState(): void {
-    this.elements.sunrise.textContent = '--'
-    this.elements.sunset.textContent = '--'
-    this.elements.moonrise.textContent = '--'
-    this.elements.moonset.textContent = '--'
   }
 
   /**

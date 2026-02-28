@@ -70,34 +70,26 @@ export class AstronomyTimes {
   }
 
   /**
-   * Validates astronomy times data
+   * Validates astronomy times data. Throws if data is invalid.
    * @param astronomy Astronomy times data
-   * @returns boolean True if data is valid
    */
-  private validateAstronomyData(astronomy: AstronomyData): boolean {
+  private validateAstronomyData(astronomy: AstronomyData): void {
     if (!astronomy) {
-      console.error('Astronomy data is null or undefined')
-      return false
+      throw new Error('Astronomy data is null or undefined')
     }
 
-    // Check for required numeric properties
     const requiredProps = ['sunrise', 'sunset', 'moonrise', 'moonset']
     for (const prop of requiredProps) {
       if (typeof astronomy[prop as keyof AstronomyData] !== 'number') {
-        console.error(`Invalid astronomy data: ${prop} is not a number`)
-        return false
+        throw new Error(`Invalid astronomy data: ${prop} is not a number`)
       }
     }
 
-    // Validate that sunrise and sunset are reasonable timestamps (not 0)
     if (astronomy.sunrise <= 0 || astronomy.sunset <= 0) {
-      console.error(
+      throw new Error(
         'Invalid astronomy data: sunrise or sunset is zero or negative'
       )
-      return false
     }
-
-    return true
   }
 
   /**
@@ -105,25 +97,11 @@ export class AstronomyTimes {
    * @param astronomy Astronomy times data
    */
   updateTimes(astronomy: AstronomyData): void {
-    if (!this.validateAstronomyData(astronomy)) {
-      this.showErrorState()
-      return
-    }
-
+    this.validateAstronomyData(astronomy)
     this.updateSunriseTime(astronomy.sunrise)
     this.updateSunsetTime(astronomy.sunset)
     this.updateMoonriseTime(astronomy.moonrise)
     this.updateMoonsetTime(astronomy.moonset)
-  }
-
-  /**
-   * Shows error state for all astronomy time displays
-   */
-  private showErrorState(): void {
-    this.elements.sunrise.textContent = '--'
-    this.elements.sunset.textContent = '--'
-    this.elements.moonrise.textContent = '--'
-    this.elements.moonset.textContent = '--'
   }
 
   /**

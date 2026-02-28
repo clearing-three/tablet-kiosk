@@ -32,6 +32,9 @@ npm run format && npm run lint:fix && npm run lint && npm test && npm run build
 ### Test Coverage
 - `npm run test:coverage`: Run tests with coverage report (open `coverage/index.html` to view)
 
+### Dead Code
+- `npm run knip`: Find unused exports, files, and dependencies
+
 ## Deployment
 
 Requires tablet setup — see [Tablet](#tablet) section below.

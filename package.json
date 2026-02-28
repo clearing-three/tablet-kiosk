@@ -18,7 +18,8 @@
     "type-check": "tsc --noEmit",
     "deploy": "./deploy.sh",
     "deploy:list": "./deploy.sh -l",
-    "deploy:clean": "./deploy.sh -c"
+    "deploy:clean": "./deploy.sh -c",
+    "knip": "knip"
   },
   "repository": {
     "type": "git",
@@ -40,12 +41,11 @@
     "eslint": "10.0.2",
     "eslint-config-prettier": "10.1.8",
     "jsdom": "28.1.0",
+    "knip": "5.85.0",
     "prettier": "3.8.1",
     "typescript": "5.9.3",
     "vite": "7.3.1",
     "vitest": "4.0.18"
   },
-  "dependencies": {
-    "date-fns": "4.1.0"
-  }
+  "dependencies": {}
 }

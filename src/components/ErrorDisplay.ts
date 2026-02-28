@@ -1,4 +1,4 @@
-export type ErrorSource = 'init' | 'weather-update' | 'clock-update'
+type ErrorSource = 'init' | 'weather-update' | 'clock-update'
 
 function getErrorDetails(error: unknown): { message: string; stack?: string } {
   if (error instanceof Error)

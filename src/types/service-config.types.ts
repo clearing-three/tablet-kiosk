@@ -40,12 +40,3 @@ export interface MoonPhaseServiceConfig {
   /** Placeholder for future configuration options */
   readonly placeholder?: never
 }
-
-/**
- * Combined configuration for all services
- */
-export interface ServiceConfigs {
-  weather: WeatherServiceConfig
-  time: TimeServiceConfig
-  moonPhase: MoonPhaseServiceConfig
-}

@@ -26,8 +26,8 @@ export class WeatherUpdateCoordinator {
 
       this.errorDisplay.remove('weather-update')
     } catch (error) {
+      console.error('Failed to update weather data:', error)
       this.errorDisplay.show('weather-update', error)
-      throw error
     }
   }
 }

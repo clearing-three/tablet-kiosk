@@ -127,7 +127,7 @@ describe('WeatherUpdateCoordinator', () => {
     })
 
     it('calls errorDisplay.show with the weather-update key', async () => {
-      await expect(coordinator.update()).rejects.toThrow()
+      await coordinator.update()
 
       expect(mockErrorDisplay.show).toHaveBeenCalledWith(
         'weather-update',
@@ -135,12 +135,8 @@ describe('WeatherUpdateCoordinator', () => {
       )
     })
 
-    it('re-throws the error', async () => {
-      await expect(coordinator.update()).rejects.toThrow('network failure')
-    })
-
     it('does not call any display update methods', async () => {
-      await expect(coordinator.update()).rejects.toThrow()
+      await coordinator.update()
 
       expect(mockWeatherDisplay.updateDisplay).not.toHaveBeenCalled()
       expect(mockWeatherForecast.updateForecast).not.toHaveBeenCalled()
@@ -149,7 +145,7 @@ describe('WeatherUpdateCoordinator', () => {
     })
 
     it('does not call errorDisplay.remove on failure', async () => {
-      await expect(coordinator.update()).rejects.toThrow()
+      await coordinator.update()
 
       expect(mockErrorDisplay.remove).not.toHaveBeenCalled()
     })

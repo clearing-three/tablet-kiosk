@@ -7,32 +7,11 @@
 
 // Application configuration
 export interface AppConfig {
-  api: {
-    key: string
-    baseUrl: string
-    endpoints: {
-      oneCall: string
-    }
-  }
-  location: {
-    latitude: string
-    longitude: string
-    timezone?: string
-  }
-  updates: {
-    weatherInterval: number // Milliseconds
-    clockInterval: number // Milliseconds
-  }
-  display: {
-    temperatureUnit: 'celsius' | 'fahrenheit'
-    timeFormat: '12h' | '24h'
-    dateFormat: string
-    forecastDays: number
-  }
-  assets: {
-    weatherIconsPath: string
-    fallbackIcon: string
-  }
+  weatherUpdateIntervalMs: number
+}
+
+export const DEFAULT_APP_CONFIG: AppConfig = {
+  weatherUpdateIntervalMs: 10 * 60 * 1000,
 }
 
 // Environment configuration

@@ -9,12 +9,7 @@
  */
 
 import type { Mock } from 'vitest'
-import {
-  WeatherDisplay,
-  WEATHER_ERROR_TEMP,
-  WEATHER_ERROR_DESCRIPTION,
-  WEATHER_ERROR_RANGE,
-} from '../../src/components/Weather/WeatherDisplay'
+import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
 import { WeatherService } from '../../src/services/WeatherService'
 import type { ProcessedWeatherData } from '../../src/types/weather.types'
 
@@ -207,39 +202,16 @@ describe('WeatherDisplay', () => {
     })
   })
 
-  describe('Error state handling', () => {
-    it('should show error placeholders when updateDisplay throws', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
-        throw new Error('Icon mapping failed')
-      })
-
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      expect(document.getElementById('temp-now')!.textContent).toBe(
-        WEATHER_ERROR_TEMP
-      )
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        WEATHER_ERROR_DESCRIPTION
-      )
-      expect(document.getElementById('weather-range')!.textContent).toBe(
-        WEATHER_ERROR_RANGE
-      )
-    })
-
-    it('should log the error to console when updateDisplay throws', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+  describe('Error propagation', () => {
+    it('should throw when updateDisplay encounters an error', () => {
       const thrownError = new Error('Icon mapping failed')
       ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
         throw thrownError
       })
 
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error updating weather display:',
+      expect(() => weatherDisplay.updateDisplay(mockCurrentWeather)).toThrow(
         thrownError
       )
-      consoleSpy.mockRestore()
     })
   })
 })

@@ -39,38 +39,16 @@ import { UpdateScheduler } from './core/UpdateScheduler'
 import { WeatherUpdateCoordinator } from './core/WeatherUpdateCoordinator'
 
 // Types
-import { type AppConfig, DEFAULT_APP_CONFIG } from './types/app.types'
+import { DEFAULT_APP_CONFIG } from './types/app.types'
 
 export class TabletKioskApp {
-  private readonly weatherScheduler: UpdateScheduler
-  private readonly weatherCoordinator: WeatherUpdateCoordinator
-  private readonly timeDisplay: TimeDisplay
-
   constructor(
-    config: AppConfig,
     private readonly domValidator: DOMValidator,
     private readonly assetValidator: AssetValidator,
-    componentFactory: ComponentFactory,
-    weatherService: WeatherService,
-    errorDisplay: ErrorDisplay
-  ) {
-    const weatherDisplay = componentFactory.createWeatherDisplay()
-    const weatherForecast = componentFactory.createWeatherForecast()
-    const astronomyTimes = componentFactory.createAstronomyTimes()
-    const moonPhase = componentFactory.createMoonPhase()
-    this.timeDisplay = componentFactory.createTimeDisplay()
-
-    this.weatherCoordinator = new WeatherUpdateCoordinator(
-      weatherService,
-      weatherDisplay,
-      weatherForecast,
-      astronomyTimes,
-      moonPhase,
-      errorDisplay
-    )
-
-    this.weatherScheduler = new UpdateScheduler(config.weatherUpdateIntervalMs)
-  }
+    private readonly weatherCoordinator: WeatherUpdateCoordinator,
+    private readonly weatherScheduler: UpdateScheduler,
+    private readonly timeDisplay: TimeDisplay
+  ) {}
 
   async initialize(): Promise<void> {
     const domValidation = this.domValidator.validate(Object.values(DOM_IDS))
@@ -122,16 +100,31 @@ function createApp(): TabletKioskApp {
     weatherService,
     moonPhaseService
   )
-  const domValidator = new DOMValidator()
-  const assetValidator = new AssetValidator()
+
+  const weatherDisplay = componentFactory.createWeatherDisplay()
+  const weatherForecast = componentFactory.createWeatherForecast()
+  const astronomyTimes = componentFactory.createAstronomyTimes()
+  const moonPhase = componentFactory.createMoonPhase()
+  const timeDisplay = componentFactory.createTimeDisplay()
+
+  const weatherCoordinator = new WeatherUpdateCoordinator(
+    weatherService,
+    weatherDisplay,
+    weatherForecast,
+    astronomyTimes,
+    moonPhase,
+    errorDisplay
+  )
+  const weatherScheduler = new UpdateScheduler(
+    DEFAULT_APP_CONFIG.weatherUpdateIntervalMs
+  )
 
   return new TabletKioskApp(
-    DEFAULT_APP_CONFIG,
-    domValidator,
-    assetValidator,
-    componentFactory,
-    weatherService,
-    errorDisplay
+    new DOMValidator(),
+    new AssetValidator(),
+    weatherCoordinator,
+    weatherScheduler,
+    timeDisplay
   )
 }
 

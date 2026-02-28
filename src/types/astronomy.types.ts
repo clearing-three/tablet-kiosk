@@ -40,13 +40,6 @@ export enum MoonPhaseName {
   WANING_CRESCENT = 'Waning Crescent',
 }
 
-// Moon phase calculation parameters
-export interface MoonPhaseCalculationParams {
-  date: Date
-  latitude?: number
-  longitude?: number
-}
-
 // SVG moon phase rendering data
 export interface MoonPhaseSVGData {
   phase: number // Phase decimal value 0-1
@@ -60,27 +53,4 @@ export interface MoonPhaseServiceInterface {
   calculatePhase(date: Date): MoonPhase
   getPhaseName(phase: number): string
   generateSVG(phase: number): MoonPhaseSVGData
-}
-
-// Complete astronomical data for a day
-export interface DailyAstronomyData {
-  date: Date
-  times: AstronomyTimes
-  formattedTimes: FormattedAstronomyTimes
-  moonPhase: MoonPhase
-  svgData: MoonPhaseSVGData
-}
-
-// Solar position data (for future enhancements)
-export interface SolarPosition {
-  azimuth: number // Solar azimuth angle in degrees
-  elevation: number // Solar elevation angle in degrees
-  zenith: number // Solar zenith angle in degrees
-}
-
-// Lunar position data (for future enhancements)
-export interface LunarPosition {
-  azimuth: number // Lunar azimuth angle in degrees
-  elevation: number // Lunar elevation angle in degrees
-  distance: number // Distance to moon in kilometers
 }

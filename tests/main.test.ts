@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest'
 import { TabletKioskApp } from '../src/main'
 import { DOM_IDS } from '../src/utils/constants'
 import type { DOMValidator } from '../src/core/DOMValidator'
@@ -5,6 +6,7 @@ import type { AssetValidator } from '../src/core/AssetValidator'
 import type { UpdateScheduler } from '../src/core/UpdateScheduler'
 import type { WeatherUpdateCoordinator } from '../src/core/WeatherUpdateCoordinator'
 import type { TimeDisplay } from '../src/components/Time/TimeDisplay'
+import type { ErrorDisplay } from '../src/components/ErrorDisplay'
 
 describe('TabletKioskApp', () => {
   let mockDomValidator: Pick<DOMValidator, 'validate'>
@@ -15,6 +17,7 @@ describe('TabletKioskApp', () => {
     TimeDisplay,
     'startUpdates' | 'updateDisplay' | 'destroy'
   >
+  let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
 
   function makeApp(): TabletKioskApp {
     return new TabletKioskApp(
@@ -22,7 +25,8 @@ describe('TabletKioskApp', () => {
       mockAssetValidator as AssetValidator,
       mockWeatherCoordinator as WeatherUpdateCoordinator,
       mockWeatherScheduler as UpdateScheduler,
-      mockTimeDisplay as TimeDisplay
+      mockTimeDisplay as TimeDisplay,
+      mockErrorDisplay as ErrorDisplay
     )
   }
 
@@ -44,6 +48,10 @@ describe('TabletKioskApp', () => {
       startUpdates: vi.fn(),
       updateDisplay: vi.fn(),
       destroy: vi.fn(),
+    }
+    mockErrorDisplay = {
+      show: vi.fn(),
+      remove: vi.fn(),
     }
   })
 
@@ -82,6 +90,27 @@ describe('TabletKioskApp', () => {
       await makeApp().initialize()
 
       expect(mockWeatherScheduler.start).toHaveBeenCalledOnce()
+    })
+
+    it('wires onError to show a clock-update error bar', async () => {
+      await makeApp().initialize()
+
+      const [onError] = (mockTimeDisplay.startUpdates as Mock).mock
+        .calls[0] as [(error: unknown) => void]
+      const err = new Error('clock error')
+      onError(err)
+
+      expect(mockErrorDisplay.show).toHaveBeenCalledWith('clock-update', err)
+    })
+
+    it('wires onSuccess to remove the clock-update error bar', async () => {
+      await makeApp().initialize()
+
+      const [, onSuccess] = (mockTimeDisplay.startUpdates as Mock).mock
+        .calls[0] as [unknown, () => void]
+      onSuccess()
+
+      expect(mockErrorDisplay.remove).toHaveBeenCalledWith('clock-update')
     })
   })
 

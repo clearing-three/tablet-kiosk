@@ -47,7 +47,8 @@ export class TabletKioskApp {
     private readonly assetValidator: AssetValidator,
     private readonly weatherCoordinator: WeatherUpdateCoordinator,
     private readonly weatherScheduler: UpdateScheduler,
-    private readonly timeDisplay: TimeDisplay
+    private readonly timeDisplay: TimeDisplay,
+    private readonly errorDisplay: ErrorDisplay
   ) {}
 
   async initialize(): Promise<void> {
@@ -61,7 +62,13 @@ export class TabletKioskApp {
     this.validateAssetsAsync()
     preloadCriticalAssets()
 
-    this.timeDisplay.startUpdates()
+    this.timeDisplay.startUpdates(
+      error => {
+        console.error('Time display error:', error)
+        this.errorDisplay.show('clock-update', error)
+      },
+      () => this.errorDisplay.remove('clock-update')
+    )
     this.weatherScheduler.start(() => this.weatherCoordinator.update())
   }
 
@@ -92,8 +99,7 @@ export class TabletKioskApp {
 // Global app instance
 let app: TabletKioskApp | null = null
 
-function createApp(): TabletKioskApp {
-  const errorDisplay = new ErrorDisplay()
+function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const weatherService = new WeatherService(weatherServiceConfig)
   const moonPhaseService = new MoonPhaseService(moonPhaseServiceConfig)
   const componentFactory = new ComponentFactory(
@@ -124,7 +130,8 @@ function createApp(): TabletKioskApp {
     new AssetValidator(),
     weatherCoordinator,
     weatherScheduler,
-    timeDisplay
+    timeDisplay,
+    errorDisplay
   )
 }
 
@@ -132,8 +139,9 @@ function createApp(): TabletKioskApp {
  * Initialize the application when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', async () => {
+  const errorDisplay = new ErrorDisplay()
   try {
-    app = createApp()
+    app = createApp(errorDisplay)
     await app.initialize()
 
     // Make app globally available for debugging
@@ -141,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       app
   } catch (error) {
     console.error('Failed to start application:', error)
-    new ErrorDisplay().show('init', error)
+    errorDisplay.show('init', error)
   }
 })
 

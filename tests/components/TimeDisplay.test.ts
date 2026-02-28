@@ -182,6 +182,75 @@ describe('TimeDisplay', () => {
     })
   })
 
+  describe('startUpdates() callbacks', () => {
+    it('calls onError with the thrown error when updateDisplay throws on a tick', () => {
+      const onError = vi.fn()
+      const err = new Error('display failed')
+      vi.spyOn(timeDisplay, 'updateDisplay')
+        .mockImplementationOnce(() => {}) // initial call succeeds
+        .mockImplementation(() => {
+          throw err
+        })
+
+      timeDisplay.startUpdates(onError)
+      vi.advanceTimersByTime(1000)
+
+      expect(onError).toHaveBeenCalledWith(err)
+    })
+
+    it('calls onError on every failing tick, not just the first', () => {
+      const onError = vi.fn()
+      vi.spyOn(timeDisplay, 'updateDisplay')
+        .mockImplementationOnce(() => {})
+        .mockImplementation(() => {
+          throw new Error('fail')
+        })
+
+      timeDisplay.startUpdates(onError)
+      vi.advanceTimersByTime(3000)
+
+      expect(onError).toHaveBeenCalledTimes(3)
+    })
+
+    it('calls onSuccess on the tick after a failure when updateDisplay recovers', () => {
+      const onError = vi.fn()
+      const onSuccess = vi.fn()
+      vi.spyOn(timeDisplay, 'updateDisplay')
+        .mockImplementationOnce(() => {}) // initial
+        .mockImplementationOnce(() => {
+          throw new Error('fail')
+        }) // tick 1
+        .mockImplementation(() => {}) // tick 2+ succeeds
+
+      timeDisplay.startUpdates(onError, onSuccess)
+      vi.advanceTimersByTime(1000) // tick 1: fails
+      vi.advanceTimersByTime(1000) // tick 2: recovers
+
+      expect(onSuccess).toHaveBeenCalledOnce()
+    })
+
+    it('does not call onSuccess on a successful tick not preceded by a failure', () => {
+      const onSuccess = vi.fn()
+
+      timeDisplay.startUpdates(undefined, onSuccess)
+      vi.advanceTimersByTime(3000)
+
+      expect(onSuccess).not.toHaveBeenCalled()
+    })
+
+    it('does not throw when no callbacks are provided and updateDisplay throws', () => {
+      vi.spyOn(timeDisplay, 'updateDisplay')
+        .mockImplementationOnce(() => {})
+        .mockImplementation(() => {
+          throw new Error('fail')
+        })
+
+      timeDisplay.startUpdates()
+
+      expect(() => vi.advanceTimersByTime(1000)).not.toThrow()
+    })
+  })
+
   describe('getCurrentDisplayValues', () => {
     it('should return empty strings before any update', () => {
       const values = timeDisplay.getCurrentDisplayValues()

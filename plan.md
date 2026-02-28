@@ -40,7 +40,7 @@ source never calls `remove` since there is no subsequent success after startup.
 
 ---
 
-## Step 1 — Create `ErrorDisplay` component
+## ✅ Step 1 — Create `ErrorDisplay` component
 
 **New file: `src/components/ErrorDisplay.ts`**
 
@@ -96,7 +96,7 @@ Per-bar structure:
 
 ---
 
-## Step 2 — Add CSS for the error display
+## ✅ Step 2 — Add CSS for the error display
 
 **File: `src/styles/main.css`**
 
@@ -117,7 +117,7 @@ Add styles for the error display container and individual bars:
 
 ---
 
-## Step 3 — Update `DOMContentLoaded` handler in `main.ts`
+## ✅ Step 3 — Update `DOMContentLoaded` handler in `main.ts`
 
 **File: `src/main.ts`**
 
@@ -131,7 +131,7 @@ Add styles for the error display container and individual bars:
 
 ---
 
-## Step 4 — Update `TabletKioskApp` in `main.ts`
+## ✅ Step 4 — Update `TabletKioskApp` in `main.ts`
 
 **File: `src/main.ts`**
 
@@ -163,7 +163,12 @@ In the existing `TabletKioskApp` test file (or create one). Pass a mock
 
 ---
 
-## Step 5 — Update `TimeDisplay` to propagate errors
+## ✅ Step 5 — Wire clock error handling into `TabletKioskApp`
+
+This step has two parts: update `TimeDisplay` to expose error/success callbacks,
+then add `errorDisplay` to `TabletKioskApp` so it can wire them up.
+
+### Part A — Update `TimeDisplay`
 
 **File: `src/components/Time/TimeDisplay.ts`**
 
@@ -192,7 +197,26 @@ setInterval(() => {
 }, 1000)
 ```
 
-In `main.ts`, call:
+### Part B — Add `errorDisplay` to `TabletKioskApp`
+
+**File: `src/main.ts`**
+
+`TabletKioskApp` is the orchestrator for clock error handling, the same role
+`WeatherUpdateCoordinator` plays for weather errors. Add `errorDisplay` as an
+injected constructor parameter, following the same pattern:
+
+```ts
+constructor(
+  private readonly domValidator: DOMValidator,
+  private readonly assetValidator: AssetValidator,
+  private readonly weatherCoordinator: WeatherUpdateCoordinator,
+  private readonly weatherScheduler: UpdateScheduler,
+  private readonly timeDisplay: TimeDisplay,
+  private readonly errorDisplay: ErrorDisplay
+) {}
+```
+
+In `initialize()`, pass callbacks to `startUpdates()`:
 ```ts
 this.timeDisplay.startUpdates(
   (error) => {
@@ -203,9 +227,13 @@ this.timeDisplay.startUpdates(
 )
 ```
 
+In `createApp()`, pass the existing `errorDisplay` instance (already created
+there and passed to `WeatherUpdateCoordinator`) as the final argument to
+`TabletKioskApp`.
+
 ### Tests — `TimeDisplay.startUpdates()`
 
-In the existing `TimeDisplay` test file. Use fake/mock timers to advance the
+In the existing `TimeDisplay` test file. Use fake timers to advance the
 interval manually.
 
 - `onError` is called with the thrown error when `updateDisplay()` throws
@@ -215,6 +243,16 @@ interval manually.
   failure
 - `onError` is called on every failing tick, not just the first one
 - Neither callback is invoked when `startUpdates()` is called with no arguments
+
+### Tests — `TabletKioskApp` (update existing test file)
+
+Add `mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>` to the test
+setup and pass it as the sixth constructor argument in `makeApp()`.
+
+- `initialize()` passes an `onError` callback to `startUpdates()` that calls
+  `errorDisplay.show('clock-update', error)`
+- `initialize()` passes an `onSuccess` callback to `startUpdates()` that calls
+  `errorDisplay.remove('clock-update')`
 
 ---
 

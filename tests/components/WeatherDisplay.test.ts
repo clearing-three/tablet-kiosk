@@ -22,6 +22,7 @@ describe('WeatherDisplay', () => {
     document.body.innerHTML = `
       <object id="weather-icon"></object>
       <div id="temp-now"></div>
+      <div id="feels-like"></div>
       <div id="weather-desc"></div>
       <div id="weather-range"></div>
     `
@@ -36,6 +37,7 @@ describe('WeatherDisplay', () => {
 
     mockCurrentWeather = {
       temperature: 75,
+      feelsLike: 72,
       description: 'clear sky',
       iconCode: '01d',
       minTemp: 58,
@@ -48,6 +50,7 @@ describe('WeatherDisplay', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('75°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('72°')
       expect(document.getElementById('weather-desc')!.textContent).toBe(
         'clear sky'
       )
@@ -59,6 +62,7 @@ describe('WeatherDisplay', () => {
     it('should update elements with different weather data', () => {
       const rainyWeather: ProcessedWeatherData['current'] = {
         temperature: 45,
+        feelsLike: 42,
         description: 'heavy intensity rain',
         iconCode: '10d',
         minTemp: 38,
@@ -82,6 +86,7 @@ describe('WeatherDisplay', () => {
 
       const updatedWeather: ProcessedWeatherData['current'] = {
         temperature: 60,
+        feelsLike: 57,
         description: 'overcast clouds',
         iconCode: '04d',
         minTemp: 50,
@@ -127,6 +132,7 @@ describe('WeatherDisplay', () => {
     it('should update icon data and alt correctly for a different icon code', () => {
       const snowWeather: ProcessedWeatherData['current'] = {
         temperature: 28,
+        feelsLike: 20,
         description: 'heavy snow',
         iconCode: '13d',
         minTemp: 18,
@@ -173,6 +179,7 @@ describe('WeatherDisplay', () => {
     it('should handle negative temperatures', () => {
       const coldWeather: ProcessedWeatherData['current'] = {
         temperature: -15,
+        feelsLike: -24,
         description: 'heavy snow',
         iconCode: '13d',
         minTemp: -28,
@@ -190,6 +197,7 @@ describe('WeatherDisplay', () => {
     it('should handle zero temperature', () => {
       const freezingWeather: ProcessedWeatherData['current'] = {
         temperature: 0,
+        feelsLike: -4,
         description: 'freezing fog',
         iconCode: '50d',
         minTemp: -5,
@@ -199,6 +207,50 @@ describe('WeatherDisplay', () => {
       weatherDisplay.updateDisplay(freezingWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('0°')
+    })
+  })
+
+  describe('Feels-like temperature rendering', () => {
+    it('should render feels-like temperature with degree symbol', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
+
+      expect(document.getElementById('feels-like')!.textContent).toBe('72°')
+    })
+
+    it('should render feels-like independently of current temperature', () => {
+      const weather: ProcessedWeatherData['current'] = {
+        ...mockCurrentWeather,
+        temperature: 90,
+        feelsLike: 98,
+      }
+
+      weatherDisplay.updateDisplay(weather)
+
+      expect(document.getElementById('temp-now')!.textContent).toBe('90°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('98°')
+    })
+
+    it('should handle negative feels-like temperature', () => {
+      const weather: ProcessedWeatherData['current'] = {
+        ...mockCurrentWeather,
+        feelsLike: -10,
+      }
+
+      weatherDisplay.updateDisplay(weather)
+
+      expect(document.getElementById('feels-like')!.textContent).toBe('-10°')
+    })
+
+    it('should overwrite previous feels-like value on subsequent calls', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
+
+      const updated: ProcessedWeatherData['current'] = {
+        ...mockCurrentWeather,
+        feelsLike: 85,
+      }
+      weatherDisplay.updateDisplay(updated)
+
+      expect(document.getElementById('feels-like')!.textContent).toBe('85°')
     })
   })
 

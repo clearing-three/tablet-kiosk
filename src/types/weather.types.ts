@@ -89,6 +89,7 @@ export interface WeatherData {
 export interface ProcessedWeatherData {
   current: {
     temperature: number
+    feelsLike: number
     description: string
     iconCode: string
     minTemp: number

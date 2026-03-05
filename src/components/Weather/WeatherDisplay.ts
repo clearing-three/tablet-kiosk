@@ -8,6 +8,7 @@
 import type { ProcessedWeatherData } from '../../types/weather.types'
 
 type CurrentWeatherDisplay = ProcessedWeatherData['current']
+
 import {
   formatTemperatureDisplay,
   formatTemperatureRange,
@@ -20,6 +21,7 @@ export class WeatherDisplay {
   private elements: {
     icon: HTMLObjectElement
     tempNow: HTMLElement
+    feelsLike: HTMLElement
     description: HTMLElement
     range: HTMLElement
   }
@@ -36,6 +38,7 @@ export class WeatherDisplay {
     return {
       icon: getElement<HTMLObjectElement>('weather-icon'),
       tempNow: getElement('temp-now'),
+      feelsLike: getElement('feels-like'),
       description: getElement('weather-desc'),
       range: getElement('weather-range'),
     }
@@ -58,6 +61,14 @@ export class WeatherDisplay {
    */
   private updateCurrentTemperature(temperature: number): void {
     this.elements.tempNow.textContent = formatTemperatureDisplay(temperature)
+  }
+
+  /**
+   * Updates the feels-like temperature display
+   * @param feelsLike Feels-like temperature value
+   */
+  private updateFeelsLikeTemperature(feelsLike: number): void {
+    this.elements.feelsLike.textContent = formatTemperatureDisplay(feelsLike)
   }
 
   /**
@@ -84,6 +95,7 @@ export class WeatherDisplay {
   updateDisplay(currentWeather: CurrentWeatherDisplay): void {
     this.updateWeatherIcon(currentWeather.iconCode, currentWeather.description)
     this.updateCurrentTemperature(currentWeather.temperature)
+    this.updateFeelsLikeTemperature(currentWeather.feelsLike)
     this.updateWeatherDescription(currentWeather.description)
     this.updateTemperatureRange(currentWeather.maxTemp, currentWeather.minTemp)
   }

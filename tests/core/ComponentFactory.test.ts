@@ -16,6 +16,7 @@ describe('ComponentFactory', () => {
     document.body.innerHTML = `
       <object id="weather-icon"></object>
       <div id="temp-now"></div>
+      <div id="feels-like"></div>
       <div id="weather-desc"></div>
       <div id="weather-range"></div>
       <div id="forecast"></div>

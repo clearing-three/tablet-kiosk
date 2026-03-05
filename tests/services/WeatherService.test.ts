@@ -188,6 +188,9 @@ describe('WeatherService', () => {
       expect(processed.current.temperature).toBe(
         Math.round(mockData.current.temp)
       )
+      expect(processed.current.feelsLike).toBe(
+        Math.round(mockData.current.feels_like)
+      )
       expect(processed.current.description).toBe(
         mockData.current.weather[0].description
       )
@@ -358,6 +361,7 @@ describe('WeatherService', () => {
         current: {
           ...getWeatherScenario('clearSunnyDay').current,
           temp: 72.7,
+          feels_like: 69.4,
         },
         daily: [
           {
@@ -378,6 +382,7 @@ describe('WeatherService', () => {
       const processed = weatherService.processWeatherData(testData)
 
       expect(processed.current.temperature).toBe(73) // 72.7 rounded
+      expect(processed.current.feelsLike).toBe(69) // 69.4 rounded
       expect(processed.current.minTemp).toBe(65) // 65.3 rounded
       expect(processed.current.maxTemp).toBe(79) // 78.9 rounded
     })

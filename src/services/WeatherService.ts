@@ -119,6 +119,7 @@ export class WeatherService {
     // Process current weather
     const currentWeather = {
       temperature: Math.round(current.temp),
+      feelsLike: Math.round(current.feels_like),
       description: current.weather[0].description,
       iconCode: current.weather[0].icon,
       minTemp: Math.round(todaysForecast.temp.min),

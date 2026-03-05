@@ -10,6 +10,7 @@ import type { ProcessedWeatherData } from '../../src/types/weather.types'
 const mockWeatherData: ProcessedWeatherData = {
   current: {
     temperature: 72,
+    feelsLike: 70,
     description: 'clear sky',
     iconCode: '01d',
     minTemp: 65,

@@ -8,6 +8,7 @@
   --fg-sun: #ffcc80;
   --fg-moon: #d0d0d0;
   --fg-moon-text: #b0c4de;
+  --fg-feels-like: #b0c4de;
 
   --pad: 2vh;
   --gap-lg: 4vw;
@@ -166,11 +167,27 @@ body,
   height: 20vh;
 }
 
+#temp-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2vh;
+  margin-top: -2vh;
+}
+
 #temp-now {
   font-size: 7vh;
   font-weight: 500;
   color: var(--fg-tertiary);
-  margin-top: -2vh;
+}
+
+#feels-like {
+  font-size: 5.8vh;
+  font-weight: 300;
+  color: var(--fg-feels-like);
+}
+
+#feels-like::before {
+  content: '∼';
 }
 
 #weather-desc {

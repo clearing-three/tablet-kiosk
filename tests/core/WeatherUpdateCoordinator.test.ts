@@ -15,6 +15,8 @@ const mockWeatherData: ProcessedWeatherData = {
     iconCode: '01d',
     minTemp: 65,
     maxTemp: 78,
+    windSpeed: 5,
+    windDirection: 'SW',
   },
   forecast: [
     {

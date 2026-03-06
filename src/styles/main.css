@@ -63,7 +63,6 @@ body,
   align-items: center;
   justify-content: space-evenly;
   padding: var(--pad);
-  box-sizing: border-box;
   position: relative;
 }
 
@@ -73,7 +72,6 @@ body,
   flex-direction: column;
   align-items: center;
   padding: var(--pad);
-  box-sizing: border-box;
   position: relative;
 }
 
@@ -102,6 +100,12 @@ body,
 .astro-icon {
   width: 18vh;
   height: 18vh;
+  display: block;
+}
+
+.wind-icon {
+  width: 6vh;
+  height: 6vh;
   display: block;
 }
 
@@ -152,19 +156,19 @@ body,
   font-size: 3.5vh;
   font-weight: 300;
   color: var(--fg-secondary);
-  margin-bottom: 2.5vh;
+  margin-bottom: 1vh;
 }
 
 #weather {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2.5vh;
 }
 
 #weather-icon {
-  width: 20vh;
-  height: 20vh;
+  width: 15vh;
+  height: 15vh;
+  margin-bottom: -2vh;
 }
 
 #temp-row {
@@ -186,6 +190,18 @@ body,
   color: var(--fg-feels-like);
 }
 
+#wind-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5vh;
+}
+
+#wind-text {
+  font-size: 3.5vh;
+  font-weight: 300;
+  color: var(--fg-secondary);
+}
+
 #feels-like::before {
   content: '∼';
 }
@@ -194,6 +210,7 @@ body,
   font-size: 3.5vh;
   color: var(--fg-secondary);
   margin-top: 0.5vh;
+  margin-bottom: 2vh;
 }
 
 #weather-range {
@@ -203,12 +220,15 @@ body,
   opacity: 0.9;
 }
 
+#forecast-spacer {
+  flex: 1;
+  max-height: 8vh;
+}
+
 #forecast {
   display: flex;
   justify-content: space-between;
-  gap: 0;
   width: 100%;
-  margin-top: 1vh;
 }
 
 .forecast-day {
@@ -222,7 +242,6 @@ body,
   max-width: 33.33%;
 }
 
-.forecast-day img,
 .forecast-day .forecast-icon {
   width: 11vh;
   height: 11vh;

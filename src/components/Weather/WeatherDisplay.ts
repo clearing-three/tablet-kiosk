@@ -12,9 +12,11 @@ type CurrentWeatherDisplay = ProcessedWeatherData['current']
 import {
   formatTemperatureDisplay,
   formatTemperatureRange,
+  formatWind,
 } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'
+import { DOM_IDS } from '../../utils/constants'
 
 export class WeatherDisplay {
   private weatherService: WeatherService
@@ -22,6 +24,7 @@ export class WeatherDisplay {
     icon: HTMLObjectElement
     tempNow: HTMLElement
     feelsLike: HTMLElement
+    windText: HTMLElement
     description: HTMLElement
     range: HTMLElement
   }
@@ -36,11 +39,12 @@ export class WeatherDisplay {
    */
   private initializeElements() {
     return {
-      icon: getElement<HTMLObjectElement>('weather-icon'),
-      tempNow: getElement('temp-now'),
-      feelsLike: getElement('feels-like'),
-      description: getElement('weather-desc'),
-      range: getElement('weather-range'),
+      icon: getElement<HTMLObjectElement>(DOM_IDS.WEATHER_ICON),
+      tempNow: getElement(DOM_IDS.TEMP_NOW),
+      feelsLike: getElement(DOM_IDS.FEELS_LIKE),
+      windText: getElement(DOM_IDS.WIND_TEXT),
+      description: getElement(DOM_IDS.WEATHER_DESC),
+      range: getElement(DOM_IDS.WEATHER_RANGE),
     }
   }
 
@@ -71,6 +75,10 @@ export class WeatherDisplay {
     this.elements.feelsLike.textContent = formatTemperatureDisplay(feelsLike)
   }
 
+  private updateWind(speed: number, direction: string, gust?: number): void {
+    this.elements.windText.textContent = formatWind(speed, direction, gust)
+  }
+
   /**
    * Updates the weather description display
    * @param description Weather condition description
@@ -96,6 +104,11 @@ export class WeatherDisplay {
     this.updateWeatherIcon(currentWeather.iconCode, currentWeather.description)
     this.updateCurrentTemperature(currentWeather.temperature)
     this.updateFeelsLikeTemperature(currentWeather.feelsLike)
+    this.updateWind(
+      currentWeather.windSpeed,
+      currentWeather.windDirection,
+      currentWeather.windGust
+    )
     this.updateWeatherDescription(currentWeather.description)
     this.updateTemperatureRange(currentWeather.maxTemp, currentWeather.minTemp)
   }

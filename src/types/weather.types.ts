@@ -94,6 +94,9 @@ export interface ProcessedWeatherData {
     iconCode: string
     minTemp: number
     maxTemp: number
+    windSpeed: number
+    windDirection: string
+    windGust?: number
   }
   forecast: Array<{
     dayName: string

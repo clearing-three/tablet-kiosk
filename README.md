@@ -47,7 +47,7 @@ adb devices
 2. Use `deploy.sh`.
 
 ### Deployment Commands
-- `./deploy.sh`: Deploy files to connected Android tablet via ADB
+- `./deploy.sh`: Build, clean device, and deploy files to device
 - `./deploy.sh -l`: List deployed files on device
 - `./deploy.sh -c`: Clean/remove all deployed files from device
 

@@ -78,6 +78,8 @@ case "$1" in
     clean_files
     ;;
   "")
+    npm run build || exit 1
+    clean_files
     deploy_files
     ;;
   *)

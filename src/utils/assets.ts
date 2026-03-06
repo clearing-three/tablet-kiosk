@@ -8,12 +8,11 @@
 import { getWeatherIconPath } from './iconMapper'
 
 /**
- * Preloads critical weather icons to ensure they're available when needed
+ * Preloads weather and static icons to ensure they're available when needed
  * This helps with performance and ensures icons are bundled properly
  */
-export function preloadCriticalAssets(): void {
-  // Most commonly used weather icons that should be preloaded
-  const criticalIcons = [
+export function preloadAssets(): void {
+  const dynamicIcons = [
     'clear-day',
     'clear-night',
     'partly-cloudy-day',
@@ -23,7 +22,7 @@ export function preloadCriticalAssets(): void {
     'na',
   ]
 
-  criticalIcons.forEach(iconName => {
+  dynamicIcons.forEach(iconName => {
     const link = document.createElement('link')
     link.rel = 'preload'
     link.as = 'image'
@@ -31,9 +30,8 @@ export function preloadCriticalAssets(): void {
     document.head.appendChild(link)
   })
 
-  // Preload astronomy icons used in the UI
-  const astronomyIcons = ['sunrise', 'sunset', 'moonrise', 'moonset']
-  astronomyIcons.forEach(iconName => {
+  const staticIcons = ['sunrise', 'sunset', 'moonrise', 'moonset', 'wind']
+  staticIcons.forEach(iconName => {
     const link = document.createElement('link')
     link.rel = 'preload'
     link.as = 'image'
@@ -69,7 +67,7 @@ export async function validateAssetExists(assetPath: string): Promise<boolean> {
  * Gets all asset URLs that should be validated on application startup
  * @returns Array of asset URLs to validate
  */
-export function getCriticalAssetUrls(): string[] {
+export function getAssetUrls(): string[] {
   return [
     'weather-icons/clear-day.svg',
     'weather-icons/clear-night.svg',
@@ -86,6 +84,7 @@ export function getCriticalAssetUrls(): string[] {
     'weather-icons/sunset.svg',
     'weather-icons/moonrise.svg',
     'weather-icons/moonset.svg',
+    'weather-icons/wind.svg',
     'moon-phase.js',
   ]
 }

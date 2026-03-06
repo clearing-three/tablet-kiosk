@@ -69,6 +69,7 @@ body,
 
 #main-right {
   width: 55%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -158,19 +159,20 @@ body,
   font-size: 3.5vh;
   font-weight: 300;
   color: var(--fg-secondary);
-  margin-bottom: 2.5vh;
+  margin-bottom: 1vh;
 }
 
 #weather {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2.5vh;
+  margin-bottom: 0;
 }
 
 #weather-icon {
-  width: 20vh;
-  height: 20vh;
+  width: 15vh;
+  height: 15vh;
+  margin-bottom: -2vh;
 }
 
 #temp-row {
@@ -212,6 +214,7 @@ body,
   font-size: 3.5vh;
   color: var(--fg-secondary);
   margin-top: 0.5vh;
+  margin-bottom: 2vh;
 }
 
 #weather-range {
@@ -221,12 +224,16 @@ body,
   opacity: 0.9;
 }
 
+#forecast-spacer {
+  flex: 1;
+  max-height: 8vh;
+}
+
 #forecast {
   display: flex;
   justify-content: space-between;
   gap: 0;
   width: 100%;
-  margin-top: 1vh;
 }
 
 .forecast-day {

@@ -387,6 +387,64 @@ describe('WeatherService', () => {
       expect(processed.current.maxTemp).toBe(79) // 78.9 rounded
     })
 
+    it('should process wind fields correctly', () => {
+      const testData = {
+        ...getWeatherScenario('clearSunnyDay'),
+        current: {
+          ...getWeatherScenario('clearSunnyDay').current,
+          wind_speed: 12.4,
+          wind_deg: 315, // NW
+          wind_gust: 18.6,
+        },
+      }
+
+      const processed = weatherService.processWeatherData(testData)
+
+      expect(processed.current.windSpeed).toBe(12) // 12.4 rounded
+      expect(processed.current.windDirection).toBe('NW') // 315° → NW
+      expect(processed.current.windGust).toBe(19) // 18.6 rounded
+    })
+
+    it('should convert wind degrees to correct cardinal directions', () => {
+      const cardinalCases: [number, string][] = [
+        [0, 'N'],
+        [45, 'NE'],
+        [90, 'E'],
+        [135, 'SE'],
+        [180, 'S'],
+        [225, 'SW'],
+        [270, 'W'],
+        [315, 'NW'],
+        [360, 'N'], // 360 % 8 = 0 → N
+      ]
+
+      cardinalCases.forEach(([deg, expected]) => {
+        const testData = {
+          ...getWeatherScenario('clearSunnyDay'),
+          current: {
+            ...getWeatherScenario('clearSunnyDay').current,
+            wind_deg: deg,
+          },
+        }
+        const processed = weatherService.processWeatherData(testData)
+        expect(processed.current.windDirection).toBe(expected)
+      })
+    })
+
+    it('should handle missing wind gust', () => {
+      const testData = {
+        ...getWeatherScenario('clearSunnyDay'),
+        current: {
+          ...getWeatherScenario('clearSunnyDay').current,
+          wind_gust: undefined,
+        },
+      }
+
+      const processed = weatherService.processWeatherData(testData)
+
+      expect(processed.current.windGust).toBeUndefined()
+    })
+
     it('should process exactly required days of forecast data correctly', () => {
       const dataWithRequiredDays = getWeatherScenario('clearSunnyDay')
 

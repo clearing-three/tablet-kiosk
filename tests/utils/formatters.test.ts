@@ -16,6 +16,7 @@ import {
   formatTemperature,
   formatTemperatureRange,
   formatTemperatureDisplay,
+  formatWind,
 } from '../../src/utils/formatters'
 
 describe('formatters', () => {
@@ -232,6 +233,31 @@ describe('formatters', () => {
       testTemps.forEach(temp => {
         const result = formatTemperatureDisplay(temp)
         expect(result).toMatch(/^-?\d+°$/)
+      })
+    })
+  })
+
+  describe('formatWind', () => {
+    it('should format wind without gusts', () => {
+      expect(formatWind(12, 'NW')).toBe('NW 12 mph')
+    })
+
+    it('should format wind with gusts', () => {
+      expect(formatWind(12, 'NW', 18)).toBe('NW 12 mph (gusts 18 mph)')
+    })
+
+    it('should handle zero speed', () => {
+      expect(formatWind(0, 'N')).toBe('N 0 mph')
+    })
+
+    it('should handle zero speed with gusts', () => {
+      expect(formatWind(0, 'S', 5)).toBe('S 0 mph (gusts 5 mph)')
+    })
+
+    it('should format all 8 cardinal directions', () => {
+      const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+      directions.forEach(dir => {
+        expect(formatWind(10, dir)).toBe(`${dir} 10 mph`)
       })
     })
   })

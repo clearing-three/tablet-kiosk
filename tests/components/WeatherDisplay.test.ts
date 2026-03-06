@@ -42,6 +42,8 @@ describe('WeatherDisplay', () => {
       iconCode: '01d',
       minTemp: 58,
       maxTemp: 82,
+      windSpeed: 5,
+      windDirection: 'SW',
     }
   })
 
@@ -67,6 +69,9 @@ describe('WeatherDisplay', () => {
         iconCode: '10d',
         minTemp: 38,
         maxTemp: 52,
+        windSpeed: 13,
+        windDirection: 'W',
+        windGust: 19,
       }
       ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('rain')
 
@@ -91,6 +96,8 @@ describe('WeatherDisplay', () => {
         iconCode: '04d',
         minTemp: 50,
         maxTemp: 65,
+        windSpeed: 8,
+        windDirection: 'N',
       }
       weatherDisplay.updateDisplay(updatedWeather)
 
@@ -137,6 +144,8 @@ describe('WeatherDisplay', () => {
         iconCode: '13d',
         minTemp: 18,
         maxTemp: 32,
+        windSpeed: 9,
+        windDirection: 'N',
       }
       ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('snow')
 
@@ -184,6 +193,8 @@ describe('WeatherDisplay', () => {
         iconCode: '13d',
         minTemp: -28,
         maxTemp: -8,
+        windSpeed: 19,
+        windDirection: 'NW',
       }
 
       weatherDisplay.updateDisplay(coldWeather)
@@ -202,6 +213,8 @@ describe('WeatherDisplay', () => {
         iconCode: '50d',
         minTemp: -5,
         maxTemp: 2,
+        windSpeed: 3,
+        windDirection: 'E',
       }
 
       weatherDisplay.updateDisplay(freezingWeather)

@@ -105,6 +105,12 @@ body,
   display: block;
 }
 
+.wind-icon {
+  width: 6vh;
+  height: 6vh;
+  display: block;
+}
+
 .astro-time span {
   font-size: 4vh;
 }
@@ -184,6 +190,18 @@ body,
   font-size: 5.8vh;
   font-weight: 300;
   color: var(--fg-feels-like);
+}
+
+#wind-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5vh;
+}
+
+#wind-text {
+  font-size: 3.5vh;
+  font-weight: 300;
+  color: var(--fg-secondary);
 }
 
 #feels-like::before {

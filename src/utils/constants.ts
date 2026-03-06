@@ -75,6 +75,8 @@ export const DOM_IDS = {
   // Current weather elements
   WEATHER_ICON: 'weather-icon',
   TEMP_NOW: 'temp-now',
+  FEELS_LIKE: 'feels-like',
+  WIND_TEXT: 'wind-text',
   WEATHER_DESC: 'weather-desc',
   WEATHER_RANGE: 'weather-range',
 

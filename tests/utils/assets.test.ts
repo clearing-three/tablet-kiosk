@@ -4,29 +4,29 @@
 
 import type { Mock, MockInstance } from 'vitest'
 import {
-  preloadCriticalAssets,
+  preloadAssets,
   getWeatherIconUrl,
   validateAssetExists,
-  getCriticalAssetUrls,
+  getAssetUrls,
   reportMissingAssets,
 } from '../../src/utils/assets'
 
-describe('preloadCriticalAssets', () => {
+describe('preloadAssets()', () => {
   it('appends preload link elements to document.head', () => {
     const before = document.head.querySelectorAll('link[rel="preload"]').length
-    preloadCriticalAssets()
+    preloadAssets()
     const links = document.head.querySelectorAll('link[rel="preload"]')
     expect(links.length).toBeGreaterThan(before)
   })
 
   it('sets as="image" on every preload link', () => {
-    preloadCriticalAssets()
+    preloadAssets()
     const links = document.head.querySelectorAll('link[rel="preload"]')
     links.forEach(link => expect((link as HTMLLinkElement).as).toBe('image'))
   })
 
-  it('includes critical weather icon paths', () => {
-    preloadCriticalAssets()
+  it('includes dynamic weather icon paths', () => {
+    preloadAssets()
     const hrefs = Array.from(
       document.head.querySelectorAll('link[rel="preload"]')
     ).map(el => el.getAttribute('href'))
@@ -35,8 +35,8 @@ describe('preloadCriticalAssets', () => {
     expect(hrefs).toContain('/weather-icons/na.svg')
   })
 
-  it('includes astronomy icon paths', () => {
-    preloadCriticalAssets()
+  it('includes static icon paths', () => {
+    preloadAssets()
     const hrefs = Array.from(
       document.head.querySelectorAll('link[rel="preload"]')
     ).map(el => el.getAttribute('href'))
@@ -87,22 +87,22 @@ describe('validateAssetExists', () => {
   })
 })
 
-describe('getCriticalAssetUrls', () => {
+describe('getAssetUrls()', () => {
   it('returns a non-empty array', () => {
-    const urls = getCriticalAssetUrls()
+    const urls = getAssetUrls()
     expect(Array.isArray(urls)).toBe(true)
     expect(urls.length).toBeGreaterThan(0)
   })
 
   it('includes expected weather icon entries', () => {
-    const urls = getCriticalAssetUrls()
+    const urls = getAssetUrls()
     expect(urls).toContain('weather-icons/clear-day.svg')
     expect(urls).toContain('weather-icons/rain.svg')
     expect(urls).toContain('weather-icons/na.svg')
   })
 
-  it('includes astronomy icon entries', () => {
-    const urls = getCriticalAssetUrls()
+  it('includes static icon entries', () => {
+    const urls = getAssetUrls()
     expect(urls).toContain('weather-icons/sunrise.svg')
     expect(urls).toContain('weather-icons/moonset.svg')
   })

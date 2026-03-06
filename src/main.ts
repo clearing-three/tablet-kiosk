@@ -19,8 +19,8 @@ import {
 
 // Asset management
 import {
-  preloadCriticalAssets,
-  getCriticalAssetUrls,
+  preloadAssets,
+  getAssetUrls,
   reportMissingAssets,
 } from './utils/assets'
 
@@ -60,7 +60,7 @@ export class TabletKioskApp {
     }
 
     this.validateAssetsAsync()
-    preloadCriticalAssets()
+    preloadAssets()
 
     this.timeDisplay.startUpdates(
       error => {
@@ -74,9 +74,8 @@ export class TabletKioskApp {
 
   private async validateAssetsAsync(): Promise<void> {
     try {
-      const assetValidation = await this.assetValidator.validateAll(
-        getCriticalAssetUrls()
-      )
+      const assetValidation =
+        await this.assetValidator.validateAll(getAssetUrls())
       if (!assetValidation.valid) {
         reportMissingAssets(assetValidation.missing)
       }

@@ -132,9 +132,12 @@ body,
 }
 
 #moon {
-  width: 22vh;
-  height: 22vh;
+  max-width: 80vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
   display: block;
+  object-fit: contain;
 }
 
 /* ---------- Right Section: Time, Weather & Forecast ---------- */

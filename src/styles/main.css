@@ -1,6 +1,6 @@
 /* ---------- Root Variables & Global Resets ---------- */
 :root {
-  --bg: #000000;
+  --bg: #000;
   --fg-primary: #66b2ff;
   --fg-secondary: #a8cfff;
   --fg-tertiary: #c2e5ff;
@@ -9,7 +9,6 @@
   --fg-moon: #d0d0d0;
   --fg-moon-text: #b0c4de;
   --fg-feels-like: #b0c4de;
-
   --pad: 2vh;
   --gap-lg: 4vw;
   --gap-md: 2vw;
@@ -29,9 +28,9 @@ body {
   width: 100%;
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   overflow: hidden;
-  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 img {
@@ -246,9 +245,6 @@ body,
   width: 11vh;
   height: 11vh;
   margin-bottom: 0.5vh;
-}
-
-.forecast-day .forecast-icon {
   pointer-events: none;
 }
 
@@ -273,7 +269,7 @@ body,
 }
 
 .moonback {
-  fill: #111111;
+  fill: #111;
 }
 
 /* ---------- Legacy Color Styles ---------- */
@@ -297,7 +293,7 @@ body,
   width: 100%;
   background: #7a1a1a;
   color: #fff;
-  font-family: 'Roboto', sans-serif;
+  font-family: Roboto, sans-serif;
   font-size: 1rem;
 }
 
@@ -340,7 +336,7 @@ body,
 
 .error-bar-toggle:hover,
 .error-bar-dismiss:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgb(255 255 255 / 15%);
 }
 
 .error-bar-detail {
@@ -353,5 +349,5 @@ body,
   overflow-y: auto;
   max-height: 30vh;
   background: #4a0f0f;
-  color: #ffcccc;
+  color: #fcc;
 }

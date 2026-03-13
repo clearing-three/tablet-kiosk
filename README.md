@@ -26,7 +26,7 @@ npm ci
 
 ### Validation
 ```bash
-npm run format && npm run lint:fix && npm run lint && npm test && npm run build
+npm run format && npm run lint:fix && npm run stylelint:fix && npm run lint && npm run stylelint && npm test && npm run build
 ```
 
 ### Test Coverage

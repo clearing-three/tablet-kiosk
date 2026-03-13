@@ -2,7 +2,6 @@ import { WeatherService } from '../services/WeatherService'
 import { WeatherDisplay } from '../components/Weather/WeatherDisplay'
 import { WeatherForecast } from '../components/Weather/WeatherForecast'
 import { AstronomyTimes } from '../components/Astronomy/AstronomyTimes'
-import { MoonPhase } from '../components/Astronomy/MoonPhase'
 import { ErrorDisplay } from '../components/ErrorDisplay'
 
 export class WeatherUpdateCoordinator {
@@ -11,7 +10,6 @@ export class WeatherUpdateCoordinator {
     private readonly weatherDisplay: WeatherDisplay,
     private readonly weatherForecast: WeatherForecast,
     private readonly astronomyTimes: AstronomyTimes,
-    private readonly moonPhase: MoonPhase,
     private readonly errorDisplay: ErrorDisplay
   ) {}
 
@@ -22,7 +20,6 @@ export class WeatherUpdateCoordinator {
       this.weatherDisplay.updateDisplay(weatherData.current)
       this.weatherForecast.updateForecast(weatherData.forecast)
       this.astronomyTimes.updateTimes(weatherData.astronomy)
-      this.moonPhase.updatePhase(weatherData.astronomy.moonPhase)
 
       this.errorDisplay.remove('weather-update')
     } catch (error) {

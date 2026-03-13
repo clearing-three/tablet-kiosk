@@ -88,7 +88,6 @@ export const DOM_IDS = {
 
   // Moon phase elements
   MOON: 'moon',
-  MOON_PHASE_NAME: 'moon-phase-name',
 
   // Forecast elements
   FORECAST: 'forecast',

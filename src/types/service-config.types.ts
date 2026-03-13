@@ -30,13 +30,3 @@ export interface TimeServiceConfig {
   /** Weather update interval in milliseconds */
   weatherUpdateInterval: number
 }
-
-/**
- * Configuration for MoonPhaseService
- * Currently has no configurable parameters, but included for consistency
- * and future extensibility
- */
-export interface MoonPhaseServiceConfig {
-  /** Placeholder for future configuration options */
-  readonly placeholder?: never
-}

@@ -137,12 +137,6 @@ body,
   display: block;
 }
 
-#moon-phase-name {
-  font-size: 3.5vh;
-  color: var(--fg-moon-text);
-  text-align: center;
-}
-
 /* ---------- Right Section: Time, Weather & Forecast ---------- */
 #time {
   font-size: 18vh;

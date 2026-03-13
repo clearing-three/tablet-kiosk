@@ -207,7 +207,6 @@ describe('constants', () => {
 
     it('should have all required moon phase element IDs', () => {
       expect(DOM_IDS.MOON).toBe('moon')
-      expect(DOM_IDS.MOON_PHASE_NAME).toBe('moon-phase-name')
     })
 
     it('should have forecast element ID', () => {

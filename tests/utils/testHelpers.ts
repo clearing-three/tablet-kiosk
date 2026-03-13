@@ -2,7 +2,7 @@
 
 import type { Mock } from 'vitest'
 import type { WeatherData } from '../../src/types/weather.types'
-import type { AstronomyTimes, MoonPhase } from '../../src/types/astronomy.types'
+import type { AstronomyTimes } from '../../src/types/astronomy.types'
 
 /**
  * Creates mock weather data for testing
@@ -134,20 +134,6 @@ export function createMockAstronomyTimes(
     sunset: 1641002400, // 16:00:00 UTC
     moonrise: 1640980800, // 10:00:00 UTC
     moonset: 1641024000, // 02:00:00 UTC next day
-    ...overrides,
-  }
-}
-
-/**
- * Creates mock moon phase data for testing
- */
-export function createMockMoonPhase(
-  overrides: Partial<MoonPhase> = {}
-): MoonPhase {
-  return {
-    phase: 0.25,
-    name: 'First Quarter',
-    illumination: 50,
     ...overrides,
   }
 }

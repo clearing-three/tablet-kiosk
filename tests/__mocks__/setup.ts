@@ -7,7 +7,6 @@
  */
 
 import { OpenWeatherMapMock } from './api/openweathermap'
-import { MoonPhaseMock } from './libraries/moon-phase'
 import { BrowserApiMock } from './dom/browser-apis'
 
 /**
@@ -17,9 +16,6 @@ import { BrowserApiMock } from './dom/browser-apis'
 export function setupAllMocks() {
   // Set up API mocks
   OpenWeatherMapMock.setup()
-
-  // Set up library mocks
-  MoonPhaseMock.setup()
 
   // Set up browser API mocks
   BrowserApiMock.setup()
@@ -34,7 +30,6 @@ export function setupAllMocks() {
 export function teardownAllMocks() {
   // Teardown in reverse order
   BrowserApiMock.teardown()
-  MoonPhaseMock.teardown()
   OpenWeatherMapMock.teardown()
 }
 
@@ -45,7 +40,6 @@ export function teardownAllMocks() {
 export function resetAllMocks() {
   // Reset individual mock systems
   OpenWeatherMapMock.reset()
-  MoonPhaseMock.reset()
   BrowserApiMock.reset()
 
   vi.clearAllMocks()
@@ -60,7 +54,6 @@ export const mockScenarios = {
    */
   successfulWeatherFlow: () => {
     OpenWeatherMapMock.mockSuccess()
-    MoonPhaseMock.mockPhase(0.25) // First quarter moon
   },
 
   /**
@@ -68,7 +61,6 @@ export const mockScenarios = {
    */
   apiErrorFlow: () => {
     OpenWeatherMapMock.mockError('serverError')
-    MoonPhaseMock.mockPhase(0.0) // New moon as fallback
   },
 
   /**
@@ -76,7 +68,6 @@ export const mockScenarios = {
    */
   networkFailureFlow: () => {
     OpenWeatherMapMock.mockNetworkFailure()
-    MoonPhaseMock.mockPhase(0.5) // Full moon as fallback
   },
 
   /**
@@ -84,7 +75,6 @@ export const mockScenarios = {
    */
   edgeCaseFlow: () => {
     OpenWeatherMapMock.mockEdgeCase('missingMoonData')
-    MoonPhaseMock.mockEdgeCases()
   },
 
   /**
@@ -92,7 +82,6 @@ export const mockScenarios = {
    */
   extremeWeatherFlow: () => {
     OpenWeatherMapMock.mockEdgeCase('extremeWeather')
-    MoonPhaseMock.mockPhase(0.75) // Last quarter moon
   },
 }
 
@@ -105,16 +94,12 @@ export class TestMockManager {
   /**
    * Set up specific mocks for a test
    */
-  setup(mockTypes: Array<'api' | 'moon-phase' | 'browser-apis' | 'all'>) {
+  setup(mockTypes: Array<'api' | 'browser-apis' | 'all'>) {
     mockTypes.forEach(type => {
       switch (type) {
         case 'api':
           OpenWeatherMapMock.setup()
           this.activeMocks.add('api')
-          break
-        case 'moon-phase':
-          MoonPhaseMock.setup()
-          this.activeMocks.add('moon-phase')
           break
         case 'browser-apis':
           BrowserApiMock.setup()
@@ -135,9 +120,6 @@ export class TestMockManager {
     if (this.activeMocks.has('all') || this.activeMocks.has('api')) {
       OpenWeatherMapMock.reset()
     }
-    if (this.activeMocks.has('all') || this.activeMocks.has('moon-phase')) {
-      MoonPhaseMock.reset()
-    }
     if (this.activeMocks.has('all') || this.activeMocks.has('browser-apis')) {
       BrowserApiMock.reset()
     }
@@ -153,9 +135,6 @@ export class TestMockManager {
       if (this.activeMocks.has('browser-apis')) {
         BrowserApiMock.teardown()
       }
-      if (this.activeMocks.has('moon-phase')) {
-        MoonPhaseMock.teardown()
-      }
       if (this.activeMocks.has('api')) {
         OpenWeatherMapMock.teardown()
       }
@@ -168,7 +147,7 @@ export class TestMockManager {
  * Decorator for test functions that need specific mocks
  */
 export function withMocks<T extends any[]>(
-  mockTypes: Array<'api' | 'moon-phase' | 'browser-apis' | 'all'>,
+  mockTypes: Array<'api' | 'browser-apis' | 'all'>,
   testFn: (...args: T) => void | Promise<void>
 ) {
   return async (...args: T) => {
@@ -190,9 +169,7 @@ export function createIsolatedTestEnvironment() {
   const manager = new TestMockManager()
 
   return {
-    setup: (
-      mockTypes: Array<'api' | 'moon-phase' | 'browser-apis' | 'all'>
-    ) => {
+    setup: (mockTypes: Array<'api' | 'browser-apis' | 'all'>) => {
       manager.setup(mockTypes)
     },
     reset: () => manager.reset(),

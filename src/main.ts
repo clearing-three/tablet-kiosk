@@ -9,13 +9,9 @@ import './styles/main.css'
 
 // Services
 import { WeatherService } from './services/WeatherService'
-import { MoonPhaseService } from './services/MoonPhaseService'
 
 // Configuration
-import {
-  weatherServiceConfig,
-  moonPhaseServiceConfig,
-} from './config/environment'
+import { weatherServiceConfig } from './config/environment'
 
 // Asset management
 import {
@@ -100,16 +96,11 @@ let app: TabletKioskApp | null = null
 
 function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const weatherService = new WeatherService(weatherServiceConfig)
-  const moonPhaseService = new MoonPhaseService(moonPhaseServiceConfig)
-  const componentFactory = new ComponentFactory(
-    weatherService,
-    moonPhaseService
-  )
+  const componentFactory = new ComponentFactory(weatherService)
 
   const weatherDisplay = componentFactory.createWeatherDisplay()
   const weatherForecast = componentFactory.createWeatherForecast()
   const astronomyTimes = componentFactory.createAstronomyTimes()
-  const moonPhase = componentFactory.createMoonPhase()
   const timeDisplay = componentFactory.createTimeDisplay()
 
   const weatherCoordinator = new WeatherUpdateCoordinator(
@@ -117,7 +108,6 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     weatherDisplay,
     weatherForecast,
     astronomyTimes,
-    moonPhase,
     errorDisplay
   )
   const weatherScheduler = new UpdateScheduler(

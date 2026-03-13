@@ -3,7 +3,6 @@ import type { WeatherService } from '../../src/services/WeatherService'
 import type { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
 import type { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
 import type { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
-import type { MoonPhase } from '../../src/components/Astronomy/MoonPhase'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
 import type { ProcessedWeatherData } from '../../src/types/weather.types'
 
@@ -42,7 +41,6 @@ describe('WeatherUpdateCoordinator', () => {
   let mockWeatherDisplay: Pick<WeatherDisplay, 'updateDisplay'>
   let mockWeatherForecast: Pick<WeatherForecast, 'updateForecast'>
   let mockAstronomyTimes: Pick<AstronomyTimes, 'updateTimes'>
-  let mockMoonPhase: Pick<MoonPhase, 'updatePhase'>
   let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
   let coordinator: WeatherUpdateCoordinator
 
@@ -53,7 +51,6 @@ describe('WeatherUpdateCoordinator', () => {
     mockWeatherDisplay = { updateDisplay: vi.fn() }
     mockWeatherForecast = { updateForecast: vi.fn() }
     mockAstronomyTimes = { updateTimes: vi.fn() }
-    mockMoonPhase = { updatePhase: vi.fn() }
     mockErrorDisplay = { show: vi.fn(), remove: vi.fn() }
 
     coordinator = new WeatherUpdateCoordinator(
@@ -61,7 +58,6 @@ describe('WeatherUpdateCoordinator', () => {
       mockWeatherDisplay as WeatherDisplay,
       mockWeatherForecast as WeatherForecast,
       mockAstronomyTimes as AstronomyTimes,
-      mockMoonPhase as MoonPhase,
       mockErrorDisplay as ErrorDisplay
     )
   })
@@ -96,14 +92,6 @@ describe('WeatherUpdateCoordinator', () => {
 
       expect(mockAstronomyTimes.updateTimes).toHaveBeenCalledWith(
         mockWeatherData.astronomy
-      )
-    })
-
-    it('passes moonPhase to moonPhase.updatePhase', async () => {
-      await coordinator.update()
-
-      expect(mockMoonPhase.updatePhase).toHaveBeenCalledWith(
-        mockWeatherData.astronomy.moonPhase
       )
     })
 
@@ -144,7 +132,6 @@ describe('WeatherUpdateCoordinator', () => {
       expect(mockWeatherDisplay.updateDisplay).not.toHaveBeenCalled()
       expect(mockWeatherForecast.updateForecast).not.toHaveBeenCalled()
       expect(mockAstronomyTimes.updateTimes).not.toHaveBeenCalled()
-      expect(mockMoonPhase.updatePhase).not.toHaveBeenCalled()
     })
 
     it('does not call errorDisplay.remove on failure', async () => {

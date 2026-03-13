@@ -84,7 +84,7 @@ export function formatTemperatureDisplay(temp: number): string {
  * @param speed Wind speed in mph
  * @param direction 8-point cardinal direction (e.g., "NW")
  * @param gust Optional gust speed in mph
- * @returns Formatted wind string (e.g., "NW 12 mph" or "NW 12 mph (gusts 18 mph)")
+ * @returns Formatted wind string (e.g., "NW 12 mph" or "NW 12 mph ➜ 18 mph")
  */
 export function formatWind(
   speed: number,
@@ -92,5 +92,5 @@ export function formatWind(
   gust?: number
 ): string {
   const base = `${direction} ${speed} mph`
-  return gust !== undefined ? `${base} (gusts ${gust} mph)` : base
+  return gust !== undefined ? `${base} ➜ ${gust} mph` : base
 }

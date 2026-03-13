@@ -14,7 +14,6 @@ export default defineConfig({
     outDir: '../dist',
     emptyOutDir: true,
     assetsDir: 'assets',
-    minify: 'esbuild',
     rollupOptions: {
       input: resolve(__dirname, 'src/index.html'),
       output: {

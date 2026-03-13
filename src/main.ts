@@ -9,13 +9,10 @@ import './styles/main.css'
 
 // Services
 import { WeatherService } from './services/WeatherService'
-import { MoonPhaseService } from './services/MoonPhaseService'
+import { NasaMoonService } from './services/NasaMoonService'
 
 // Configuration
-import {
-  weatherServiceConfig,
-  moonPhaseServiceConfig,
-} from './config/environment'
+import { weatherServiceConfig } from './config/environment'
 
 // Asset management
 import {
@@ -30,6 +27,7 @@ import { DOM_IDS } from './utils/constants'
 // Components
 import { ErrorDisplay } from './components/ErrorDisplay'
 import { TimeDisplay } from './components/Time/TimeDisplay'
+import { NasaMoonDisplay } from './components/Astronomy/NasaMoonDisplay'
 
 // Core
 import { DOMValidator } from './core/DOMValidator'
@@ -48,6 +46,7 @@ export class TabletKioskApp {
     private readonly weatherCoordinator: WeatherUpdateCoordinator,
     private readonly weatherScheduler: UpdateScheduler,
     private readonly timeDisplay: TimeDisplay,
+    private readonly nasaMoonDisplay: NasaMoonDisplay,
     private readonly errorDisplay: ErrorDisplay
   ) {}
 
@@ -69,6 +68,13 @@ export class TabletKioskApp {
       },
       () => this.errorDisplay.remove('clock-update')
     )
+    this.nasaMoonDisplay.startUpdates(
+      error => {
+        console.error('NASA moon error:', error)
+        this.errorDisplay.show('nasa-moon', error)
+      },
+      () => this.errorDisplay.remove('nasa-moon')
+    )
     this.weatherScheduler.start(() => this.weatherCoordinator.update())
   }
 
@@ -87,6 +93,7 @@ export class TabletKioskApp {
   destroy(): void {
     this.weatherScheduler.stop()
     this.timeDisplay.destroy()
+    this.nasaMoonDisplay.destroy()
   }
 
   async refresh(): Promise<void> {
@@ -100,24 +107,21 @@ let app: TabletKioskApp | null = null
 
 function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const weatherService = new WeatherService(weatherServiceConfig)
-  const moonPhaseService = new MoonPhaseService(moonPhaseServiceConfig)
-  const componentFactory = new ComponentFactory(
-    weatherService,
-    moonPhaseService
-  )
+  const componentFactory = new ComponentFactory(weatherService)
 
   const weatherDisplay = componentFactory.createWeatherDisplay()
   const weatherForecast = componentFactory.createWeatherForecast()
   const astronomyTimes = componentFactory.createAstronomyTimes()
-  const moonPhase = componentFactory.createMoonPhase()
   const timeDisplay = componentFactory.createTimeDisplay()
+
+  const nasaMoonService = new NasaMoonService()
+  const nasaMoonDisplay = new NasaMoonDisplay(nasaMoonService)
 
   const weatherCoordinator = new WeatherUpdateCoordinator(
     weatherService,
     weatherDisplay,
     weatherForecast,
     astronomyTimes,
-    moonPhase,
     errorDisplay
   )
   const weatherScheduler = new UpdateScheduler(
@@ -130,6 +134,7 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     weatherCoordinator,
     weatherScheduler,
     timeDisplay,
+    nasaMoonDisplay,
     errorDisplay
   )
 }

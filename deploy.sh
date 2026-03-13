@@ -2,7 +2,7 @@
 
 DEST_DIR="/sdcard/Android/data/de.ozerov.fully/files/html"
 SOURCE_DIR="dist"
-FILES=("index.html" "moon-phase.js")
+FILES=("index.html")
 ICONS_DIR="weather-icons"
 ASSETS_DIR="assets"
 

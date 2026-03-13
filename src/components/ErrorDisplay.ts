@@ -1,4 +1,4 @@
-type ErrorSource = 'init' | 'weather-update' | 'clock-update'
+type ErrorSource = 'init' | 'weather-update' | 'clock-update' | 'nasa-moon'
 
 function getErrorDetails(error: unknown): { message: string; stack?: string } {
   if (error instanceof Error)
@@ -10,6 +10,7 @@ const SOURCE_LABELS: Record<ErrorSource, string> = {
   init: 'Init',
   'weather-update': 'Weather',
   'clock-update': 'Clock',
+  'nasa-moon': 'Nasa Moon',
 }
 
 export class ErrorDisplay {

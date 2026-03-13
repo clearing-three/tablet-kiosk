@@ -8,7 +8,6 @@
 import type { Mock } from 'vitest'
 import {
   OpenWeatherMapMock,
-  MoonPhaseMock,
   weatherScenarios,
   getWeatherScenario,
 } from './__mocks__'
@@ -71,52 +70,6 @@ describe('Mock Integration', () => {
 
       expect(data.daily[0].moonrise).toBe(0)
       expect(data.daily[0].moonset).toBe(0)
-    })
-  })
-
-  describe('Moon Phase Library Mocks', () => {
-    it('should mock moon phase calculations', () => {
-      MoonPhaseMock.mockPhase(0.25)
-
-      const phase = (global as any).moon_day(new Date())
-      const svgPath = (global as any).phase_junk(0.25)
-
-      expect(phase).toBe(0.25)
-      expect(svgPath).toContain('M 50') // SVG path should start with move command
-      expect(svgPath).toContain('A ') // Should contain arc commands
-
-      MoonPhaseMock.verifyMoonDayCalled()
-      MoonPhaseMock.verifyPhaseJunkCalled(0.25)
-    })
-
-    it('should handle different moon phases', () => {
-      const phases = [0.0, 0.25, 0.5, 0.75]
-
-      phases.forEach(phase => {
-        MoonPhaseMock.mockPhase(phase)
-        const svgPath = (global as any).phase_junk(phase)
-        expect(svgPath).toBeTruthy()
-        expect(typeof svgPath).toBe('string')
-      })
-    })
-
-    it('should mock moon phase for specific dates', () => {
-      const testDate = new Date('2022-01-15T00:00:00Z')
-      MoonPhaseMock.mockPhaseForDate(testDate, 0.25)
-
-      const phase = (global as any).moon_day(testDate)
-      expect(phase).toBe(0.25)
-    })
-
-    it('should handle edge cases in moon phase calculations', () => {
-      MoonPhaseMock.mockEdgeCases()
-
-      // Test invalid inputs
-      const invalidPhase = (global as any).phase_junk('invalid')
-      expect(invalidPhase).toBe('')
-
-      const invalidDate = (global as any).moon_day('not a date')
-      expect(invalidDate).toBe(0) // Should default to new moon
     })
   })
 
@@ -217,14 +170,12 @@ describe('Mock Integration', () => {
     it('should reset mocks between tests', () => {
       // Set up some mock state
       OpenWeatherMapMock.mockSuccess()
-      MoonPhaseMock.mockPhase(0.5)
 
       // Verify initial state
       expect((global.fetch as Mock).mock.calls.length).toBeGreaterThanOrEqual(0)
 
       // Reset should clear mock state
       OpenWeatherMapMock.reset()
-      MoonPhaseMock.reset()
 
       // Verify reset
       expect((global.fetch as Mock).mock.calls.length).toBe(0)
@@ -233,7 +184,6 @@ describe('Mock Integration', () => {
     it('should handle multiple mock setups without conflicts', () => {
       // Set up different mocks
       OpenWeatherMapMock.mockError('rateLimited')
-      MoonPhaseMock.mockPhase(0.75)
 
       // Both should work independently
       expect(
@@ -241,8 +191,6 @@ describe('Mock Integration', () => {
       ).resolves.toMatchObject({
         status: 429,
       })
-
-      expect((global as any).moon_day(new Date())).toBe(0.75)
     })
   })
 
@@ -251,40 +199,26 @@ describe('Mock Integration', () => {
       // Mock successful weather API call
       OpenWeatherMapMock.mockSuccess(weatherScenarios.clearSunnyDay)
 
-      // Mock moon phase for the same date
-      MoonPhaseMock.mockPhase(0.25)
-
       // Test the complete flow
       const weatherResponse = await fetch(
         'https://api.openweathermap.org/data/3.0/onecall'
       )
       const weatherData = await weatherResponse.json()
-      const moonPhase = (global as any).moon_day(
-        new Date(weatherData.current.dt * 1000)
-      )
 
       expect(weatherData.current.weather[0].main).toBe('Clear')
-      expect(moonPhase).toBe(0.25)
 
       // Verify all APIs were called as expected
       OpenWeatherMapMock.verifyApiCallCount(1)
-      MoonPhaseMock.verifyMoonDayCalled()
     })
 
     it('should handle error scenarios across all mocks', async () => {
       // Mock API failure
       OpenWeatherMapMock.mockNetworkFailure()
 
-      // Mock moon phase edge case
-      MoonPhaseMock.mockEdgeCases()
-
       // Verify error handling
       await expect(
         fetch('https://api.openweathermap.org/data/3.0/onecall')
       ).rejects.toThrow()
-
-      const invalidMoonPhase = (global as any).moon_day('invalid')
-      expect(invalidMoonPhase).toBe(0) // Should fallback gracefully
     })
   })
 })

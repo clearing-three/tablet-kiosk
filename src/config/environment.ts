@@ -4,10 +4,7 @@
  * Exports individual service configurations for dependency injection
  */
 
-import type {
-  WeatherServiceConfig,
-  MoonPhaseServiceConfig,
-} from '../types/service-config.types'
+import type { WeatherServiceConfig } from '../types/service-config.types'
 import {
   validateRequiredEnvVar,
   validateNumericEnvVar,
@@ -89,15 +86,6 @@ function createWeatherServiceConfig(): WeatherServiceConfig {
 }
 
 /**
- * Creates MoonPhaseServiceConfig from environment variables
- */
-function createMoonPhaseServiceConfig(): MoonPhaseServiceConfig {
-  // No environment variables needed for MoonPhaseService currently
-  return {}
-}
-
-/**
  * Service configuration objects for dependency injection
  */
 export const weatherServiceConfig = createWeatherServiceConfig()
-export const moonPhaseServiceConfig = createMoonPhaseServiceConfig()

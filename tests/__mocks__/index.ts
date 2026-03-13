@@ -8,9 +8,6 @@
 // API Mocks
 export * from './api/openweathermap'
 
-// Library Mocks
-export * from './libraries/moon-phase'
-
 // DOM and Browser API Mocks
 export * from './dom/browser-apis'
 
@@ -24,12 +21,6 @@ export {
   mockErrorResponses,
   mockEdgeCaseResponses,
 } from './api/openweathermap'
-
-export {
-  MoonPhaseMock,
-  moonPhaseTestHelpers,
-  mockMoonPhaseData,
-} from './libraries/moon-phase'
 
 export {
   BrowserApiMock,

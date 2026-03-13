@@ -2,15 +2,12 @@ import { ComponentFactory } from '../../src/core/ComponentFactory'
 import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
 import { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
 import { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
-import { MoonPhase } from '../../src/components/Astronomy/MoonPhase'
 import { TimeDisplay } from '../../src/components/Time/TimeDisplay'
 import type { WeatherService } from '../../src/services/WeatherService'
-import type { MoonPhaseService } from '../../src/services/MoonPhaseService'
 
 describe('ComponentFactory', () => {
   let factory: ComponentFactory
   let mockWeatherService: WeatherService
-  let mockMoonPhaseService: MoonPhaseService
 
   beforeEach(() => {
     document.body.innerHTML = `
@@ -26,14 +23,12 @@ describe('ComponentFactory', () => {
       <div id="moonrise-time"></div>
       <div id="moonset-time"></div>
       <div id="moon"></div>
-      <div id="moon-phase-name"></div>
       <div id="time"></div>
       <div id="date"></div>
     `
 
     mockWeatherService = {} as WeatherService
-    mockMoonPhaseService = {} as MoonPhaseService
-    factory = new ComponentFactory(mockWeatherService, mockMoonPhaseService)
+    factory = new ComponentFactory(mockWeatherService)
   })
 
   describe('createWeatherDisplay()', () => {
@@ -69,16 +64,6 @@ describe('ComponentFactory', () => {
       expect(factory.createAstronomyTimes()).not.toBe(
         factory.createAstronomyTimes()
       )
-    })
-  })
-
-  describe('createMoonPhase()', () => {
-    it('returns a MoonPhase instance', () => {
-      expect(factory.createMoonPhase()).toBeInstanceOf(MoonPhase)
-    })
-
-    it('returns a new instance on each call', () => {
-      expect(factory.createMoonPhase()).not.toBe(factory.createMoonPhase())
     })
   })
 

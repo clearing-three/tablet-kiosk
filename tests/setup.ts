@@ -48,7 +48,6 @@ beforeEach(() => {
         </div>
         <div class="moon-section">
           <div id="moon-phase-container"></div>
-          <div id="moon-phase-name"></div>
         </div>
       </div>
     </div>

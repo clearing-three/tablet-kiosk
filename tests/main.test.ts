@@ -6,6 +6,7 @@ import type { AssetValidator } from '../src/core/AssetValidator'
 import type { UpdateScheduler } from '../src/core/UpdateScheduler'
 import type { WeatherUpdateCoordinator } from '../src/core/WeatherUpdateCoordinator'
 import type { TimeDisplay } from '../src/components/Time/TimeDisplay'
+import type { NasaMoonDisplay } from '../src/components/Astronomy/NasaMoonDisplay'
 import type { ErrorDisplay } from '../src/components/ErrorDisplay'
 
 describe('TabletKioskApp', () => {
@@ -17,6 +18,7 @@ describe('TabletKioskApp', () => {
     TimeDisplay,
     'startUpdates' | 'updateDisplay' | 'destroy'
   >
+  let mockNasaMoonDisplay: Pick<NasaMoonDisplay, 'startUpdates' | 'destroy'>
   let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
 
   function makeApp(): TabletKioskApp {
@@ -26,6 +28,7 @@ describe('TabletKioskApp', () => {
       mockWeatherCoordinator as WeatherUpdateCoordinator,
       mockWeatherScheduler as UpdateScheduler,
       mockTimeDisplay as TimeDisplay,
+      mockNasaMoonDisplay as NasaMoonDisplay,
       mockErrorDisplay as ErrorDisplay
     )
   }
@@ -47,6 +50,10 @@ describe('TabletKioskApp', () => {
     mockTimeDisplay = {
       startUpdates: vi.fn(),
       updateDisplay: vi.fn(),
+      destroy: vi.fn(),
+    }
+    mockNasaMoonDisplay = {
+      startUpdates: vi.fn(),
       destroy: vi.fn(),
     }
     mockErrorDisplay = {
@@ -86,6 +93,12 @@ describe('TabletKioskApp', () => {
       expect(mockTimeDisplay.startUpdates).toHaveBeenCalledOnce()
     })
 
+    it('starts NASA moon updates', async () => {
+      await makeApp().initialize()
+
+      expect(mockNasaMoonDisplay.startUpdates).toHaveBeenCalledOnce()
+    })
+
     it('starts the weather scheduler', async () => {
       await makeApp().initialize()
 
@@ -112,6 +125,27 @@ describe('TabletKioskApp', () => {
 
       expect(mockErrorDisplay.remove).toHaveBeenCalledWith('clock-update')
     })
+
+    it('wires onError to show a nasa-moon error bar', async () => {
+      await makeApp().initialize()
+
+      const [onError] = (mockNasaMoonDisplay.startUpdates as Mock).mock
+        .calls[0] as [(error: unknown) => void]
+      const err = new Error('NASA API error')
+      onError(err)
+
+      expect(mockErrorDisplay.show).toHaveBeenCalledWith('nasa-moon', err)
+    })
+
+    it('wires onSuccess to remove the nasa-moon error bar', async () => {
+      await makeApp().initialize()
+
+      const [, onSuccess] = (mockNasaMoonDisplay.startUpdates as Mock).mock
+        .calls[0] as [unknown, () => void]
+      onSuccess()
+
+      expect(mockErrorDisplay.remove).toHaveBeenCalledWith('nasa-moon')
+    })
   })
 
   describe('destroy()', () => {
@@ -125,6 +159,12 @@ describe('TabletKioskApp', () => {
       makeApp().destroy()
 
       expect(mockTimeDisplay.destroy).toHaveBeenCalledOnce()
+    })
+
+    it('destroys the NASA moon component', () => {
+      makeApp().destroy()
+
+      expect(mockNasaMoonDisplay.destroy).toHaveBeenCalledOnce()
     })
   })
 

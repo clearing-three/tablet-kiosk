@@ -1,5 +1,5 @@
 /**
- * NASA Moon Component
+ * NASA Moon Display Component
  *
  * Displays NASA Dial-a-Moon API images with hourly updates.
  * Self-contained component that manages its own update interval.
@@ -8,7 +8,7 @@
 import type { NasaMoonService } from '../../services/NasaMoonService'
 import { getElement } from '../../utils/dom'
 
-export class NasaMoon {
+export class NasaMoonDisplay {
   private element: HTMLImageElement
   private updateInterval: number | null = null
   private readonly updateIntervalMs = 3600000 // 60 minutes

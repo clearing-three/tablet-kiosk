@@ -467,6 +467,49 @@ describe('WeatherService', () => {
         weatherService.processWeatherData(dataWithInsufficientDays)
       }).toThrow(new RegExp(`Expected at least ${REQUIRED_FORECAST_DAYS} days`))
     })
+
+    it('should reject data when daily array is missing', () => {
+      const dataWithoutDaily = {
+        ...getWeatherScenario('clearSunnyDay'),
+        daily: undefined as any,
+      }
+
+      expect(() => {
+        weatherService.processWeatherData(dataWithoutDaily)
+      }).toThrow('Invalid weather data: missing daily forecast array')
+    })
+
+    it('should reject data when daily is not an array', () => {
+      const dataWithInvalidDaily = {
+        ...getWeatherScenario('clearSunnyDay'),
+        daily: 'not-an-array' as any,
+      }
+
+      expect(() => {
+        weatherService.processWeatherData(dataWithInvalidDaily)
+      }).toThrow('Invalid weather data: missing daily forecast array')
+    })
+
+    it('should successfully process data when daily is a valid array with sufficient days', () => {
+      const validData = getWeatherScenario('clearSunnyDay')
+
+      // Verify the data has a valid array with sufficient days
+      expect(Array.isArray(validData.daily)).toBe(true)
+      expect(validData.daily.length).toBeGreaterThanOrEqual(
+        REQUIRED_FORECAST_DAYS
+      )
+
+      // Should not throw
+      expect(() => {
+        weatherService.processWeatherData(validData)
+      }).not.toThrow()
+
+      // Should return processed data
+      const processed = weatherService.processWeatherData(validData)
+      expect(processed.current).toBeDefined()
+      expect(processed.forecast).toBeDefined()
+      expect(processed.astronomy).toBeDefined()
+    })
   })
 
   describe('Icon Mapping', () => {

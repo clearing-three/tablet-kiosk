@@ -20,13 +20,3 @@ export interface WeatherServiceConfig {
   /** Language code for weather descriptions */
   language?: string
 }
-
-/**
- * Configuration for TimeService
- */
-export interface TimeServiceConfig {
-  /** Clock update interval in milliseconds */
-  clockUpdateInterval: number
-  /** Weather update interval in milliseconds */
-  weatherUpdateInterval: number
-}

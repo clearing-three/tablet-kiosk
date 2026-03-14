@@ -23,7 +23,8 @@ describe('WeatherDisplay', () => {
       <object id="weather-icon"></object>
       <div id="temp-now"></div>
       <div id="feels-like"></div>
-      <span id="wind-text"></span>
+      <span id="wind-direction"></span>
+      <span id="wind-speed"></span>
       <div id="weather-desc"></div>
       <div id="weather-range"></div>
     `

@@ -58,9 +58,9 @@ describe('WeatherDisplay', () => {
       expect(document.getElementById('weather-desc')!.textContent).toBe(
         'clear sky'
       )
-      expect(document.getElementById('weather-range')!.textContent).toBe(
-        '82° / 58°'
-      )
+      const rangeEl = document.getElementById('weather-range')!
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58°')
     })
 
     it('should update elements with different weather data', () => {
@@ -83,9 +83,9 @@ describe('WeatherDisplay', () => {
       expect(document.getElementById('weather-desc')!.textContent).toBe(
         'heavy intensity rain'
       )
-      expect(document.getElementById('weather-range')!.textContent).toBe(
-        '52° / 38°'
-      )
+      const rangeEl = document.getElementById('weather-range')!
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('52°')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('38°')
     })
 
     it('should overwrite previous display values on subsequent calls', () => {
@@ -107,9 +107,9 @@ describe('WeatherDisplay', () => {
       expect(document.getElementById('weather-desc')!.textContent).toBe(
         'overcast clouds'
       )
-      expect(document.getElementById('weather-range')!.textContent).toBe(
-        '65° / 50°'
-      )
+      const rangeEl = document.getElementById('weather-range')!
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('65°')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('50°')
     })
   })
 
@@ -166,12 +166,12 @@ describe('WeatherDisplay', () => {
       expect(document.getElementById('temp-now')!.textContent).toBe('75°')
     })
 
-    it('should render temperature range in "max° / min°" format', () => {
+    it('should render temperature range with styled high/low spans', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(document.getElementById('weather-range')!.textContent).toBe(
-        '82° / 58°'
-      )
+      const rangeEl = document.getElementById('weather-range')!
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58°')
     })
 
     it('should render the weather description exactly as provided', () => {
@@ -202,9 +202,9 @@ describe('WeatherDisplay', () => {
       weatherDisplay.updateDisplay(coldWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('-15°')
-      expect(document.getElementById('weather-range')!.textContent).toBe(
-        '-8° / -28°'
-      )
+      const rangeEl = document.getElementById('weather-range')!
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-8°')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-28°')
     })
 
     it('should handle zero temperature', () => {

@@ -226,8 +226,23 @@ body,
 #weather-range {
   font-size: 3vh;
   margin-top: 1vh;
-  color: var(--fg-tertiary);
   opacity: 0.9;
+}
+
+.temp-high::before {
+  content: '↑';
+}
+
+.temp-high {
+  color: #f5a623;
+}
+
+.temp-low::before {
+  content: '↓';
+}
+
+.temp-low {
+  color: #6ab0f5;
 }
 
 #forecast-spacer {

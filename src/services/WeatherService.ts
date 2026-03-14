@@ -53,13 +53,12 @@ export class WeatherService {
       const response = await fetch(url)
 
       if (!response.ok) {
-        // Try to parse error response
-        let errorMessage = `HTTP ${response.status}: ${response.statusText}`
+        let errorMessage: string
         try {
           const errorData: WeatherApiError = await response.json()
           errorMessage = `API Error ${errorData.cod}: ${errorData.message}`
         } catch {
-          // Use the HTTP error message if JSON parsing fails
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`
         }
         throw new Error(errorMessage)
       }

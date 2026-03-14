@@ -281,6 +281,14 @@ describe('WeatherService', () => {
       await expect(weatherService.fetchWeatherData()).rejects.toThrow()
     })
 
+    it('should handle HTTP errors with non-JSON response body', async () => {
+      OpenWeatherMapMock.mockError('errorWithInvalidJson')
+
+      await expect(weatherService.fetchWeatherData()).rejects.toThrow(
+        'HTTP 503: Service Unavailable'
+      )
+    })
+
     it('should handle missing required data fields', async () => {
       const invalidData = {
         lat: 40.7128,

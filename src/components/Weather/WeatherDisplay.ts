@@ -11,7 +11,7 @@ type CurrentWeatherDisplay = ProcessedWeatherData['current']
 
 import {
   formatTemperatureDisplay,
-  formatTemperatureRange,
+  createTemperatureRangeElements,
 } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'
@@ -96,7 +96,9 @@ export class WeatherDisplay {
    * @param minTemp Minimum temperature
    */
   private updateTemperatureRange(maxTemp: number, minTemp: number): void {
-    this.elements.range.textContent = formatTemperatureRange(maxTemp, minTemp)
+    this.elements.range.textContent = ''
+    const rangeElements = createTemperatureRangeElements(maxTemp, minTemp)
+    this.elements.range.appendChild(rangeElements)
   }
 
   /**

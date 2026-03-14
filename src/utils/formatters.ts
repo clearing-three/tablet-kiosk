@@ -59,15 +59,30 @@ export function formatTemperature(temp: number): number {
 }
 
 /**
- * Formats temperature range string for display
+ * Creates DOM elements for temperature range display with arrows
  * @param max Maximum temperature
  * @param min Minimum temperature
- * @returns Formatted temperature range string (e.g., "75° / 60°")
+ * @returns DocumentFragment containing styled temperature range elements
  */
-export function formatTemperatureRange(max: number, min: number): string {
-  const formattedMax = formatTemperature(max)
-  const formattedMin = formatTemperature(min)
-  return `${formattedMax}° / ${formattedMin}°`
+export function createTemperatureRangeElements(
+  max: number,
+  min: number
+): DocumentFragment {
+  const fragment = document.createDocumentFragment()
+
+  const highSpan = document.createElement('span')
+  highSpan.className = 'temp-high'
+  highSpan.textContent = `${formatTemperature(max)}°`
+
+  const lowSpan = document.createElement('span')
+  lowSpan.className = 'temp-low'
+  lowSpan.textContent = `${formatTemperature(min)}°`
+
+  fragment.appendChild(highSpan)
+  fragment.appendChild(document.createTextNode(' '))
+  fragment.appendChild(lowSpan)
+
+  return fragment
 }
 
 /**

@@ -8,7 +8,7 @@
 import type { ProcessedWeatherData } from '../../types/weather.types'
 
 type ForecastDay = ProcessedWeatherData['forecast'][0]
-import { formatTemperatureRange } from '../../utils/formatters'
+import { createTemperatureRangeElements } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 
 export class WeatherForecast {
@@ -36,17 +36,35 @@ export class WeatherForecast {
     day: ForecastDay
   ): globalThis.HTMLDivElement {
     const iconFile = this.weatherService.mapIconCodeToSVG(day.iconCode)
-    const temperatureRange = formatTemperatureRange(day.maxTemp, day.minTemp)
 
     const div = document.createElement('div')
     div.className = 'forecast-day'
 
-    div.innerHTML = `
-      <div class="forecast-day-name">${day.dayName}</div>
-      <object type="image/svg+xml" data="weather-icons/${iconFile}.svg" class="forecast-icon"></object>
-      <div class="forecast-desc">${day.description}</div>
-      <div class="forecast-range">${temperatureRange}</div>
-    `
+    const dayName = document.createElement('div')
+    dayName.className = 'forecast-day-name'
+    dayName.textContent = day.dayName
+
+    const icon = document.createElement('object')
+    icon.type = 'image/svg+xml'
+    icon.data = `weather-icons/${iconFile}.svg`
+    icon.className = 'forecast-icon'
+
+    const desc = document.createElement('div')
+    desc.className = 'forecast-desc'
+    desc.textContent = day.description
+
+    const rangeContainer = document.createElement('div')
+    rangeContainer.className = 'forecast-range'
+    const rangeElements = createTemperatureRangeElements(
+      day.maxTemp,
+      day.minTemp
+    )
+    rangeContainer.appendChild(rangeElements)
+
+    div.appendChild(dayName)
+    div.appendChild(icon)
+    div.appendChild(desc)
+    div.appendChild(rangeContainer)
 
     return div
   }

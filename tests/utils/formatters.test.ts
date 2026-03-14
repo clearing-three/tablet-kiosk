@@ -14,7 +14,7 @@ import {
   formatCurrentDate,
   formatDayNameFromUnix,
   formatTemperature,
-  formatTemperatureRange,
+  createTemperatureRangeElements,
   formatTemperatureDisplay,
 } from '../../src/utils/formatters'
 
@@ -185,30 +185,50 @@ describe('formatters', () => {
     })
   })
 
-  describe('formatTemperatureRange', () => {
-    it('should format temperature range correctly', () => {
-      const result = formatTemperatureRange(75.7, 60.3)
-      expect(result).toBe('76° / 60°')
+  describe('createTemperatureRangeElements', () => {
+    it('should create temperature range elements correctly', () => {
+      const fragment = createTemperatureRangeElements(75.7, 60.3)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.querySelector('.temp-high')?.textContent).toBe('76°')
+      expect(container.querySelector('.temp-low')?.textContent).toBe('60°')
     })
 
     it('should handle same max and min temperatures', () => {
-      const result = formatTemperatureRange(70, 70)
-      expect(result).toBe('70° / 70°')
+      const fragment = createTemperatureRangeElements(70, 70)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.querySelector('.temp-high')?.textContent).toBe('70°')
+      expect(container.querySelector('.temp-low')?.textContent).toBe('70°')
     })
 
     it('should handle negative temperatures', () => {
-      const result = formatTemperatureRange(-5.2, -10.8)
-      expect(result).toBe('-5° / -11°')
+      const fragment = createTemperatureRangeElements(-5.2, -10.8)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.querySelector('.temp-high')?.textContent).toBe('-5°')
+      expect(container.querySelector('.temp-low')?.textContent).toBe('-11°')
     })
 
     it('should handle mixed positive/negative temperatures', () => {
-      const result = formatTemperatureRange(32.1, -10.5)
-      expect(result).toBe('32° / -10°')
+      const fragment = createTemperatureRangeElements(32.1, -10.5)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.querySelector('.temp-high')?.textContent).toBe('32°')
+      expect(container.querySelector('.temp-low')?.textContent).toBe('-10°')
     })
 
     it('should round both temperatures appropriately', () => {
-      const result = formatTemperatureRange(78.9, 65.1)
-      expect(result).toBe('79° / 65°')
+      const fragment = createTemperatureRangeElements(78.9, 65.1)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.querySelector('.temp-high')?.textContent).toBe('79°')
+      expect(container.querySelector('.temp-low')?.textContent).toBe('65°')
     })
   })
 

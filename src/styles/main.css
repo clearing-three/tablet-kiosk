@@ -199,6 +199,11 @@ body,
   color: var(--fg-secondary);
 }
 
+#wind-text::after {
+  content: ' mph';
+  font-size: 0.8em;
+}
+
 #feels-like::before {
   content: '∼';
 }

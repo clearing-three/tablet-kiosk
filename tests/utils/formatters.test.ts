@@ -239,25 +239,25 @@ describe('formatters', () => {
 
   describe('formatWind', () => {
     it('should format wind without gusts', () => {
-      expect(formatWind(12, 'NW')).toBe('NW 12 mph')
+      expect(formatWind(12, 'NW')).toBe('NW 12')
     })
 
     it('should format wind with gusts', () => {
-      expect(formatWind(12, 'NW', 18)).toBe('NW 12 mph ➜ 18 mph')
+      expect(formatWind(12, 'NW', 18)).toBe('NW 12 → 18')
     })
 
     it('should handle zero speed', () => {
-      expect(formatWind(0, 'N')).toBe('N 0 mph')
+      expect(formatWind(0, 'N')).toBe('N 0')
     })
 
     it('should handle zero speed with gusts', () => {
-      expect(formatWind(0, 'S', 5)).toBe('S 0 mph ➜ 5 mph')
+      expect(formatWind(0, 'S', 5)).toBe('S 0 → 5')
     })
 
     it('should format all 8 cardinal directions', () => {
       const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
       directions.forEach(dir => {
-        expect(formatWind(10, dir)).toBe(`${dir} 10 mph`)
+        expect(formatWind(10, dir)).toBe(`${dir} 10`)
       })
     })
   })

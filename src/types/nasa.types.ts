@@ -17,8 +17,3 @@ export interface NasaMoonImage {
 export interface NasaMoonApiResponse {
   image: NasaMoonImage
 }
-
-// Service configuration
-export interface NasaMoonServiceConfig {
-  updateIntervalMs: number
-}

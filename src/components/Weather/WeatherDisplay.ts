@@ -12,7 +12,6 @@ type CurrentWeatherDisplay = ProcessedWeatherData['current']
 import {
   formatTemperatureDisplay,
   formatTemperatureRange,
-  formatWind,
 } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'
@@ -24,7 +23,8 @@ export class WeatherDisplay {
     icon: HTMLObjectElement
     tempNow: HTMLElement
     feelsLike: HTMLElement
-    windText: HTMLElement
+    windDirection: HTMLElement
+    windSpeed: HTMLElement
     description: HTMLElement
     range: HTMLElement
   }
@@ -42,7 +42,8 @@ export class WeatherDisplay {
       icon: getElement<HTMLObjectElement>(DOM_IDS.WEATHER_ICON),
       tempNow: getElement(DOM_IDS.TEMP_NOW),
       feelsLike: getElement(DOM_IDS.FEELS_LIKE),
-      windText: getElement(DOM_IDS.WIND_TEXT),
+      windDirection: getElement(DOM_IDS.WIND_DIRECTION),
+      windSpeed: getElement(DOM_IDS.WIND_SPEED),
       description: getElement(DOM_IDS.WEATHER_DESC),
       range: getElement(DOM_IDS.WEATHER_RANGE),
     }
@@ -76,7 +77,9 @@ export class WeatherDisplay {
   }
 
   private updateWind(speed: number, direction: string, gust?: number): void {
-    this.elements.windText.textContent = formatWind(speed, direction, gust)
+    this.elements.windDirection.textContent = direction
+    const speedText = gust !== undefined ? `${speed} → ${gust}` : `${speed}`
+    this.elements.windSpeed.textContent = speedText
   }
 
   /**

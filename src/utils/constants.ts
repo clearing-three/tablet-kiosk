@@ -76,7 +76,8 @@ export const DOM_IDS = {
   WEATHER_ICON: 'weather-icon',
   TEMP_NOW: 'temp-now',
   FEELS_LIKE: 'feels-like',
-  WIND_TEXT: 'wind-text',
+  WIND_DIRECTION: 'wind-direction',
+  WIND_SPEED: 'wind-speed',
   WEATHER_DESC: 'weather-desc',
   WEATHER_RANGE: 'weather-range',
 

@@ -114,12 +114,12 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(THREE_DAYS)
 
       const ranges = document.querySelectorAll('.forecast-range')
-      expect(ranges[0].querySelector('.temp-high')?.textContent).toBe('75°')
-      expect(ranges[0].querySelector('.temp-low')?.textContent).toBe('58°')
-      expect(ranges[1].querySelector('.temp-high')?.textContent).toBe('70°')
-      expect(ranges[1].querySelector('.temp-low')?.textContent).toBe('55°')
-      expect(ranges[2].querySelector('.temp-high')?.textContent).toBe('62°')
-      expect(ranges[2].querySelector('.temp-low')?.textContent).toBe('50°')
+      expect(ranges[0].querySelector('.temp-high')?.textContent).toBe('75')
+      expect(ranges[0].querySelector('.temp-low')?.textContent).toBe('58')
+      expect(ranges[1].querySelector('.temp-high')?.textContent).toBe('70')
+      expect(ranges[1].querySelector('.temp-low')?.textContent).toBe('55')
+      expect(ranges[2].querySelector('.temp-high')?.textContent).toBe('62')
+      expect(ranges[2].querySelector('.temp-low')?.textContent).toBe('50')
     })
 
     it('should set the icon SVG path using the mapped icon code', () => {
@@ -213,8 +213,8 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61')
     })
 
     it('should round fractional temperatures in the range display', () => {
@@ -223,8 +223,8 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('79°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('79')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61')
     })
 
     it('should handle negative temperatures in the range display', () => {
@@ -233,8 +233,8 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-5°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-18°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-5')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-18')
     })
   })
 

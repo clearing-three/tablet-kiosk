@@ -52,10 +52,10 @@ export function formatDayNameFromUnix(unix: number): string {
 /**
  * Formats temperature value by rounding to nearest integer
  * @param temp Temperature value as number
- * @returns Rounded temperature as number
+ * @returns Rounded temperature as string
  */
-export function formatTemperature(temp: number): number {
-  return Math.round(temp)
+export function formatTemperature(temp: number): string {
+  return String(Math.round(temp))
 }
 
 /**
@@ -71,25 +71,16 @@ export function createTemperatureRangeElements(
   const fragment = document.createDocumentFragment()
 
   const highSpan = document.createElement('span')
-  highSpan.className = 'temp-high'
-  highSpan.textContent = `${formatTemperature(max)}°`
+  highSpan.className = 'temp-high temperature'
+  highSpan.textContent = formatTemperature(max)
 
   const lowSpan = document.createElement('span')
-  lowSpan.className = 'temp-low'
-  lowSpan.textContent = `${formatTemperature(min)}°`
+  lowSpan.className = 'temp-low temperature'
+  lowSpan.textContent = formatTemperature(min)
 
   fragment.appendChild(highSpan)
   fragment.appendChild(document.createTextNode(' '))
   fragment.appendChild(lowSpan)
 
   return fragment
-}
-
-/**
- * Formats a single temperature value for display
- * @param temp Temperature value
- * @returns Formatted temperature string with degree symbol (e.g., "72°")
- */
-export function formatTemperatureDisplay(temp: number): string {
-  return `${formatTemperature(temp)}°`
 }

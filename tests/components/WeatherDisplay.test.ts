@@ -53,14 +53,14 @@ describe('WeatherDisplay', () => {
     it('should update all display elements when updateDisplay is called', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('75°')
-      expect(document.getElementById('feels-like')!.textContent).toBe('72°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('75')
+      expect(document.getElementById('feels-like')!.textContent).toBe('72')
       expect(document.getElementById('weather-desc')!.textContent).toBe(
         'clear sky'
       )
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58')
     })
 
     it('should update elements with different weather data', () => {
@@ -79,13 +79,13 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(rainyWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('45°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('45')
       expect(document.getElementById('weather-desc')!.textContent).toBe(
         'heavy intensity rain'
       )
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('52°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('38°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('52')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('38')
     })
 
     it('should overwrite previous display values on subsequent calls', () => {
@@ -103,13 +103,13 @@ describe('WeatherDisplay', () => {
       }
       weatherDisplay.updateDisplay(updatedWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('60°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('60')
       expect(document.getElementById('weather-desc')!.textContent).toBe(
         'overcast clouds'
       )
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('65°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('50°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('65')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('50')
     })
   })
 
@@ -163,15 +163,15 @@ describe('WeatherDisplay', () => {
     it('should render temperature with a degree symbol', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('75°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('75')
     })
 
     it('should render temperature range with styled high/low spans', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58')
     })
 
     it('should render the weather description exactly as provided', () => {
@@ -201,10 +201,10 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(coldWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('-15°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('-15')
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-8°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-28°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-8')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-28')
     })
 
     it('should handle zero temperature', () => {
@@ -221,7 +221,7 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(freezingWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('0°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('0')
     })
   })
 
@@ -229,7 +229,7 @@ describe('WeatherDisplay', () => {
     it('should render feels-like temperature with degree symbol', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(document.getElementById('feels-like')!.textContent).toBe('72°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('72')
     })
 
     it('should render feels-like independently of current temperature', () => {
@@ -241,8 +241,8 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(weather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('90°')
-      expect(document.getElementById('feels-like')!.textContent).toBe('98°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('90')
+      expect(document.getElementById('feels-like')!.textContent).toBe('98')
     })
 
     it('should handle negative feels-like temperature', () => {
@@ -253,7 +253,7 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(weather)
 
-      expect(document.getElementById('feels-like')!.textContent).toBe('-10°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('-10')
     })
 
     it('should overwrite previous feels-like value on subsequent calls', () => {
@@ -265,7 +265,7 @@ describe('WeatherDisplay', () => {
       }
       weatherDisplay.updateDisplay(updated)
 
-      expect(document.getElementById('feels-like')!.textContent).toBe('85°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('85')
     })
   })
 

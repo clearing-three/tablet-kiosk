@@ -212,6 +212,15 @@ body,
   font-weight: 300;
 }
 
+.wind-gust::before {
+  content: '→';
+  margin: 0 0.3em;
+}
+
+.wind-gust {
+  color: var(--fg-secondary);
+}
+
 #feels-like::before {
   content: '∼';
 }

@@ -24,7 +24,7 @@ describe('WeatherDisplay', () => {
       <div id="temp-now"></div>
       <div id="feels-like"></div>
       <span id="wind-direction"></span>
-      <span id="wind-speed"></span>
+      <div id="wind-speed"></div>
       <div id="weather-desc"></div>
       <div id="weather-range"></div>
     `
@@ -266,6 +266,57 @@ describe('WeatherDisplay', () => {
       weatherDisplay.updateDisplay(updated)
 
       expect(document.getElementById('feels-like')!.textContent).toBe('85')
+    })
+  })
+
+  describe('Wind display', () => {
+    it('should display wind speed without gust', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
+
+      const windSpeed = document.getElementById('wind-speed')!
+      expect(windSpeed.textContent).toBe('5')
+      expect(windSpeed.querySelector('.wind-gust')).toBeNull()
+    })
+
+    it('should display wind direction', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
+
+      const windDirection = document.getElementById('wind-direction')!
+      expect(windDirection.textContent).toBe('SW')
+    })
+
+    it('should display wind speed with gust using separate element', () => {
+      const gustyWeather: ProcessedWeatherData['current'] = {
+        ...mockCurrentWeather,
+        windGust: 19,
+      }
+
+      weatherDisplay.updateDisplay(gustyWeather)
+
+      const windSpeed = document.getElementById('wind-speed')!
+      const gustElement = windSpeed.querySelector('.wind-gust')
+      expect(gustElement).not.toBeNull()
+      expect(gustElement?.textContent).toBe('19')
+    })
+
+    it('should update wind display on subsequent calls', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
+
+      const updatedWeather: ProcessedWeatherData['current'] = {
+        ...mockCurrentWeather,
+        windSpeed: 12,
+        windDirection: 'NE',
+        windGust: 22,
+      }
+      weatherDisplay.updateDisplay(updatedWeather)
+
+      const windSpeed = document.getElementById('wind-speed')!
+      const windDirection = document.getElementById('wind-direction')!
+      const gustElement = windSpeed.querySelector('.wind-gust')
+
+      expect(windDirection.textContent).toBe('NE')
+      expect(windSpeed.textContent).toContain('12')
+      expect(gustElement?.textContent).toBe('22')
     })
   })
 

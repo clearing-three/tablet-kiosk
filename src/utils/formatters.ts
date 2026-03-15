@@ -84,3 +84,30 @@ export function createTemperatureRangeElements(
 
   return fragment
 }
+
+/**
+ * Creates DOM elements for wind speed display with optional gust
+ * @param speed Base wind speed
+ * @param gust Optional gust speed
+ * @returns DocumentFragment containing wind speed and optional gust elements
+ */
+export function createWindSpeedElements(
+  speed: number,
+  gust?: number
+): DocumentFragment {
+  const fragment = document.createDocumentFragment()
+
+  const speedText = document.createTextNode(String(speed))
+  fragment.appendChild(speedText)
+
+  if (gust !== undefined) {
+    const gustSpan = document.createElement('span')
+    gustSpan.className = 'wind-gust'
+    gustSpan.textContent = String(gust)
+
+    fragment.appendChild(document.createTextNode(' '))
+    fragment.appendChild(gustSpan)
+  }
+
+  return fragment
+}

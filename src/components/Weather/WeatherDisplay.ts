@@ -12,6 +12,7 @@ type CurrentWeatherDisplay = ProcessedWeatherData['current']
 import {
   formatTemperature,
   createTemperatureRangeElements,
+  createWindSpeedElements,
 } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'
@@ -78,8 +79,8 @@ export class WeatherDisplay {
 
   private updateWind(speed: number, direction: string, gust?: number): void {
     this.elements.windDirection.textContent = direction
-    const speedText = gust !== undefined ? `${speed} → ${gust}` : `${speed}`
-    this.elements.windSpeed.textContent = speedText
+    const speedElements = createWindSpeedElements(speed, gust)
+    this.elements.windSpeed.replaceChildren(speedElements)
   }
 
   /**
@@ -96,9 +97,8 @@ export class WeatherDisplay {
    * @param minTemp Minimum temperature
    */
   private updateTemperatureRange(maxTemp: number, minTemp: number): void {
-    this.elements.range.textContent = ''
     const rangeElements = createTemperatureRangeElements(maxTemp, minTemp)
-    this.elements.range.appendChild(rangeElements)
+    this.elements.range.replaceChildren(rangeElements)
   }
 
   /**

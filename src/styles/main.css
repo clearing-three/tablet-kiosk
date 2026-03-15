@@ -12,6 +12,7 @@
   --pad: 2vh;
   --gap-lg: 4vw;
   --gap-md: 2vw;
+  --arrow-right-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-6-6l6 6-6 6" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
 }
 
 *,
@@ -210,6 +211,21 @@ body,
   content: ' mph';
   font-size: 0.8em;
   font-weight: 300;
+}
+
+.wind-gust::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin: 0 0.3em;
+  background-color: currentColor;
+  vertical-align: -0.15em;
+  mask: var(--arrow-right-svg) center/contain no-repeat;
+}
+
+.wind-gust {
+  color: var(--fg-secondary);
 }
 
 #feels-like::before {

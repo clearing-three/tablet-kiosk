@@ -15,6 +15,7 @@ import {
   formatDayNameFromUnix,
   formatTemperature,
   createTemperatureRangeElements,
+  createWindSpeedElements,
 } from '../../src/utils/formatters'
 
 describe('formatters', () => {
@@ -228,6 +229,53 @@ describe('formatters', () => {
 
       expect(container.querySelector('.temp-high')?.textContent).toBe('79')
       expect(container.querySelector('.temp-low')?.textContent).toBe('65')
+    })
+  })
+
+  describe('createWindSpeedElements', () => {
+    it('should create wind speed element without gust', () => {
+      const fragment = createWindSpeedElements(5)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.textContent).toBe('5')
+      expect(container.querySelector('.wind-gust')).toBeNull()
+    })
+
+    it('should create wind speed elements with gust', () => {
+      const fragment = createWindSpeedElements(5, 19)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      const gustElement = container.querySelector('.wind-gust')
+      expect(gustElement).not.toBeNull()
+      expect(gustElement?.textContent).toBe('19')
+    })
+
+    it('should handle zero wind speed', () => {
+      const fragment = createWindSpeedElements(0)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.textContent).toBe('0')
+    })
+
+    it('should handle zero gust speed', () => {
+      const fragment = createWindSpeedElements(5, 0)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      const gustElement = container.querySelector('.wind-gust')
+      expect(gustElement?.textContent).toBe('0')
+    })
+
+    it('should handle large wind speeds', () => {
+      const fragment = createWindSpeedElements(45, 68)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+
+      expect(container.textContent).toContain('45')
+      expect(container.querySelector('.wind-gust')?.textContent).toBe('68')
     })
   })
 

@@ -10,7 +10,7 @@ import type { ProcessedWeatherData } from '../../types/weather.types'
 type CurrentWeatherDisplay = ProcessedWeatherData['current']
 
 import {
-  formatTemperatureDisplay,
+  formatTemperature,
   createTemperatureRangeElements,
 } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
@@ -65,7 +65,7 @@ export class WeatherDisplay {
    * @param temperature Current temperature value
    */
   private updateCurrentTemperature(temperature: number): void {
-    this.elements.tempNow.textContent = formatTemperatureDisplay(temperature)
+    this.elements.tempNow.textContent = formatTemperature(temperature)
   }
 
   /**
@@ -73,7 +73,7 @@ export class WeatherDisplay {
    * @param feelsLike Feels-like temperature value
    */
   private updateFeelsLikeTemperature(feelsLike: number): void {
-    this.elements.feelsLike.textContent = formatTemperatureDisplay(feelsLike)
+    this.elements.feelsLike.textContent = formatTemperature(feelsLike)
   }
 
   private updateWind(speed: number, direction: string, gust?: number): void {

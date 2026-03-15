@@ -105,7 +105,6 @@ export function createWindSpeedElements(
     gustSpan.className = 'wind-gust'
     gustSpan.textContent = String(gust)
 
-    fragment.appendChild(document.createTextNode(' '))
     fragment.appendChild(gustSpan)
   }
 

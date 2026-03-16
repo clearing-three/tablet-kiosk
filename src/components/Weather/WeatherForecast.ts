@@ -1,7 +1,7 @@
 /**
  * Weather Forecast Component
  *
- * Handles rendering and management of the 3-day weather forecast display.
+ * Handles rendering and management of the 2-day weather forecast display.
  * Dynamically generates HTML for forecast days with proper typing and error handling.
  */
 
@@ -104,13 +104,13 @@ export class WeatherForecast {
 
   /**
    * Updates the forecast display with new data
-   * @param forecast Array of daily weather forecast data (next 3 days)
+   * @param forecast Array of daily weather forecast data (next 2 days)
    */
   updateForecast(forecast: ForecastDay[]): void {
     this.validateForecastData(forecast)
     this.clearForecast()
 
-    const forecastToShow = forecast.slice(0, 3)
+    const forecastToShow = forecast.slice(0, 2)
 
     for (const day of forecastToShow) {
       const dayElement = this.createForecastDayElement(day)

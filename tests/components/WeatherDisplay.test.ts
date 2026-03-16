@@ -3,39 +3,26 @@
  *
  * Tests for WeatherDisplay component covering:
  * - DOM updates with weather data
- * - Icon loading and display
- * - Temperature and description rendering
- * - Error state handling
+ * - Temperature rendering
  */
 
-import type { Mock } from 'vitest'
 import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
-import { WeatherService } from '../../src/services/WeatherService'
 import type { ProcessedWeatherData } from '../../src/types/weather.types'
 
 describe('WeatherDisplay', () => {
   let weatherDisplay: WeatherDisplay
-  let mockWeatherService: Pick<WeatherService, 'mapIconCodeToSVG'>
   let mockCurrentWeather: ProcessedWeatherData['current']
 
   beforeEach(() => {
     document.body.innerHTML = `
-      <object id="weather-icon"></object>
       <div id="temp-now"></div>
       <div id="feels-like"></div>
       <span id="wind-direction"></span>
       <div id="wind-speed"></div>
-      <div id="weather-desc"></div>
       <div id="weather-range"></div>
     `
 
-    mockWeatherService = {
-      mapIconCodeToSVG: vi.fn().mockReturnValue('clear-day'),
-    }
-
-    weatherDisplay = new WeatherDisplay(
-      mockWeatherService as unknown as WeatherService
-    )
+    weatherDisplay = new WeatherDisplay()
 
     mockCurrentWeather = {
       temperature: 75,
@@ -55,9 +42,6 @@ describe('WeatherDisplay', () => {
 
       expect(document.getElementById('temp-now')!.textContent).toBe('75')
       expect(document.getElementById('feels-like')!.textContent).toBe('72')
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'clear sky'
-      )
       const rangeEl = document.getElementById('weather-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
       expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58')
@@ -75,14 +59,10 @@ describe('WeatherDisplay', () => {
         windDirection: 'W',
         windGust: 19,
       }
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('rain')
 
       weatherDisplay.updateDisplay(rainyWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('45')
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'heavy intensity rain'
-      )
       const rangeEl = document.getElementById('weather-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('52')
       expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('38')
@@ -104,62 +84,13 @@ describe('WeatherDisplay', () => {
       weatherDisplay.updateDisplay(updatedWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('60')
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'overcast clouds'
-      )
       const rangeEl = document.getElementById('weather-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('65')
       expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('50')
     })
   })
 
-  describe('Icon loading and display', () => {
-    it('should set the icon data attribute to the mapped SVG path', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue(
-        'clear-day'
-      )
-
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      const icon = document.getElementById('weather-icon') as HTMLObjectElement
-      expect(icon.data).toContain('weather-icons/clear-day.svg')
-    })
-
-    it('should set the icon alt attribute to the weather description', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      const icon = document.getElementById('weather-icon') as HTMLObjectElement
-      expect(icon.getAttribute('alt')).toBe('clear sky')
-    })
-
-    it('should call mapIconCodeToSVG with the correct icon code', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('01d')
-    })
-
-    it('should update icon data and alt correctly for a different icon code', () => {
-      const snowWeather: ProcessedWeatherData['current'] = {
-        temperature: 28,
-        feelsLike: 20,
-        description: 'heavy snow',
-        iconCode: '13d',
-        minTemp: 18,
-        maxTemp: 32,
-        windSpeed: 9,
-        windDirection: 'N',
-      }
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('snow')
-
-      weatherDisplay.updateDisplay(snowWeather)
-
-      const icon = document.getElementById('weather-icon') as HTMLObjectElement
-      expect(icon.data).toContain('weather-icons/snow.svg')
-      expect(icon.getAttribute('alt')).toBe('heavy snow')
-    })
-  })
-
-  describe('Temperature and description rendering', () => {
+  describe('Temperature rendering', () => {
     it('should render temperature with a degree symbol', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
@@ -172,19 +103,6 @@ describe('WeatherDisplay', () => {
       const rangeEl = document.getElementById('weather-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
       expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58')
-    })
-
-    it('should render the weather description exactly as provided', () => {
-      const detailedDesc: ProcessedWeatherData['current'] = {
-        ...mockCurrentWeather,
-        description: 'thunderstorm with heavy rain',
-      }
-
-      weatherDisplay.updateDisplay(detailedDesc)
-
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'thunderstorm with heavy rain'
-      )
     })
 
     it('should handle negative temperatures', () => {
@@ -317,19 +235,6 @@ describe('WeatherDisplay', () => {
       expect(windDirection.textContent).toBe('NE')
       expect(windSpeed.textContent).toContain('12')
       expect(gustElement?.textContent).toBe('22')
-    })
-  })
-
-  describe('Error propagation', () => {
-    it('should throw when updateDisplay encounters an error', () => {
-      const thrownError = new Error('Icon mapping failed')
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
-        throw thrownError
-      })
-
-      expect(() => weatherDisplay.updateDisplay(mockCurrentWeather)).toThrow(
-        thrownError
-      )
     })
   })
 })

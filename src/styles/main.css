@@ -145,36 +145,67 @@ body,
 
 /* ---------- Right Section: Time, Weather & Forecast ---------- */
 #time {
-  font-size: 18vh;
+  font-size: 19.8vh;
   font-weight: 300;
   margin-bottom: 0.5vh;
   color: var(--fg-primary);
 }
 
 #date {
-  font-size: 3.5vh;
+  font-size: 3.85vh;
   font-weight: 300;
   color: var(--fg-secondary);
   margin-bottom: 1vh;
+}
+
+#sun-times {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+  font-size: 2.8vh;
+  font-weight: 300;
+  margin-bottom: 2vh;
+}
+
+.sun-icon {
+  width: 3.2vh;
+  height: 3.2vh;
+  display: block;
+}
+
+#sun-times #sunrise-time,
+#sun-times #sunset-time {
+  color: var(--fg-sun);
+}
+
+#sunrise-time::before {
+  content: '↑';
+  color: #ffa500;
+  font-size: 1.15em;
+  font-weight: 500;
+  margin-right: 0.3em;
+}
+
+#sunset-time::before {
+  content: '↓';
+  color: #ff6b35;
+  font-size: 1.15em;
+  font-weight: 500;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
 }
 
 #weather {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-#weather-icon {
-  width: 15vh;
-  height: 15vh;
-  margin-bottom: -2vh;
+  gap: 1vh;
 }
 
 #temp-row {
   display: flex;
   align-items: center;
   gap: 1.5vh;
-  margin-top: -2vh;
 }
 
 #temp-now {
@@ -259,13 +290,6 @@ body,
   content: '°';
 }
 
-#weather-desc {
-  font-size: 3.5vh;
-  color: var(--fg-secondary);
-  margin-top: 0.5vh;
-  margin-bottom: 2vh;
-}
-
 #weather-range {
   font-size: 3vh;
   margin-top: 1vh;
@@ -339,12 +363,6 @@ body,
 
 .moonback {
   fill: #111;
-}
-
-/* ---------- Legacy Color Styles ---------- */
-#sunrise-time,
-#sunset-time {
-  color: var(--fg-sun);
 }
 
 /* ---------- Error Display ---------- */

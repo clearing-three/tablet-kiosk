@@ -192,9 +192,7 @@ describe('constants', () => {
     })
 
     it('should have all required weather element IDs', () => {
-      expect(DOM_IDS.WEATHER_ICON).toBe('weather-icon')
       expect(DOM_IDS.TEMP_NOW).toBe('temp-now')
-      expect(DOM_IDS.WEATHER_DESC).toBe('weather-desc')
       expect(DOM_IDS.WEATHER_RANGE).toBe('weather-range')
     })
 

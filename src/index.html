@@ -14,24 +14,6 @@
       <div id="main-left">
         <div id="astro-times">
           <div class="time-row">
-            <div class="astro-time sun-time">
-              <img
-                src="weather-icons/sunrise.svg"
-                alt="Sunrise"
-                class="astro-icon"
-              />
-              <span id="sunrise-time">--:--</span>
-            </div>
-            <div class="astro-time sun-time">
-              <img
-                src="weather-icons/sunset.svg"
-                alt="Sunset"
-                class="astro-icon"
-              />
-              <span id="sunset-time">--:--</span>
-            </div>
-          </div>
-          <div class="time-row">
             <div class="astro-time moon-time">
               <img
                 src="weather-icons/moonrise.svg"
@@ -60,9 +42,12 @@
       <div id="main-right">
         <div id="time">--:--</div>
         <div id="date">Loading date...</div>
+        <div id="sun-times">
+          <img src="weather-icons/clear-day.svg" alt="Sun" class="sun-icon" />
+          <span id="sunrise-time"></span>
+          <span id="sunset-time"></span>
+        </div>
         <div id="weather">
-          <object id="weather-icon" type="image/svg+xml" data=""></object>
-          <div id="weather-desc">Loading...</div>
           <div id="temp-row">
             <div id="temp-now" class="temperature">--</div>
             <div id="feels-like-display">

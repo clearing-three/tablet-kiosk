@@ -13,6 +13,7 @@
   --gap-lg: 4vw;
   --gap-md: 2vw;
   --arrow-right-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-6-6l6 6-6 6" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  --person-icon-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="3" fill="black"/><path d="M12 12c-4 0-7 2-7 4.5v2.5h14v-2.5c0-2.5-3-4.5-7-4.5z" fill="black"/></svg>');
 }
 
 *,
@@ -172,7 +173,7 @@ body,
 #temp-row {
   display: flex;
   align-items: center;
-  gap: 1.2vh;
+  gap: 1.5vh;
   margin-top: -2vh;
 }
 
@@ -182,10 +183,36 @@ body,
   color: var(--fg-tertiary);
 }
 
+#feels-like-display {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+  font-size: 4vh;
+}
+
+#feels-like-display::before {
+  content: '';
+  display: block;
+  width: 0.15vh;
+  height: 1.2em;
+  background-color: var(--fg-feels-like);
+  opacity: 0.5;
+}
+
 #feels-like {
-  font-size: 5.8vh;
   font-weight: 300;
   color: var(--fg-feels-like);
+}
+
+#feels-like::before {
+  content: '';
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.4em;
+  background-color: var(--fg-feels-like);
+  mask: var(--person-icon-svg) center/contain no-repeat;
+  vertical-align: -0.1em;
 }
 
 #wind-display {
@@ -219,17 +246,13 @@ body,
   width: 1em;
   height: 1em;
   margin: 0 0.3em;
-  background-color: currentColor;
+  background-color: currentcolor;
   vertical-align: -0.15em;
   mask: var(--arrow-right-svg) center/contain no-repeat;
 }
 
 .wind-gust {
   color: var(--fg-secondary);
-}
-
-#feels-like::before {
-  content: '∼';
 }
 
 .temperature::after {

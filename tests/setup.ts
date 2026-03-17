@@ -43,8 +43,6 @@ beforeEach(() => {
         <div class="astronomy-section">
           <div id="sunrise-time"></div>
           <div id="sunset-time"></div>
-          <div id="moonrise-time"></div>
-          <div id="moonset-time"></div>
         </div>
         <div class="moon-section">
           <div id="moon-phase-container"></div>

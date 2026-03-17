@@ -20,14 +20,20 @@
       </div>
 
       <div id="main-right">
-        <div id="time">--:--</div>
-        <div id="date">Loading date...</div>
-        <div id="sun-times">
-          <img src="weather-icons/clear-day.svg" alt="Sun" class="sun-icon" />
-          <span id="sunrise-time"></span>
-          <span id="sunset-time"></span>
-        </div>
-        <div id="weather">
+        <section class="section-time">
+          <div id="time">--:--</div>
+        </section>
+
+        <section class="section-date-sun">
+          <div id="date">Loading date...</div>
+          <div id="sun-times">
+            <img src="weather-icons/clear-day.svg" alt="Sun" class="sun-icon" />
+            <span id="sunrise-time"></span>
+            <span id="sunset-time"></span>
+          </div>
+        </section>
+
+        <section class="section-weather">
           <div id="temp-row">
             <div id="temp-now" class="temperature">--</div>
             <div id="feels-like-display">
@@ -40,9 +46,11 @@
             <div id="wind-speed"></div>
           </div>
           <div id="weather-range"></div>
-        </div>
-        <div id="forecast-spacer"></div>
-        <div id="forecast"></div>
+        </section>
+
+        <section class="section-forecast">
+          <div id="forecast"></div>
+        </section>
       </div>
     </div>
 

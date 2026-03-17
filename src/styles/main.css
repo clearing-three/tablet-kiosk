@@ -75,6 +75,7 @@ body,
   padding: var(--pad);
   position: relative;
   margin-left: -3vw;
+  gap: 2vh;
 }
 
 /* ---------- Left Section: Astro Times & Moon Phase ---------- */
@@ -140,10 +141,25 @@ body,
 }
 
 /* ---------- Right Section: Time, Weather & Forecast ---------- */
+
+/* Section containers */
+.section-time,
+.section-date-sun,
+.section-weather,
+.section-forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.section-forecast {
+  margin-top: auto;
+}
+
 #time {
   font-size: 19.8vh;
   font-weight: 300;
-  margin-bottom: 0.5vh;
   color: var(--fg-primary);
 }
 
@@ -151,7 +167,6 @@ body,
   font-size: 3.85vh;
   font-weight: 300;
   color: var(--fg-secondary);
-  margin-bottom: 1vh;
 }
 
 #sun-times {
@@ -160,7 +175,7 @@ body,
   gap: 1vh;
   font-size: 2.8vh;
   font-weight: 300;
-  margin-bottom: 2vh;
+  margin-top: 1vh;
 }
 
 .sun-icon {
@@ -191,10 +206,7 @@ body,
   margin-right: 0.3em;
 }
 
-#weather {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.section-weather {
   gap: 1vh;
 }
 
@@ -306,11 +318,6 @@ body,
 
 .temp-low {
   color: #6ab0f5;
-}
-
-#forecast-spacer {
-  flex: 1;
-  max-height: 8vh;
 }
 
 #forecast {

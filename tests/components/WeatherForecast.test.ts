@@ -273,6 +273,19 @@ describe('WeatherForecast', () => {
       )
     })
 
+    it.each([
+      '.forecast-day-name',
+      '.forecast-icon',
+      '.forecast-desc',
+      '.forecast-range',
+    ])('should throw when %s is missing', selector => {
+      document.querySelector(selector)?.remove()
+
+      expect(() => weatherForecast.updateForecast(THREE_DAYS)).toThrow(
+        'Forecast day element is missing required child elements'
+      )
+    })
+
     it('should propagate errors thrown during rendering', () => {
       const thrownError = new Error('mapping failed')
       ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {

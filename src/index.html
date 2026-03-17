@@ -12,26 +12,6 @@
   <body>
     <div id="main-container">
       <div id="main-left">
-        <div id="astro-times">
-          <div class="time-row">
-            <div class="astro-time moon-time">
-              <img
-                src="weather-icons/moonrise.svg"
-                alt="Moonrise"
-                class="astro-icon"
-              />
-              <span id="moonrise-time">--:--</span>
-            </div>
-            <div class="astro-time moon-time">
-              <img
-                src="weather-icons/moonset.svg"
-                alt="Moonset"
-                class="astro-icon"
-              />
-              <span id="moonset-time">--:--</span>
-            </div>
-          </div>
-        </div>
         <div id="moon-phase">
           <div id="moon-phase-render">
             <img id="moon" alt="Current moon phase" />
@@ -40,14 +20,20 @@
       </div>
 
       <div id="main-right">
-        <div id="time">--:--</div>
-        <div id="date">Loading date...</div>
-        <div id="sun-times">
-          <img src="weather-icons/clear-day.svg" alt="Sun" class="sun-icon" />
-          <span id="sunrise-time"></span>
-          <span id="sunset-time"></span>
-        </div>
-        <div id="weather">
+        <section class="section-time">
+          <div id="time">--:--</div>
+        </section>
+
+        <section class="section-date-sun">
+          <div id="date">Loading date...</div>
+          <div id="sun-times">
+            <img src="weather-icons/clear-day.svg" alt="Sun" class="sun-icon" />
+            <span id="sunrise-time"></span>
+            <span id="sunset-time"></span>
+          </div>
+        </section>
+
+        <section class="section-weather">
           <div id="temp-row">
             <div id="temp-now" class="temperature">--</div>
             <div id="feels-like-display">
@@ -60,9 +46,24 @@
             <div id="wind-speed"></div>
           </div>
           <div id="weather-range"></div>
-        </div>
-        <div id="forecast-spacer"></div>
-        <div id="forecast"></div>
+        </section>
+
+        <section class="section-forecast">
+          <div id="forecast">
+            <div id="forecast-day-1" class="forecast-day">
+              <div class="forecast-day-name"></div>
+              <object type="image/svg+xml" class="forecast-icon"></object>
+              <div class="forecast-desc"></div>
+              <div class="forecast-range"></div>
+            </div>
+            <div id="forecast-day-2" class="forecast-day">
+              <div class="forecast-day-name"></div>
+              <object type="image/svg+xml" class="forecast-icon"></object>
+              <div class="forecast-desc"></div>
+              <div class="forecast-range"></div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
 

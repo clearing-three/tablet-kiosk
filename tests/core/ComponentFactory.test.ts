@@ -18,11 +18,22 @@ describe('ComponentFactory', () => {
       <span id="wind-speed"></span>
       <div id="weather-desc"></div>
       <div id="weather-range"></div>
-      <div id="forecast"></div>
+      <div id="forecast">
+        <div id="forecast-day-1" class="forecast-day">
+          <div class="forecast-day-name"></div>
+          <object type="image/svg+xml" class="forecast-icon"></object>
+          <div class="forecast-desc"></div>
+          <div class="forecast-range"></div>
+        </div>
+        <div id="forecast-day-2" class="forecast-day">
+          <div class="forecast-day-name"></div>
+          <object type="image/svg+xml" class="forecast-icon"></object>
+          <div class="forecast-desc"></div>
+          <div class="forecast-range"></div>
+        </div>
+      </div>
       <div id="sunrise-time"></div>
       <div id="sunset-time"></div>
-      <div id="moonrise-time"></div>
-      <div id="moonset-time"></div>
       <div id="moon"></div>
       <div id="time"></div>
       <div id="date"></div>

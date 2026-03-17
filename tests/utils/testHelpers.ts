@@ -2,7 +2,7 @@
 
 import type { Mock } from 'vitest'
 import type { WeatherData } from '../../src/types/weather.types'
-import type { AstronomyTimes } from '../../src/types/astronomy.types'
+import type { SolarTimes } from '../../src/types/astronomy.types'
 
 /**
  * Creates mock weather data for testing
@@ -61,8 +61,6 @@ export function createMockWeatherData(
         ],
         sunrise: 1640966400,
         sunset: 1641002400,
-        moonrise: 1640980800,
-        moonset: 1641024000,
         moon_phase: 0.25,
       },
       {
@@ -87,8 +85,6 @@ export function createMockWeatherData(
         ],
         sunrise: 1641052800,
         sunset: 1641088800,
-        moonrise: 1641067200,
-        moonset: 1641110400,
         moon_phase: 0.5,
       },
       {
@@ -114,8 +110,6 @@ export function createMockWeatherData(
         ],
         sunrise: 1641139200,
         sunset: 1641175200,
-        moonrise: 1641153600,
-        moonset: 1641196800,
         moon_phase: 0.75,
       },
     ],
@@ -127,13 +121,11 @@ export function createMockWeatherData(
  * Creates mock astronomy times for testing
  */
 export function createMockAstronomyTimes(
-  overrides: Partial<AstronomyTimes> = {}
-): AstronomyTimes {
+  overrides: Partial<SolarTimes> = {}
+): SolarTimes {
   return {
     sunrise: 1640966400, // 06:00:00 UTC
     sunset: 1641002400, // 16:00:00 UTC
-    moonrise: 1640980800, // 10:00:00 UTC
-    moonset: 1641024000, // 02:00:00 UTC next day
     ...overrides,
   }
 }

@@ -82,14 +82,14 @@ export const DOM_IDS = {
   // Astronomy elements
   SUNRISE_TIME: 'sunrise-time',
   SUNSET_TIME: 'sunset-time',
-  MOONRISE_TIME: 'moonrise-time',
-  MOONSET_TIME: 'moonset-time',
 
   // Moon phase elements
   MOON: 'moon',
 
   // Forecast elements
   FORECAST: 'forecast',
+  FORECAST_DAY_1: 'forecast-day-1',
+  FORECAST_DAY_2: 'forecast-day-2',
 } as const
 
 /**

@@ -2,7 +2,7 @@
  * Weather Forecast Component
  *
  * Handles rendering and management of the 2-day weather forecast display.
- * Dynamically generates HTML for forecast days with proper typing and error handling.
+ * Updates static forecast day elements with weather data.
  */
 
 import type { ProcessedWeatherData } from '../../types/weather.types'
@@ -10,63 +10,61 @@ import type { ProcessedWeatherData } from '../../types/weather.types'
 type ForecastDay = ProcessedWeatherData['forecast'][0]
 import { createTemperatureRangeElements } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
+import { getElement } from '../../utils/dom'
+import { DOM_IDS } from '../../utils/constants'
 
 export class WeatherForecast {
   private weatherService: WeatherService
-  private forecastContainer: HTMLElement
+  private elements: {
+    day1: HTMLElement
+    day2: HTMLElement
+  }
 
   constructor(weatherService: WeatherService) {
-    const container = document.getElementById('forecast')
-    if (!container) {
-      throw new Error(
-        'WeatherForecast: required element #forecast not found in DOM'
-      )
-    }
-
     this.weatherService = weatherService
-    this.forecastContainer = container
+    this.elements = this.initializeElements()
   }
 
   /**
-   * Creates HTML for a single forecast day
-   * @param day Daily weather data
-   * @returns HTMLDivElement containing the forecast day
+   * Initialize DOM element references. Throws if any required element is missing.
    */
-  private createForecastDayElement(
+  private initializeElements() {
+    return {
+      day1: getElement(DOM_IDS.FORECAST_DAY_1),
+      day2: getElement(DOM_IDS.FORECAST_DAY_2),
+    }
+  }
+
+  /**
+   * Updates a single forecast day element with data
+   * @param element The forecast day element to update
+   * @param day Daily weather data
+   */
+  private updateForecastDayElement(
+    element: HTMLElement,
     day: ForecastDay
-  ): globalThis.HTMLDivElement {
+  ): void {
     const iconFile = this.weatherService.mapIconCodeToSVG(day.iconCode)
 
-    const div = document.createElement('div')
-    div.className = 'forecast-day'
+    const dayName = element.querySelector('.forecast-day-name')
+    const icon = element.querySelector('.forecast-icon') as HTMLObjectElement
+    const desc = element.querySelector('.forecast-desc')
+    const rangeContainer = element.querySelector('.forecast-range')
 
-    const dayName = document.createElement('div')
-    dayName.className = 'forecast-day-name'
+    if (!dayName || !icon || !desc || !rangeContainer) {
+      throw new Error('Forecast day element is missing required child elements')
+    }
+
     dayName.textContent = day.dayName
-
-    const icon = document.createElement('object')
-    icon.type = 'image/svg+xml'
     icon.data = `weather-icons/${iconFile}.svg`
-    icon.className = 'forecast-icon'
-
-    const desc = document.createElement('div')
-    desc.className = 'forecast-desc'
     desc.textContent = day.description
 
-    const rangeContainer = document.createElement('div')
-    rangeContainer.className = 'forecast-range'
+    rangeContainer.innerHTML = ''
     const rangeElements = createTemperatureRangeElements(
       day.maxTemp,
       day.minTemp
     )
     rangeContainer.appendChild(rangeElements)
-
-    div.appendChild(dayName)
-    div.appendChild(icon)
-    div.appendChild(desc)
-    div.appendChild(rangeContainer)
-
-    return div
   }
 
   /**
@@ -96,25 +94,17 @@ export class WeatherForecast {
   }
 
   /**
-   * Clears the forecast container
-   */
-  private clearForecast(): void {
-    this.forecastContainer.innerHTML = ''
-  }
-
-  /**
    * Updates the forecast display with new data
    * @param forecast Array of daily weather forecast data (next 2 days)
    */
   updateForecast(forecast: ForecastDay[]): void {
     this.validateForecastData(forecast)
-    this.clearForecast()
 
     const forecastToShow = forecast.slice(0, 2)
+    const dayElements = [this.elements.day1, this.elements.day2]
 
-    for (const day of forecastToShow) {
-      const dayElement = this.createForecastDayElement(day)
-      this.forecastContainer.appendChild(dayElement)
+    for (let i = 0; i < forecastToShow.length; i++) {
+      this.updateForecastDayElement(dayElements[i], forecastToShow[i])
     }
   }
 
@@ -123,6 +113,6 @@ export class WeatherForecast {
    * @returns number Number of forecast days currently displayed
    */
   getForecastDayCount(): number {
-    return this.forecastContainer.querySelectorAll('.forecast-day').length
+    return 2
   }
 }

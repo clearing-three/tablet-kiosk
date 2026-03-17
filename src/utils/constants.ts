@@ -88,6 +88,8 @@ export const DOM_IDS = {
 
   // Forecast elements
   FORECAST: 'forecast',
+  FORECAST_DAY_1: 'forecast-day-1',
+  FORECAST_DAY_2: 'forecast-day-2',
 } as const
 
 /**

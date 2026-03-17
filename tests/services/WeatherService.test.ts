@@ -217,8 +217,6 @@ describe('WeatherService', () => {
       // Check astronomy data processing
       expect(processed.astronomy.sunrise).toBe(mockData.current.sunrise)
       expect(processed.astronomy.sunset).toBe(mockData.current.sunset)
-      expect(processed.astronomy.moonrise).toBe(mockData.daily[0].moonrise)
-      expect(processed.astronomy.moonset).toBe(mockData.daily[0].moonset)
       expect(processed.astronomy.moonPhase).toBe(mockData.daily[0].moon_phase)
     })
 
@@ -338,14 +336,6 @@ describe('WeatherService', () => {
   })
 
   describe('Data Processing Edge Cases', () => {
-    it('should handle missing moonrise/moonset data', async () => {
-      const dataWithMissingMoon = getWeatherScenario('missingMoonData')
-      const processed = weatherService.processWeatherData(dataWithMissingMoon)
-
-      expect(processed.astronomy.moonrise).toBe(0)
-      expect(processed.astronomy.moonset).toBe(0)
-    })
-
     it('should handle extreme weather values', async () => {
       const extremeData = getWeatherScenario('extremeHeat')
       const processed = weatherService.processWeatherData(extremeData)

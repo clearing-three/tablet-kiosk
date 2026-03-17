@@ -215,7 +215,7 @@ describe('constants', () => {
 
     it('should have kebab-case ID values', () => {
       Object.values(DOM_IDS).forEach(id => {
-        expect(id).toMatch(/^[a-z]+(-[a-z]+)*$/)
+        expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
       })
     })
 

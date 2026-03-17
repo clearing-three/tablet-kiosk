@@ -55,7 +55,22 @@ describe('WeatherForecast', () => {
   let mockWeatherService: Pick<WeatherService, 'mapIconCodeToSVG'>
 
   beforeEach(() => {
-    document.body.innerHTML = '<div id="forecast"></div>'
+    document.body.innerHTML = `
+      <div id="forecast">
+        <div id="forecast-day-1" class="forecast-day">
+          <div class="forecast-day-name"></div>
+          <object type="image/svg+xml" class="forecast-icon"></object>
+          <div class="forecast-desc"></div>
+          <div class="forecast-range"></div>
+        </div>
+        <div id="forecast-day-2" class="forecast-day">
+          <div class="forecast-day-name"></div>
+          <object type="image/svg+xml" class="forecast-icon"></object>
+          <div class="forecast-desc"></div>
+          <div class="forecast-range"></div>
+        </div>
+      </div>
+    `
 
     mockWeatherService = {
       mapIconCodeToSVG: vi.fn().mockReturnValue('clear-day'),
@@ -67,13 +82,13 @@ describe('WeatherForecast', () => {
   })
 
   describe('Constructor', () => {
-    it('should throw when #forecast element is not in the DOM', () => {
+    it('should throw when forecast day elements are not in the DOM', () => {
       document.body.innerHTML = ''
 
       expect(
         () =>
           new WeatherForecast(mockWeatherService as unknown as WeatherService)
-      ).toThrow('WeatherForecast: required element #forecast not found in DOM')
+      ).toThrow('Required DOM element not found: #forecast-day-1')
     })
 
     it('should construct successfully when #forecast element is present', () => {
@@ -141,12 +156,20 @@ describe('WeatherForecast', () => {
       expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('02d')
     })
 
-    it('should clear previous forecast before rendering new one', () => {
+    it('should update previous forecast with new data', () => {
       weatherForecast.updateForecast(THREE_DAYS)
-      expect(document.querySelectorAll('.forecast-day')).toHaveLength(2)
+      const firstDayName =
+        document.querySelector('.forecast-day-name')?.textContent
+      expect(firstDayName).toBe('Mon')
 
-      weatherForecast.updateForecast([makeForecastDay()])
-      expect(document.querySelectorAll('.forecast-day')).toHaveLength(1)
+      const newForecast = [
+        makeForecastDay({ dayName: 'Sat' }),
+        makeForecastDay({ dayName: 'Sun' }),
+      ]
+      weatherForecast.updateForecast(newForecast)
+      const updatedDayName =
+        document.querySelector('.forecast-day-name')?.textContent
+      expect(updatedDayName).toBe('Sat')
     })
   })
 
@@ -169,10 +192,11 @@ describe('WeatherForecast', () => {
       expect(getForecastDays()).toHaveLength(2)
     })
 
-    it('should display 1 day when given only 1', () => {
-      weatherForecast.updateForecast([makeForecastDay()])
+    it('should update only first day when given only 1', () => {
+      weatherForecast.updateForecast([makeForecastDay({ dayName: 'Thu' })])
 
-      expect(getForecastDays()).toHaveLength(1)
+      const dayNames = document.querySelectorAll('.forecast-day-name')
+      expect(dayNames[0].textContent).toBe('Thu')
     })
 
     it('should report the correct count via getForecastDayCount', () => {

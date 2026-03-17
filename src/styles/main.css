@@ -74,7 +74,7 @@ body,
   align-items: center;
   padding: var(--pad);
   position: relative;
-  margin-left: -3vw;
+  margin-left: 0;
   gap: 2vh;
 }
 
@@ -122,6 +122,7 @@ body,
 
 #moon-phase {
   text-align: center;
+  align-self: flex-end;
 }
 
 #moon-phase-render {
@@ -138,6 +139,7 @@ body,
   height: auto;
   display: block;
   object-fit: contain;
+  transform: scale(1.6);
 }
 
 /* ---------- Right Section: Time, Weather & Forecast ---------- */
@@ -151,6 +153,10 @@ body,
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+.section-date-sun {
+  transform: scale(1.2);
 }
 
 .section-forecast {
@@ -208,6 +214,8 @@ body,
 
 .section-weather {
   gap: 1vh;
+  margin: auto 0;
+  transform: scale(1.2) translateY(2vh);
 }
 
 #temp-row {
@@ -322,12 +330,12 @@ body,
 
 #forecast {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 15vh;
   width: 100%;
 }
 
 .forecast-day {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

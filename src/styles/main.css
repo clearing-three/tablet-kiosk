@@ -119,10 +119,6 @@ body,
   color: var(--fg-sun);
 }
 
-.moon-time span {
-  color: var(--fg-moon);
-}
-
 #moon-phase {
   text-align: center;
 }

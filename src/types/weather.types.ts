@@ -56,8 +56,6 @@ export interface DailyWeather {
   dt: number // Unix timestamp
   sunrise: number // Unix timestamp
   sunset: number // Unix timestamp
-  moonrise: number // Unix timestamp (0 if no moonrise)
-  moonset: number // Unix timestamp (0 if no moonset)
   moon_phase: number // Moon phase value 0-1
   temp: DailyTemperature
   feels_like: DailyFeelsLike
@@ -109,8 +107,6 @@ export interface ProcessedWeatherData {
   astronomy: {
     sunrise: number // Unix timestamp
     sunset: number // Unix timestamp
-    moonrise: number // Unix timestamp (0 if no moonrise)
-    moonset: number // Unix timestamp (0 if no moonset)
     moonPhase: number // Moon phase value 0-1
   }
 }

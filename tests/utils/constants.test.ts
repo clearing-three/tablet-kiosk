@@ -199,8 +199,6 @@ describe('constants', () => {
     it('should have all required astronomy element IDs', () => {
       expect(DOM_IDS.SUNRISE_TIME).toBe('sunrise-time')
       expect(DOM_IDS.SUNSET_TIME).toBe('sunset-time')
-      expect(DOM_IDS.MOONRISE_TIME).toBe('moonrise-time')
-      expect(DOM_IDS.MOONSET_TIME).toBe('moonset-time')
     })
 
     it('should have all required moon phase element IDs', () => {

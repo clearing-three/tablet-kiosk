@@ -7,11 +7,11 @@
  */
 
 import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
-import type { ProcessedWeatherData } from '../../src/types/weather-domain.types'
+import type { WeatherData } from '../../src/types/weather-domain.types'
 
 describe('WeatherDisplay', () => {
   let weatherDisplay: WeatherDisplay
-  let mockCurrentWeather: ProcessedWeatherData['current']
+  let mockCurrentWeather: WeatherData['current']
 
   beforeEach(() => {
     document.body.innerHTML = `
@@ -48,7 +48,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should update elements with different weather data', () => {
-      const rainyWeather: ProcessedWeatherData['current'] = {
+      const rainyWeather: WeatherData['current'] = {
         temperature: 45,
         feelsLike: 42,
         description: 'heavy intensity rain',
@@ -71,7 +71,7 @@ describe('WeatherDisplay', () => {
     it('should overwrite previous display values on subsequent calls', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      const updatedWeather: ProcessedWeatherData['current'] = {
+      const updatedWeather: WeatherData['current'] = {
         temperature: 60,
         feelsLike: 57,
         description: 'overcast clouds',
@@ -106,7 +106,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should handle negative temperatures', () => {
-      const coldWeather: ProcessedWeatherData['current'] = {
+      const coldWeather: WeatherData['current'] = {
         temperature: -15,
         feelsLike: -24,
         description: 'heavy snow',
@@ -126,7 +126,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should handle zero temperature', () => {
-      const freezingWeather: ProcessedWeatherData['current'] = {
+      const freezingWeather: WeatherData['current'] = {
         temperature: 0,
         feelsLike: -4,
         description: 'freezing fog',
@@ -151,7 +151,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should render feels-like independently of current temperature', () => {
-      const weather: ProcessedWeatherData['current'] = {
+      const weather: WeatherData['current'] = {
         ...mockCurrentWeather,
         temperature: 90,
         feelsLike: 98,
@@ -164,7 +164,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should handle negative feels-like temperature', () => {
-      const weather: ProcessedWeatherData['current'] = {
+      const weather: WeatherData['current'] = {
         ...mockCurrentWeather,
         feelsLike: -10,
       }
@@ -177,7 +177,7 @@ describe('WeatherDisplay', () => {
     it('should overwrite previous feels-like value on subsequent calls', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      const updated: ProcessedWeatherData['current'] = {
+      const updated: WeatherData['current'] = {
         ...mockCurrentWeather,
         feelsLike: 85,
       }
@@ -204,7 +204,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should display wind speed with gust using separate element', () => {
-      const gustyWeather: ProcessedWeatherData['current'] = {
+      const gustyWeather: WeatherData['current'] = {
         ...mockCurrentWeather,
         windGust: 19,
       }
@@ -220,7 +220,7 @@ describe('WeatherDisplay', () => {
     it('should update wind display on subsequent calls', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      const updatedWeather: ProcessedWeatherData['current'] = {
+      const updatedWeather: WeatherData['current'] = {
         ...mockCurrentWeather,
         windSpeed: 12,
         windDirection: 'NE',

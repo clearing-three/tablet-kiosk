@@ -5,9 +5,9 @@
  * Updates static forecast day elements with weather data.
  */
 
-import type { ProcessedWeatherData } from '../../types/weather-domain.types'
+import type { WeatherData } from '../../types/weather-domain.types'
 
-type ForecastDay = ProcessedWeatherData['forecast'][0]
+type ForecastDay = WeatherData['forecast'][0]
 import { createTemperatureRangeElements } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'

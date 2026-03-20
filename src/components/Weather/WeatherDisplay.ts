@@ -5,9 +5,9 @@
  * Manages temperature and temperature range display.
  */
 
-import type { ProcessedWeatherData } from '../../types/weather-domain.types'
+import type { WeatherData } from '../../types/weather-domain.types'
 
-type CurrentWeatherDisplay = ProcessedWeatherData['current']
+type CurrentWeatherDisplay = WeatherData['current']
 
 import {
   formatTemperature,

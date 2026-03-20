@@ -7,7 +7,7 @@
  */
 
 import type {
-  WeatherData,
+  WeatherApiData,
   DailyWeather,
 } from '../../../src/types/weather-api.types'
 import { REQUIRED_FORECAST_DAYS } from '../../../src/constants/weather.constants'
@@ -122,7 +122,7 @@ function generateFourDayForecast(
 /**
  * Clear sunny day scenario - 4 days of mostly clear weather
  */
-export const clearSunnyDay: WeatherData = {
+export const clearSunnyDay: WeatherApiData = {
   lat: 40.7128,
   lon: -74.006,
   timezone: 'America/New_York',
@@ -184,7 +184,7 @@ export const clearSunnyDay: WeatherData = {
 /**
  * Rainy stormy day scenario - 4 days with increasing rain
  */
-export const rainyStormyDay: WeatherData = {
+export const rainyStormyDay: WeatherApiData = {
   lat: 40.7128,
   lon: -74.006,
   timezone: 'America/New_York',
@@ -259,7 +259,7 @@ export const rainyStormyDay: WeatherData = {
 /**
  * Snowy winter day scenario - 4 days with snow conditions
  */
-export const snowyWinterDay: WeatherData = {
+export const snowyWinterDay: WeatherApiData = {
   lat: 40.7128,
   lon: -74.006,
   timezone: 'America/New_York',
@@ -322,7 +322,7 @@ export const snowyWinterDay: WeatherData = {
 /**
  * Extreme heat scenario - 4 days of hot weather
  */
-export const extremeHeat: WeatherData = {
+export const extremeHeat: WeatherApiData = {
   lat: 40.7128,
   lon: -74.006,
   timezone: 'America/New_York',
@@ -368,7 +368,7 @@ export const extremeHeat: WeatherData = {
 /**
  * Extreme cold scenario - 4 days of very cold weather
  */
-export const extremeCold: WeatherData = {
+export const extremeCold: WeatherApiData = {
   lat: 40.7128,
   lon: -74.006,
   timezone: 'America/New_York',
@@ -424,7 +424,7 @@ export const extremeCold: WeatherData = {
 /**
  * Multi-day forecast scenario - 4 days with mixed weather
  */
-export const multiDayForecast: WeatherData = {
+export const multiDayForecast: WeatherApiData = {
   lat: 40.7128,
   lon: -74.006,
   timezone: 'America/New_York',
@@ -464,7 +464,7 @@ export const multiDayForecast: WeatherData = {
 /**
  * Missing moon data scenario - 4 days with no moonrise/moonset
  */
-export const missingMoonData: WeatherData = {
+export const missingMoonData: WeatherApiData = {
   ...clearSunnyDay,
   daily: clearSunnyDay.daily.map(day => ({
     ...day,
@@ -474,7 +474,7 @@ export const missingMoonData: WeatherData = {
 /**
  * Null values scenario - 4 days with some null/undefined values
  */
-export const nullValuesScenario: WeatherData = {
+export const nullValuesScenario: WeatherApiData = {
   ...clearSunnyDay,
   current: {
     ...clearSunnyDay.current,
@@ -492,7 +492,7 @@ export const nullValuesScenario: WeatherData = {
  * Minimal response - This should NEVER be used in real scenarios
  * but exists for testing insufficient data error handling
  */
-export const minimalResponse: WeatherData = {
+export const minimalResponse: WeatherApiData = {
   lat: 40.7128,
   lon: -74.006,
   timezone: 'America/New_York',
@@ -526,7 +526,7 @@ export const minimalResponse: WeatherData = {
 /**
  * Insufficient forecast data - Only 2 days instead of required 4
  */
-export const insufficientForecastData: WeatherData = {
+export const insufficientForecastData: WeatherApiData = {
   ...clearSunnyDay,
   daily: clearSunnyDay.daily.slice(0, 2), // Only 2 days - should trigger error
 }
@@ -552,7 +552,7 @@ export const weatherScenarios = {
  */
 export function getWeatherScenario(
   scenarioName: keyof typeof weatherScenarios
-): WeatherData {
+): WeatherApiData {
   return weatherScenarios[scenarioName]
 }
 
@@ -560,9 +560,9 @@ export function getWeatherScenario(
  * Helper function to create custom scenario variations
  */
 export function createCustomScenario(
-  baseScenario: WeatherData,
-  overrides: Partial<WeatherData>
-): WeatherData {
+  baseScenario: WeatherApiData,
+  overrides: Partial<WeatherApiData>
+): WeatherApiData {
   return {
     ...baseScenario,
     ...overrides,

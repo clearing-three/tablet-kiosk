@@ -77,7 +77,7 @@ const DailyWeatherSchema = z.object({
 })
 
 // Complete API response structure
-export const WeatherDataSchema = z.object({
+export const WeatherApiDataSchema = z.object({
   lat: z.number(),
   lon: z.number(),
   timezone: z.string(),
@@ -86,7 +86,7 @@ export const WeatherDataSchema = z.object({
   daily: z.array(DailyWeatherSchema).min(REQUIRED_FORECAST_DAYS),
 })
 
-export type WeatherData = z.infer<typeof WeatherDataSchema>
+export type WeatherApiData = z.infer<typeof WeatherApiDataSchema>
 export type DailyWeather = z.infer<typeof DailyWeatherSchema>
 
 // API error response

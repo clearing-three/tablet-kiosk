@@ -13,9 +13,9 @@ import {
   ERROR_MISSING_CHILD_ELEMENTS,
 } from '../../src/components/Weather/WeatherForecast'
 import { WeatherService } from '../../src/services/WeatherService'
-import type { ProcessedWeatherData } from '../../src/types/weather-domain.types'
+import type { WeatherData } from '../../src/types/weather-domain.types'
 
-type ForecastDay = ProcessedWeatherData['forecast'][0]
+type ForecastDay = WeatherData['forecast'][0]
 
 const makeForecastDay = (
   overrides: Partial<ForecastDay> = {}

@@ -12,7 +12,7 @@ export interface SolarTimes {
 }
 
 // Simplified weather data for component consumption
-export interface ProcessedWeatherData {
+export interface WeatherData {
   current: {
     temperature: number
     feelsLike: number

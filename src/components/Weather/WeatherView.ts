@@ -1,7 +1,7 @@
 /**
- * Weather Display Component
+ * Weather View Component
  *
- * Handles updating current weather display elements in the UI.
+ * Renders current weather display elements in the UI.
  * Manages temperature and temperature range display.
  */
 
@@ -17,7 +17,7 @@ import {
 import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
 
-export class WeatherDisplay {
+export class WeatherView {
   private elements: {
     tempNow: HTMLElement
     feelsLike: HTMLElement
@@ -76,10 +76,10 @@ export class WeatherDisplay {
   }
 
   /**
-   * Updates all current weather display elements
+   * Renders all current weather display elements
    * @param currentWeather Current weather data
    */
-  updateDisplay(currentWeather: CurrentWeatherDisplay): void {
+  render(currentWeather: CurrentWeatherDisplay): void {
     this.updateCurrentTemperature(currentWeather.temperature)
     this.updateFeelsLikeTemperature(currentWeather.feelsLike)
     this.updateWind(

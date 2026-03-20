@@ -28,17 +28,18 @@ import { DOM_IDS } from './utils/constants'
 import { ErrorDisplay } from './components/ErrorDisplay'
 import { TimeView } from './components/Time/TimeView'
 import { MoonView } from './components/Astronomy/MoonView'
+import { WeatherView } from './components/Weather/WeatherView'
+import { ForecastView } from './components/Weather/ForecastView'
+import { AstronomyView } from './components/Astronomy/AstronomyView'
 
 // Core
 import { DOMValidator } from './core/DOMValidator'
 import { AssetValidator } from './core/AssetValidator'
-import { ComponentFactory } from './core/ComponentFactory'
-import { UpdateScheduler } from './core/UpdateScheduler'
-import { WeatherUpdateCoordinator } from './core/WeatherUpdateCoordinator'
 
 // Controllers
 import { TimeController } from './controllers/TimeController'
 import { MoonController } from './controllers/MoonController'
+import { WeatherController } from './controllers/WeatherController'
 
 // Types
 import { DEFAULT_APP_CONFIG } from './types/app.types'
@@ -47,8 +48,7 @@ export class TabletKioskApp {
   constructor(
     private readonly domValidator: DOMValidator,
     private readonly assetValidator: AssetValidator,
-    private readonly weatherCoordinator: WeatherUpdateCoordinator,
-    private readonly weatherScheduler: UpdateScheduler,
+    private readonly weatherController: WeatherController,
     private readonly timeController: TimeController,
     private readonly moonController: MoonController
   ) {}
@@ -66,7 +66,7 @@ export class TabletKioskApp {
 
     this.timeController.start()
     this.moonController.start()
-    this.weatherScheduler.start(() => this.weatherCoordinator.update())
+    this.weatherController.start()
   }
 
   private async validateAssetsAsync(): Promise<void> {
@@ -82,13 +82,13 @@ export class TabletKioskApp {
   }
 
   destroy(): void {
-    this.weatherScheduler.stop()
+    this.weatherController.destroy()
     this.timeController.destroy()
     this.moonController.destroy()
   }
 
   async refresh(): Promise<void> {
-    await this.weatherCoordinator.update()
+    await this.weatherController.update()
     this.timeController.updateDisplay()
   }
 }
@@ -98,11 +98,6 @@ let app: TabletKioskApp | null = null
 
 function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const weatherService = new WeatherService(weatherServiceConfig)
-  const componentFactory = new ComponentFactory()
-
-  const weatherDisplay = componentFactory.createWeatherDisplay()
-  const weatherForecast = componentFactory.createWeatherForecast()
-  const astronomyTimes = componentFactory.createAstronomyTimes()
 
   const timeView = new TimeView()
   const timeController = new TimeController(timeView, errorDisplay)
@@ -115,22 +110,22 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     errorDisplay
   )
 
-  const weatherCoordinator = new WeatherUpdateCoordinator(
+  const weatherView = new WeatherView()
+  const forecastView = new ForecastView()
+  const astronomyView = new AstronomyView()
+  const weatherController = new WeatherController(
+    weatherView,
+    forecastView,
+    astronomyView,
     weatherService,
-    weatherDisplay,
-    weatherForecast,
-    astronomyTimes,
-    errorDisplay
-  )
-  const weatherScheduler = new UpdateScheduler(
+    errorDisplay,
     DEFAULT_APP_CONFIG.weatherUpdateIntervalMs
   )
 
   return new TabletKioskApp(
     new DOMValidator(),
     new AssetValidator(),
-    weatherCoordinator,
-    weatherScheduler,
+    weatherController,
     timeController,
     moonController
   )

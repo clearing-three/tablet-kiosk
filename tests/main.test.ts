@@ -2,16 +2,17 @@ import { TabletKioskApp } from '../src/main'
 import { DOM_IDS } from '../src/utils/constants'
 import type { DOMValidator } from '../src/core/DOMValidator'
 import type { AssetValidator } from '../src/core/AssetValidator'
-import type { UpdateScheduler } from '../src/core/UpdateScheduler'
-import type { WeatherUpdateCoordinator } from '../src/core/WeatherUpdateCoordinator'
+import type { WeatherController } from '../src/controllers/WeatherController'
 import type { TimeController } from '../src/controllers/TimeController'
 import type { MoonController } from '../src/controllers/MoonController'
 
 describe('TabletKioskApp', () => {
   let mockDomValidator: Pick<DOMValidator, 'validate'>
   let mockAssetValidator: Pick<AssetValidator, 'validateAll'>
-  let mockWeatherCoordinator: Pick<WeatherUpdateCoordinator, 'update'>
-  let mockWeatherScheduler: Pick<UpdateScheduler, 'start' | 'stop'>
+  let mockWeatherController: Pick<
+    WeatherController,
+    'start' | 'update' | 'destroy'
+  >
   let mockTimeController: Pick<
     TimeController,
     'start' | 'updateDisplay' | 'destroy'
@@ -22,8 +23,7 @@ describe('TabletKioskApp', () => {
     return new TabletKioskApp(
       mockDomValidator as DOMValidator,
       mockAssetValidator as AssetValidator,
-      mockWeatherCoordinator as WeatherUpdateCoordinator,
-      mockWeatherScheduler as UpdateScheduler,
+      mockWeatherController as WeatherController,
       mockTimeController as TimeController,
       mockMoonController as MoonController
     )
@@ -36,12 +36,10 @@ describe('TabletKioskApp', () => {
     mockAssetValidator = {
       validateAll: vi.fn().mockResolvedValue({ valid: true, missing: [] }),
     }
-    mockWeatherCoordinator = {
-      update: vi.fn().mockResolvedValue(undefined),
-    }
-    mockWeatherScheduler = {
+    mockWeatherController = {
       start: vi.fn(),
-      stop: vi.fn(),
+      update: vi.fn().mockResolvedValue(undefined),
+      destroy: vi.fn(),
     }
     mockTimeController = {
       start: vi.fn(),
@@ -91,18 +89,18 @@ describe('TabletKioskApp', () => {
       expect(mockMoonController.start).toHaveBeenCalledOnce()
     })
 
-    it('starts the weather scheduler', async () => {
+    it('starts the weather controller', async () => {
       await makeApp().initialize()
 
-      expect(mockWeatherScheduler.start).toHaveBeenCalledOnce()
+      expect(mockWeatherController.start).toHaveBeenCalledOnce()
     })
   })
 
   describe('destroy()', () => {
-    it('stops the weather scheduler', () => {
+    it('destroys the weather controller', () => {
       makeApp().destroy()
 
-      expect(mockWeatherScheduler.stop).toHaveBeenCalledOnce()
+      expect(mockWeatherController.destroy).toHaveBeenCalledOnce()
     })
 
     it('destroys the time controller', () => {
@@ -122,7 +120,7 @@ describe('TabletKioskApp', () => {
     it('triggers a weather update', async () => {
       await makeApp().refresh()
 
-      expect(mockWeatherCoordinator.update).toHaveBeenCalledOnce()
+      expect(mockWeatherController.update).toHaveBeenCalledOnce()
     })
 
     it('updates the time display', async () => {

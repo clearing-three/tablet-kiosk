@@ -1,19 +1,65 @@
 /* ---------- Root Variables & Global Resets ---------- */
 :root {
-  --bg: #000;
-  --fg-primary: #66b2ff;
-  --fg-secondary: #a8cfff;
-  --fg-tertiary: #c2e5ff;
-  --fg-day: #ffe0b3;
-  --fg-sun: #ffcc80;
-  --fg-moon: #d0d0d0;
-  --fg-moon-text: #b0c4de;
-  --fg-feels-like: #b0c4de;
+  /* === COLOR PALETTE === */
+
+  /* Grays */
+  --black: #000;
+  --white: #fff;
+
+  /* Blues */
+  --blue-500: #66b2ff;
+  --blue-400: #6ab0f5;
+  --blue-300: #a8cfff;
+  --blue-200: #c2e5ff;
+  --blue-100: #b0c4de;
+
+  /* Oranges & Ambers */
+  --orange-500: #ffa500;
+  --orange-400: #ff6b35;
+  --orange-300: #ffcc80;
+  --amber-500: #f5a623;
+
+  /* Reds (error states) */
+  --red-900: #4a0f0f;
+  --red-800: #7a1a1a;
+  --red-100: #fcc;
+
+  /* === SEMANTIC COLORS === */
+
+  /* Background & Base */
+  --color-bg: var(--black);
+
+  /* Text Colors */
+  --color-text-primary: var(--blue-500);
+  --color-text-secondary: var(--blue-300);
+  --color-text-tertiary: var(--blue-200);
+
+  /* Weather-specific */
+  --color-sun: var(--orange-300);
+  --color-sunrise: var(--orange-500);
+  --color-sunset: var(--orange-400);
+  --color-feels-like: var(--blue-100);
+  --color-temp-high: var(--amber-500);
+  --color-temp-low: var(--blue-400);
+
+  /* Error States */
+  --color-error-bg: var(--red-800);
+  --color-error-detail-bg: var(--red-900);
+  --color-error-text: var(--white);
+  --color-error-detail-text: var(--red-100);
+  --color-error-hover: rgb(255 255 255 / 15%);
+
+  /* SVG Icon Colors */
+  --color-icon: var(--black);
+
+  /* === SPACING === */
   --pad: 2vh;
   --gap-lg: 4vw;
   --gap-md: 2vw;
-  --arrow-right-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-6-6l6 6-6 6" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-  --person-icon-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="3" fill="black"/><path d="M12 12c-4 0-7 2-7 4.5v2.5h14v-2.5c0-2.5-3-4.5-7-4.5z" fill="black"/></svg>');
+
+  /* === SVG ASSETS === */
+  --arrow-right-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-6-6l6 6-6 6" stroke="%23000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  --person-icon-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="3" fill="%23000"/><path d="M12 12c-4 0-7 2-7 4.5v2.5h14v-2.5c0-2.5-3-4.5-7-4.5z" fill="%23000"/></svg>');
 }
 
 *,
@@ -28,8 +74,8 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
-  background: var(--bg);
-  color: var(--fg);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
   font-family: Roboto, sans-serif;
   overflow: hidden;
   text-size-adjust: 100%;
@@ -78,46 +124,11 @@ body,
   gap: 2vh;
 }
 
-/* ---------- Left Section: Astro Times & Moon Phase ---------- */
-#astro-times {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3vh;
-  text-align: center;
-  margin-bottom: 4vh;
-}
-
-.time-row {
-  display: flex;
-  flex-direction: row;
-  gap: 5vw;
-}
-
-.astro-time {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.astro-icon {
-  width: 18vh;
-  height: 18vh;
-  display: block;
-}
-
+/* ---------- Left Section: Moon Phase ---------- */
 .wind-icon {
   width: 6vh;
   height: 6vh;
   display: block;
-}
-
-.astro-time span {
-  font-size: 4vh;
-}
-
-.sun-time span {
-  color: var(--fg-sun);
 }
 
 #moon-phase {
@@ -166,13 +177,13 @@ body,
 #time {
   font-size: 19.8vh;
   font-weight: 300;
-  color: var(--fg-primary);
+  color: var(--color-text-primary);
 }
 
 #date {
   font-size: 3.85vh;
   font-weight: 300;
-  color: var(--fg-secondary);
+  color: var(--color-text-secondary);
 }
 
 #sun-times {
@@ -192,12 +203,12 @@ body,
 
 #sun-times #sunrise-time,
 #sun-times #sunset-time {
-  color: var(--fg-sun);
+  color: var(--color-sun);
 }
 
 #sunrise-time::before {
   content: '↑';
-  color: #ffa500;
+  color: var(--color-sunrise);
   font-size: 1.15em;
   font-weight: 500;
   margin-right: 0.3em;
@@ -205,7 +216,7 @@ body,
 
 #sunset-time::before {
   content: '↓';
-  color: #ff6b35;
+  color: var(--color-sunset);
   font-size: 1.15em;
   font-weight: 500;
   margin-left: 0.3em;
@@ -227,7 +238,7 @@ body,
 #temp-now {
   font-size: 7vh;
   font-weight: 500;
-  color: var(--fg-tertiary);
+  color: var(--color-text-tertiary);
 }
 
 #feels-like-display {
@@ -242,13 +253,13 @@ body,
   display: block;
   width: 0.15vh;
   height: 1.2em;
-  background-color: var(--fg-feels-like);
+  background-color: var(--color-feels-like);
   opacity: 0.5;
 }
 
 #feels-like {
   font-weight: 300;
-  color: var(--fg-feels-like);
+  color: var(--color-feels-like);
 }
 
 #feels-like::before {
@@ -257,7 +268,7 @@ body,
   width: 0.85em;
   height: 0.85em;
   margin-right: 0.4em;
-  background-color: var(--fg-feels-like);
+  background-color: var(--color-feels-like);
   mask: var(--person-icon-svg) center/contain no-repeat;
   vertical-align: -0.1em;
 }
@@ -272,13 +283,13 @@ body,
   font-size: 4vh;
   font-weight: 300;
   letter-spacing: 0.05em;
-  color: var(--fg-primary);
+  color: var(--color-text-primary);
 }
 
 #wind-speed {
   font-size: 3.5vh;
   font-weight: 500;
-  color: var(--fg-secondary);
+  color: var(--color-text-secondary);
 }
 
 #wind-speed::after {
@@ -299,7 +310,7 @@ body,
 }
 
 .wind-gust {
-  color: var(--fg-secondary);
+  color: var(--color-text-secondary);
 }
 
 .temperature::after {
@@ -317,7 +328,7 @@ body,
 }
 
 .temp-high {
-  color: #f5a623;
+  color: var(--color-temp-high);
 }
 
 .temp-low::before {
@@ -325,7 +336,7 @@ body,
 }
 
 .temp-low {
-  color: #6ab0f5;
+  color: var(--color-temp-low);
 }
 
 #forecast {
@@ -353,26 +364,19 @@ body,
 
 .forecast-desc {
   font-size: 2.7vh;
-  color: var(--fg-secondary);
+  font-weight: 300;
+  color: var(--color-text-secondary);
   margin-bottom: 0.3vh;
 }
 
 .forecast-range {
-  color: var(--fg-tertiary);
+  color: var(--color-text-tertiary);
   font-size: 3vh;
 }
 
 .forecast-day-name {
-  color: var(--fg-day);
-}
-
-/* ---------- Moon Phase SVG Styling ---------- */
-.moon {
-  fill: var(--fg-moon);
-}
-
-.moonback {
-  fill: #111;
+  font-weight: 700;
+  color: var(--color-text-secondary);
 }
 
 /* ---------- Error Display ---------- */
@@ -388,8 +392,8 @@ body,
 
 .error-bar {
   width: 100%;
-  background: #7a1a1a;
-  color: #fff;
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
   font-family: Roboto, sans-serif;
   font-size: 1rem;
 }
@@ -422,7 +426,7 @@ body,
   height: 44px;
   background: transparent;
   border: none;
-  color: #fff;
+  color: var(--color-error-text);
   font-size: 1.25rem;
   cursor: pointer;
   display: flex;
@@ -433,7 +437,7 @@ body,
 
 .error-bar-toggle:hover,
 .error-bar-dismiss:hover {
-  background: rgb(255 255 255 / 15%);
+  background: var(--color-error-hover);
 }
 
 .error-bar-detail {
@@ -445,6 +449,6 @@ body,
   word-break: break-all;
   overflow-y: auto;
   max-height: 30vh;
-  background: #4a0f0f;
-  color: #fcc;
+  background: var(--color-error-detail-bg);
+  color: var(--color-error-detail-text);
 }

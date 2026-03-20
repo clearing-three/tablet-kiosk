@@ -110,24 +110,23 @@ describe('WeatherService', () => {
         'Network error'
       )
     })
-  })
 
-  describe('Icon Mapping', () => {
-    it('should map OpenWeatherMap icon codes to SVG names', () => {
-      const testCodes = ['01d', '02n', '10d', '13d', '50n']
+    it('should process icon codes internally and not expose provider details', async () => {
+      const mockData = getWeatherScenario('clearSunnyDay')
+      OpenWeatherMapMock.mockSuccess(mockData)
 
-      testCodes.forEach(code => {
-        const result = weatherService.mapIconCodeToSVG(code)
-        expect(typeof result).toBe('string')
-        expect(result.length).toBeGreaterThan(0)
+      const result = await weatherService.getWeatherData()
+
+      // Icons should be mapped to standard names, not raw provider codes
+      expect(result.current.icon).toBeDefined()
+      expect(typeof result.current.icon).toBe('string')
+      expect(result.current.icon).not.toMatch(/^\d{2}[dn]$/) // Should not be OWM format
+
+      result.forecast.forEach(day => {
+        expect(day.icon).toBeDefined()
+        expect(typeof day.icon).toBe('string')
+        expect(day.icon).not.toMatch(/^\d{2}[dn]$/)
       })
-    })
-
-    it('should handle unknown icon codes gracefully', () => {
-      const unknownCode = 'unknown-code'
-      const result = weatherService.mapIconCodeToSVG(unknownCode)
-
-      expect(typeof result).toBe('string')
     })
   })
 })

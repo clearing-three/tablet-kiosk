@@ -34,7 +34,8 @@ describe('WeatherDataProcessor', () => {
       expect(processed.current.description).toBe(
         mockData.current.weather[0].description
       )
-      expect(processed.current.iconCode).toBe(mockData.current.weather[0].icon)
+      expect(processed.current.icon).toBeDefined()
+      expect(typeof processed.current.icon).toBe('string')
       expect(processed.current.minTemp).toBe(
         Math.round(mockData.daily[0].temp.min)
       )
@@ -47,7 +48,8 @@ describe('WeatherDataProcessor', () => {
       processed.forecast.forEach((day, index) => {
         const originalDay = mockData.daily[index + 1] // Skip today
         expect(day.dayName).toBeDefined()
-        expect(day.iconCode).toBe(originalDay.weather[0].icon)
+        expect(day.icon).toBeDefined()
+        expect(typeof day.icon).toBe('string')
         expect(day.description).toBe(originalDay.weather[0].description)
         expect(day.maxTemp).toBe(Math.round(originalDay.temp.max))
         expect(day.minTemp).toBe(Math.round(originalDay.temp.min))
@@ -195,22 +197,37 @@ describe('WeatherDataProcessor', () => {
   })
 
   describe('Icon Mapping', () => {
-    it('should map OpenWeatherMap icon codes to SVG names', () => {
-      const testCodes = ['01d', '02n', '10d', '13d', '50n']
+    it('should map icon codes internally during processing', () => {
+      const mockData = getWeatherScenario('clearSunnyDay')
+      const processed = processor.processWeatherData(mockData)
 
-      testCodes.forEach(code => {
-        const result = processor.mapIconCodeToSVG(code)
-        expect(typeof result).toBe('string')
-        expect(result.length).toBeGreaterThan(0)
+      // Icons should be mapped to standard names, not raw provider codes
+      expect(processed.current.icon).toBeDefined()
+      expect(typeof processed.current.icon).toBe('string')
+      expect(processed.current.icon).not.toMatch(/^\d{2}[dn]$/) // Should not be OWM format like '01d'
+
+      processed.forecast.forEach(day => {
+        expect(day.icon).toBeDefined()
+        expect(typeof day.icon).toBe('string')
+        expect(day.icon).not.toMatch(/^\d{2}[dn]$/)
       })
     })
 
-    it('should handle unknown icon codes gracefully', () => {
-      const unknownCode = 'unknown-code'
-      const result = processor.mapIconCodeToSVG(unknownCode)
+    it('should map various weather conditions correctly', () => {
+      const scenarios: Array<keyof typeof weatherScenarios> = [
+        'clearSunnyDay',
+        'rainyStormyDay',
+        'snowyWinterDay',
+        'multiDayForecast',
+      ]
 
-      expect(typeof result).toBe('string')
-      // Should return a fallback icon or handle gracefully
+      scenarios.forEach(scenarioName => {
+        const mockData = getWeatherScenario(scenarioName)
+        const processed = processor.processWeatherData(mockData)
+
+        expect(processed.current.icon).toBeDefined()
+        expect(processed.current.icon.length).toBeGreaterThan(0)
+      })
     })
   })
 

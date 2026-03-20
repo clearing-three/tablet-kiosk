@@ -107,7 +107,7 @@ let app: TabletKioskApp | null = null
 
 function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const weatherService = new WeatherService(weatherServiceConfig)
-  const componentFactory = new ComponentFactory(weatherService)
+  const componentFactory = new ComponentFactory()
 
   const weatherDisplay = componentFactory.createWeatherDisplay()
   const weatherForecast = componentFactory.createWeatherForecast()

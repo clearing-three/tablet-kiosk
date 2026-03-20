@@ -29,15 +29,6 @@ export class WeatherService {
   }
 
   /**
-   * Maps OpenWeatherMap icon codes to local SVG file names
-   * @param owmCode OpenWeatherMap icon code (e.g., '01d', '02n')
-   * @returns string Local SVG filename without extension
-   */
-  mapIconCodeToSVG(owmCode: string): string {
-    return this.processor.mapIconCodeToSVG(owmCode)
-  }
-
-  /**
    * Gets the current configuration
    * @returns WeatherServiceConfig Current service configuration
    */

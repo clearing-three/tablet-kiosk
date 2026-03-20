@@ -11,7 +11,7 @@ const mockWeatherData: WeatherData = {
     temperature: 72,
     feelsLike: 70,
     description: 'clear sky',
-    iconCode: '01d',
+    icon: 'clear-day',
     minTemp: 65,
     maxTemp: 78,
     windSpeed: 5,
@@ -20,7 +20,7 @@ const mockWeatherData: WeatherData = {
   forecast: [
     {
       dayName: 'Mon',
-      iconCode: '01d',
+      icon: 'clear-day',
       description: 'clear sky',
       maxTemp: 78,
       minTemp: 65,

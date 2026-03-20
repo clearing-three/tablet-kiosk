@@ -11,13 +11,30 @@ export interface SolarTimes {
   sunset: number // Unix timestamp
 }
 
+/**
+ * Weather icon names for standard weather conditions.
+ * These are provider-agnostic icon identifiers mapped from API responses.
+ */
+export type WeatherIcon =
+  | 'clear-day'
+  | 'clear-night'
+  | 'partly-cloudy-day'
+  | 'partly-cloudy-night'
+  | 'overcast'
+  | 'rain'
+  | 'thunderstorms-day'
+  | 'thunderstorms-night'
+  | 'snow'
+  | 'mist'
+  | 'na' // fallback for unknown conditions
+
 // Simplified weather data for component consumption
 export interface WeatherData {
   current: {
     temperature: number
     feelsLike: number
     description: string
-    iconCode: string
+    icon: WeatherIcon
     minTemp: number
     maxTemp: number
     windSpeed: number
@@ -26,7 +43,7 @@ export interface WeatherData {
   }
   forecast: Array<{
     dayName: string
-    iconCode: string
+    icon: WeatherIcon
     description: string
     maxTemp: number
     minTemp: number

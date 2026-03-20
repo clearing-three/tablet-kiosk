@@ -1,8 +1,9 @@
 /**
  * Weather Data Processor
  *
- * Transforms raw OpenWeatherMap API data into component-friendly structures.
+ * Transforms raw weather API data into component-friendly structures.
  * Handles data processing, formatting, and icon mapping.
+ * All provider-specific details are encapsulated within this processor.
  */
 
 import type { WeatherApiData } from '../types/weather-api.types'
@@ -12,7 +13,8 @@ import { REQUIRED_FORECAST_DAYS } from '../constants/weather.constants'
 
 export class WeatherDataProcessor {
   /**
-   * Processes raw weather data into format suitable for UI components
+   * Processes raw weather data into format suitable for UI components.
+   * Maps provider-specific icon codes to standard icon names internally.
    * @param data Raw weather data from API (assumed to be validated by Zod)
    * @returns WeatherData Processed data ready for display
    */
@@ -25,7 +27,7 @@ export class WeatherDataProcessor {
       temperature: Math.round(current.temp),
       feelsLike: Math.round(current.feels_like),
       description: current.weather[0].description,
-      iconCode: current.weather[0].icon,
+      icon: mapOWMIconToSVG(current.weather[0].icon),
       minTemp: Math.round(todaysForecast.temp.min),
       maxTemp: Math.round(todaysForecast.temp.max),
       windSpeed: Math.round(current.wind_speed),
@@ -43,7 +45,7 @@ export class WeatherDataProcessor {
       const date = new Date(day.dt * 1000)
       return {
         dayName: date.toLocaleDateString(undefined, { weekday: 'short' }),
-        iconCode: day.weather[0].icon,
+        icon: mapOWMIconToSVG(day.weather[0].icon),
         description: day.weather[0].description,
         maxTemp: Math.round(day.temp.max),
         minTemp: Math.round(day.temp.min),
@@ -63,14 +65,5 @@ export class WeatherDataProcessor {
       forecast,
       astronomy,
     }
-  }
-
-  /**
-   * Maps OpenWeatherMap icon codes to local SVG file names
-   * @param owmCode OpenWeatherMap icon code (e.g., '01d', '02n')
-   * @returns string Local SVG filename without extension
-   */
-  mapIconCodeToSVG(owmCode: string): string {
-    return mapOWMIconToSVG(owmCode)
   }
 }

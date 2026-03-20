@@ -9,7 +9,6 @@ import type { WeatherData } from '../../types/weather-domain.types'
 
 type ForecastDay = WeatherData['forecast'][0]
 import { createTemperatureRangeElements } from '../../utils/formatters'
-import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
 
@@ -17,14 +16,12 @@ export const ERROR_MISSING_CHILD_ELEMENTS =
   'Forecast day element is missing required child elements'
 
 export class WeatherForecast {
-  private weatherService: WeatherService
   private elements: {
     day1: HTMLElement
     day2: HTMLElement
   }
 
-  constructor(weatherService: WeatherService) {
-    this.weatherService = weatherService
+  constructor() {
     this.elements = this.initializeElements()
   }
 
@@ -47,8 +44,6 @@ export class WeatherForecast {
     element: HTMLElement,
     day: ForecastDay
   ): void {
-    const iconFile = this.weatherService.mapIconCodeToSVG(day.iconCode)
-
     const dayName = element.querySelector('.forecast-day-name')
     const icon = element.querySelector('.forecast-icon') as HTMLObjectElement
     const desc = element.querySelector('.forecast-desc')
@@ -59,7 +54,7 @@ export class WeatherForecast {
     }
 
     dayName.textContent = day.dayName
-    icon.data = `weather-icons/${iconFile}.svg`
+    icon.data = `weather-icons/${day.icon}.svg`
     desc.textContent = day.description
 
     rangeContainer.innerHTML = ''

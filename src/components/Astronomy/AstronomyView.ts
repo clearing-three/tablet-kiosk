@@ -1,7 +1,7 @@
 /**
- * Astronomy Times Component
+ * Astronomy View Component
  *
- * Handles display of sunrise and sunset times.
+ * Renders sunrise and sunset times.
  */
 
 import type { SolarTimes as AstronomyData } from '../../types/weather-domain.types'
@@ -9,7 +9,7 @@ import { formatTimeFromUnix } from '../../utils/formatters'
 import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
 
-export class AstronomyTimes {
+export class AstronomyView {
   private elements: {
     sunrise: HTMLElement
     sunset: HTMLElement
@@ -46,10 +46,10 @@ export class AstronomyTimes {
   }
 
   /**
-   * Updates all astronomy time displays
+   * Renders all astronomy time displays
    * @param astronomy Astronomy times data
    */
-  updateTimes(astronomy: AstronomyData): void {
+  render(astronomy: AstronomyData): void {
     this.updateSunriseTime(astronomy.sunrise)
     this.updateSunsetTime(astronomy.sunset)
   }

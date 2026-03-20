@@ -1,7 +1,7 @@
 /**
- * Weather Forecast Component
+ * Forecast View Component
  *
- * Handles rendering and management of the 2-day weather forecast display.
+ * Renders the 2-day weather forecast display.
  * Updates static forecast day elements with weather data.
  */
 
@@ -15,7 +15,7 @@ import { DOM_IDS } from '../../utils/constants'
 export const ERROR_MISSING_CHILD_ELEMENTS =
   'Forecast day element is missing required child elements'
 
-export class WeatherForecast {
+export class ForecastView {
   private elements: {
     day1: HTMLElement
     day2: HTMLElement
@@ -66,10 +66,10 @@ export class WeatherForecast {
   }
 
   /**
-   * Updates the forecast display with new data
+   * Renders the forecast display with new data
    * @param forecast Array of daily weather forecast data (next 2 days)
    */
-  updateForecast(forecast: ForecastDay[]): void {
+  render(forecast: ForecastDay[]): void {
     const dayElements = [this.elements.day1, this.elements.day2]
     const forecastToShow = forecast.slice(0, dayElements.length)
 

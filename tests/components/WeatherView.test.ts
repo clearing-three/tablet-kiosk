@@ -1,16 +1,16 @@
 /**
- * WeatherDisplay Component Tests (3.5.1)
+ * WeatherView Component Tests (3.5.1)
  *
- * Tests for WeatherDisplay component covering:
+ * Tests for WeatherView component covering:
  * - DOM updates with weather data
  * - Temperature rendering
  */
 
-import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
+import { WeatherView } from '../../src/components/Weather/WeatherView'
 import type { WeatherData } from '../../src/types/weather-domain.types'
 
-describe('WeatherDisplay', () => {
-  let weatherDisplay: WeatherDisplay
+describe('WeatherView', () => {
+  let weatherView: WeatherView
   let mockCurrentWeather: WeatherData['current']
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('WeatherDisplay', () => {
       <div id="weather-range"></div>
     `
 
-    weatherDisplay = new WeatherDisplay()
+    weatherView = new WeatherView()
 
     mockCurrentWeather = {
       temperature: 75,
@@ -37,8 +37,8 @@ describe('WeatherDisplay', () => {
   })
 
   describe('DOM updates with weather data', () => {
-    it('should update all display elements when updateDisplay is called', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+    it('should update all display elements when render is called', () => {
+      weatherView.render(mockCurrentWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('75')
       expect(document.getElementById('feels-like')!.textContent).toBe('72')
@@ -60,7 +60,7 @@ describe('WeatherDisplay', () => {
         windGust: 19,
       }
 
-      weatherDisplay.updateDisplay(rainyWeather)
+      weatherView.render(rainyWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('45')
       const rangeEl = document.getElementById('weather-range')!
@@ -69,7 +69,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should overwrite previous display values on subsequent calls', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       const updatedWeather: WeatherData['current'] = {
         temperature: 60,
@@ -81,7 +81,7 @@ describe('WeatherDisplay', () => {
         windSpeed: 8,
         windDirection: 'N',
       }
-      weatherDisplay.updateDisplay(updatedWeather)
+      weatherView.render(updatedWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('60')
       const rangeEl = document.getElementById('weather-range')!
@@ -92,13 +92,13 @@ describe('WeatherDisplay', () => {
 
   describe('Temperature rendering', () => {
     it('should render temperature with a degree symbol', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('75')
     })
 
     it('should render temperature range with styled high/low spans', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       const rangeEl = document.getElementById('weather-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
@@ -117,7 +117,7 @@ describe('WeatherDisplay', () => {
         windDirection: 'NW',
       }
 
-      weatherDisplay.updateDisplay(coldWeather)
+      weatherView.render(coldWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('-15')
       const rangeEl = document.getElementById('weather-range')!
@@ -137,7 +137,7 @@ describe('WeatherDisplay', () => {
         windDirection: 'E',
       }
 
-      weatherDisplay.updateDisplay(freezingWeather)
+      weatherView.render(freezingWeather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('0')
     })
@@ -145,7 +145,7 @@ describe('WeatherDisplay', () => {
 
   describe('Feels-like temperature rendering', () => {
     it('should render feels-like temperature with degree symbol', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       expect(document.getElementById('feels-like')!.textContent).toBe('72')
     })
@@ -157,7 +157,7 @@ describe('WeatherDisplay', () => {
         feelsLike: 98,
       }
 
-      weatherDisplay.updateDisplay(weather)
+      weatherView.render(weather)
 
       expect(document.getElementById('temp-now')!.textContent).toBe('90')
       expect(document.getElementById('feels-like')!.textContent).toBe('98')
@@ -169,19 +169,19 @@ describe('WeatherDisplay', () => {
         feelsLike: -10,
       }
 
-      weatherDisplay.updateDisplay(weather)
+      weatherView.render(weather)
 
       expect(document.getElementById('feels-like')!.textContent).toBe('-10')
     })
 
     it('should overwrite previous feels-like value on subsequent calls', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       const updated: WeatherData['current'] = {
         ...mockCurrentWeather,
         feelsLike: 85,
       }
-      weatherDisplay.updateDisplay(updated)
+      weatherView.render(updated)
 
       expect(document.getElementById('feels-like')!.textContent).toBe('85')
     })
@@ -189,7 +189,7 @@ describe('WeatherDisplay', () => {
 
   describe('Wind display', () => {
     it('should display wind speed without gust', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       const windSpeed = document.getElementById('wind-speed')!
       expect(windSpeed.textContent).toBe('5')
@@ -197,7 +197,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should display wind direction', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       const windDirection = document.getElementById('wind-direction')!
       expect(windDirection.textContent).toBe('SW')
@@ -209,7 +209,7 @@ describe('WeatherDisplay', () => {
         windGust: 19,
       }
 
-      weatherDisplay.updateDisplay(gustyWeather)
+      weatherView.render(gustyWeather)
 
       const windSpeed = document.getElementById('wind-speed')!
       const gustElement = windSpeed.querySelector('.wind-gust')
@@ -218,7 +218,7 @@ describe('WeatherDisplay', () => {
     })
 
     it('should update wind display on subsequent calls', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
+      weatherView.render(mockCurrentWeather)
 
       const updatedWeather: WeatherData['current'] = {
         ...mockCurrentWeather,
@@ -226,7 +226,7 @@ describe('WeatherDisplay', () => {
         windDirection: 'NE',
         windGust: 22,
       }
-      weatherDisplay.updateDisplay(updatedWeather)
+      weatherView.render(updatedWeather)
 
       const windSpeed = document.getElementById('wind-speed')!
       const windDirection = document.getElementById('wind-direction')!

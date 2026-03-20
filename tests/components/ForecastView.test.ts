@@ -1,16 +1,16 @@
 /**
- * WeatherForecast Component Tests (3.5.2)
+ * ForecastView Component Tests (3.5.2)
  *
- * Tests for WeatherForecast component covering:
+ * Tests for ForecastView component covering:
  * - Forecast list generation (2-day forecast)
  * - Correct number of forecast days
  * - Proper date formatting for each day
  */
 
 import {
-  WeatherForecast,
+  ForecastView,
   ERROR_MISSING_CHILD_ELEMENTS,
-} from '../../src/components/Weather/WeatherForecast'
+} from '../../src/components/Weather/ForecastView'
 import type { WeatherData } from '../../src/types/weather-domain.types'
 
 type ForecastDay = WeatherData['forecast'][0]
@@ -51,8 +51,8 @@ const THREE_DAYS: ForecastDay[] = [
   }),
 ]
 
-describe('WeatherForecast', () => {
-  let weatherForecast: WeatherForecast
+describe('ForecastView', () => {
+  let forecastView: ForecastView
 
   beforeEach(() => {
     document.body.innerHTML = `
@@ -72,33 +72,33 @@ describe('WeatherForecast', () => {
       </div>
     `
 
-    weatherForecast = new WeatherForecast()
+    forecastView = new ForecastView()
   })
 
   describe('Constructor', () => {
     it('should throw when forecast day elements are not in the DOM', () => {
       document.body.innerHTML = ''
 
-      expect(() => new WeatherForecast()).toThrow(
+      expect(() => new ForecastView()).toThrow(
         'Required DOM element not found: #forecast-day-1'
       )
     })
 
     it('should construct successfully when #forecast element is present', () => {
-      expect(() => new WeatherForecast()).not.toThrow()
+      expect(() => new ForecastView()).not.toThrow()
     })
   })
 
   describe('Forecast list generation', () => {
     it('should create a forecast-day element for each day', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
+      forecastView.render(THREE_DAYS)
 
       const days = document.querySelectorAll('.forecast-day')
       expect(days).toHaveLength(2)
     })
 
     it('should render the day name in each forecast-day element', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
+      forecastView.render(THREE_DAYS)
 
       const dayNames = document.querySelectorAll('.forecast-day-name')
       expect(dayNames[0].textContent).toBe('Mon')
@@ -106,7 +106,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should render the description in each forecast-day element', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
+      forecastView.render(THREE_DAYS)
 
       const descs = document.querySelectorAll('.forecast-desc')
       expect(descs[0].textContent).toBe('clear sky')
@@ -114,7 +114,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should render the temperature range in each forecast-day element', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
+      forecastView.render(THREE_DAYS)
 
       const ranges = document.querySelectorAll('.forecast-range')
       expect(ranges[0].querySelector('.temp-high')?.textContent).toBe('75')
@@ -124,7 +124,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should set the icon SVG path using the icon name', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
+      forecastView.render(THREE_DAYS)
 
       const icons = document.querySelectorAll('.forecast-icon')
       expect((icons[0] as HTMLObjectElement).data).toContain(
@@ -136,7 +136,7 @@ describe('WeatherForecast', () => {
     })
 
     it('should update previous forecast with new data', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
+      forecastView.render(THREE_DAYS)
       const firstDayName =
         document.querySelector('.forecast-day-name')?.textContent
       expect(firstDayName).toBe('Mon')
@@ -145,7 +145,7 @@ describe('WeatherForecast', () => {
         makeForecastDay({ dayName: 'Sat' }),
         makeForecastDay({ dayName: 'Sun' }),
       ]
-      weatherForecast.updateForecast(newForecast)
+      forecastView.render(newForecast)
       const updatedDayName =
         document.querySelector('.forecast-day-name')?.textContent
       expect(updatedDayName).toBe('Sat')
@@ -154,7 +154,7 @@ describe('WeatherForecast', () => {
 
   describe('Correct number of forecast days', () => {
     it('should display only 2 days when given 3 or more', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
+      forecastView.render(THREE_DAYS)
 
       expect(getForecastDays()).toHaveLength(2)
     })
@@ -166,13 +166,13 @@ describe('WeatherForecast', () => {
         makeForecastDay({ dayName: 'Fri' }),
       ]
 
-      weatherForecast.updateForecast(fiveDays)
+      forecastView.render(fiveDays)
 
       expect(getForecastDays()).toHaveLength(2)
     })
 
     it('should update only first day when given only 1', () => {
-      weatherForecast.updateForecast([makeForecastDay({ dayName: 'Thu' })])
+      forecastView.render([makeForecastDay({ dayName: 'Thu' })])
 
       const dayNames = document.querySelectorAll('.forecast-day-name')
       expect(dayNames[0].textContent).toBe('Thu')
@@ -187,7 +187,7 @@ describe('WeatherForecast', () => {
         makeForecastDay({ dayName: 'Wednesday' }),
       ]
 
-      weatherForecast.updateForecast(days)
+      forecastView.render(days)
 
       const dayNames = document.querySelectorAll('.forecast-day-name')
       expect(dayNames[0].textContent).toBe('Monday')
@@ -197,7 +197,7 @@ describe('WeatherForecast', () => {
     it('should format temperature ranges with styled high/low spans', () => {
       const days = [makeForecastDay({ maxTemp: 82, minTemp: 61 })]
 
-      weatherForecast.updateForecast(days)
+      forecastView.render(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
@@ -207,7 +207,7 @@ describe('WeatherForecast', () => {
     it('should round fractional temperatures in the range display', () => {
       const days = [makeForecastDay({ maxTemp: 78.7, minTemp: 61.3 })]
 
-      weatherForecast.updateForecast(days)
+      forecastView.render(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('79')
@@ -217,7 +217,7 @@ describe('WeatherForecast', () => {
     it('should handle negative temperatures in the range display', () => {
       const days = [makeForecastDay({ maxTemp: -5, minTemp: -18 })]
 
-      weatherForecast.updateForecast(days)
+      forecastView.render(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
       expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-5')
@@ -234,7 +234,7 @@ describe('WeatherForecast', () => {
     ])('should throw when %s is missing', selector => {
       document.querySelector(selector)?.remove()
 
-      expect(() => weatherForecast.updateForecast(THREE_DAYS)).toThrow(
+      expect(() => forecastView.render(THREE_DAYS)).toThrow(
         ERROR_MISSING_CHILD_ELEMENTS
       )
     })

@@ -1,8 +1,8 @@
-import { WeatherUpdateCoordinator } from '../../src/core/WeatherUpdateCoordinator'
+import { WeatherController } from '../../src/controllers/WeatherController'
 import type { WeatherService } from '../../src/services/WeatherService'
-import type { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
-import type { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
-import type { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
+import type { WeatherView } from '../../src/components/Weather/WeatherView'
+import type { ForecastView } from '../../src/components/Weather/ForecastView'
+import type { AstronomyView } from '../../src/components/Astronomy/AstronomyView'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
 import type { WeatherData } from '../../src/types/weather-domain.types'
 
@@ -34,71 +34,72 @@ const mockWeatherData: WeatherData = {
   },
 }
 
-describe('WeatherUpdateCoordinator', () => {
+describe('WeatherController', () => {
   let mockWeatherService: Pick<WeatherService, 'getWeatherData'>
-  let mockWeatherDisplay: Pick<WeatherDisplay, 'updateDisplay'>
-  let mockWeatherForecast: Pick<WeatherForecast, 'updateForecast'>
-  let mockAstronomyTimes: Pick<AstronomyTimes, 'updateTimes'>
+  let mockWeatherView: Pick<WeatherView, 'render'>
+  let mockForecastView: Pick<ForecastView, 'render'>
+  let mockAstronomyView: Pick<AstronomyView, 'render'>
   let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
-  let coordinator: WeatherUpdateCoordinator
+  let controller: WeatherController
 
   beforeEach(() => {
     mockWeatherService = {
       getWeatherData: vi.fn().mockResolvedValue(mockWeatherData),
     }
-    mockWeatherDisplay = { updateDisplay: vi.fn() }
-    mockWeatherForecast = { updateForecast: vi.fn() }
-    mockAstronomyTimes = { updateTimes: vi.fn() }
+    mockWeatherView = { render: vi.fn() }
+    mockForecastView = { render: vi.fn() }
+    mockAstronomyView = { render: vi.fn() }
     mockErrorDisplay = { show: vi.fn(), remove: vi.fn() }
 
-    coordinator = new WeatherUpdateCoordinator(
+    controller = new WeatherController(
+      mockWeatherView as WeatherView,
+      mockForecastView as ForecastView,
+      mockAstronomyView as AstronomyView,
       mockWeatherService as WeatherService,
-      mockWeatherDisplay as WeatherDisplay,
-      mockWeatherForecast as WeatherForecast,
-      mockAstronomyTimes as AstronomyTimes,
-      mockErrorDisplay as ErrorDisplay
+      mockErrorDisplay as ErrorDisplay,
+      10000 // 10s interval for testing
     )
   })
 
   describe('update() — success', () => {
     it('calls getWeatherData on the weather service', async () => {
-      await coordinator.update()
+      await controller.update()
 
       expect(mockWeatherService.getWeatherData).toHaveBeenCalledTimes(1)
     })
 
-    it('passes current weather to weatherDisplay.updateDisplay', async () => {
-      await coordinator.update()
+    it('passes current weather to weatherView.render', async () => {
+      await controller.update()
 
-      expect(mockWeatherDisplay.updateDisplay).toHaveBeenCalledWith(
+      expect(mockWeatherView.render).toHaveBeenCalledWith(
         mockWeatherData.current
       )
     })
 
-    it('passes forecast to weatherForecast.updateForecast', async () => {
-      await coordinator.update()
+    it('passes forecast to forecastView.render', async () => {
+      await controller.update()
 
-      expect(mockWeatherForecast.updateForecast).toHaveBeenCalledWith(
+      expect(mockForecastView.render).toHaveBeenCalledWith(
         mockWeatherData.forecast
       )
     })
 
-    it('passes astronomy to astronomyTimes.updateTimes', async () => {
-      await coordinator.update()
+    it('passes astronomy to astronomyView.render', async () => {
+      await controller.update()
 
-      expect(mockAstronomyTimes.updateTimes).toHaveBeenCalledWith(
+      expect(mockAstronomyView.render).toHaveBeenCalledWith(
         mockWeatherData.astronomy
       )
     })
 
     it('removes the weather-update error on success', async () => {
-      await coordinator.update()
+      await controller.update()
 
       expect(mockErrorDisplay.remove).toHaveBeenCalledWith('weather-update')
     })
 
     it('does not call errorDisplay.show on success', async () => {
-      await coordinator.update()
+      await controller.update()
 
       expect(mockErrorDisplay.show).not.toHaveBeenCalled()
     })
@@ -112,7 +113,7 @@ describe('WeatherUpdateCoordinator', () => {
     })
 
     it('calls errorDisplay.show with the weather-update key', async () => {
-      await coordinator.update()
+      await controller.update()
 
       expect(mockErrorDisplay.show).toHaveBeenCalledWith(
         'weather-update',
@@ -120,18 +121,34 @@ describe('WeatherUpdateCoordinator', () => {
       )
     })
 
-    it('does not call any display update methods', async () => {
-      await coordinator.update()
+    it('does not call any view render methods', async () => {
+      await controller.update()
 
-      expect(mockWeatherDisplay.updateDisplay).not.toHaveBeenCalled()
-      expect(mockWeatherForecast.updateForecast).not.toHaveBeenCalled()
-      expect(mockAstronomyTimes.updateTimes).not.toHaveBeenCalled()
+      expect(mockWeatherView.render).not.toHaveBeenCalled()
+      expect(mockForecastView.render).not.toHaveBeenCalled()
+      expect(mockAstronomyView.render).not.toHaveBeenCalled()
     })
 
     it('does not call errorDisplay.remove on failure', async () => {
-      await coordinator.update()
+      await controller.update()
 
       expect(mockErrorDisplay.remove).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('lifecycle methods', () => {
+    it('should start without errors', () => {
+      expect(() => controller.start()).not.toThrow()
+    })
+
+    it('should stop without errors', () => {
+      controller.start()
+      expect(() => controller.stop()).not.toThrow()
+    })
+
+    it('should destroy without errors', () => {
+      controller.start()
+      expect(() => controller.destroy()).not.toThrow()
     })
   })
 })

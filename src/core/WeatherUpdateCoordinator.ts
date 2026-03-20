@@ -15,7 +15,7 @@ export class WeatherUpdateCoordinator {
 
   async update(): Promise<void> {
     try {
-      const weatherData = await this.weatherService.getProcessedWeatherData()
+      const weatherData = await this.weatherService.getWeatherData()
 
       this.weatherDisplay.updateDisplay(weatherData.current)
       this.weatherForecast.updateForecast(weatherData.forecast)

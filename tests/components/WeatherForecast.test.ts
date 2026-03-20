@@ -7,18 +7,19 @@
  * - Proper date formatting for each day
  */
 
-import type { Mock } from 'vitest'
-import { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
-import { WeatherService } from '../../src/services/WeatherService'
-import type { ProcessedWeatherData } from '../../src/types/weather.types'
+import {
+  WeatherForecast,
+  ERROR_MISSING_CHILD_ELEMENTS,
+} from '../../src/components/Weather/WeatherForecast'
+import type { WeatherData } from '../../src/types/weather-domain.types'
 
-type ForecastDay = ProcessedWeatherData['forecast'][0]
+type ForecastDay = WeatherData['forecast'][0]
 
 const makeForecastDay = (
   overrides: Partial<ForecastDay> = {}
 ): ForecastDay => ({
   dayName: 'Mon',
-  iconCode: '01d',
+  icon: 'clear-day',
   description: 'clear sky',
   maxTemp: 75,
   minTemp: 58,
@@ -29,21 +30,21 @@ const makeForecastDay = (
 const THREE_DAYS: ForecastDay[] = [
   makeForecastDay({
     dayName: 'Mon',
-    iconCode: '01d',
+    icon: 'clear-day',
     description: 'clear sky',
     maxTemp: 75,
     minTemp: 58,
   }),
   makeForecastDay({
     dayName: 'Tue',
-    iconCode: '02d',
+    icon: 'partly-cloudy-day',
     description: 'few clouds',
     maxTemp: 70,
     minTemp: 55,
   }),
   makeForecastDay({
     dayName: 'Wed',
-    iconCode: '10d',
+    icon: 'rain',
     description: 'light rain',
     maxTemp: 62,
     minTemp: 50,
@@ -52,7 +53,6 @@ const THREE_DAYS: ForecastDay[] = [
 
 describe('WeatherForecast', () => {
   let weatherForecast: WeatherForecast
-  let mockWeatherService: Pick<WeatherService, 'mapIconCodeToSVG'>
 
   beforeEach(() => {
     document.body.innerHTML = `
@@ -72,30 +72,20 @@ describe('WeatherForecast', () => {
       </div>
     `
 
-    mockWeatherService = {
-      mapIconCodeToSVG: vi.fn().mockReturnValue('clear-day'),
-    }
-
-    weatherForecast = new WeatherForecast(
-      mockWeatherService as unknown as WeatherService
-    )
+    weatherForecast = new WeatherForecast()
   })
 
   describe('Constructor', () => {
     it('should throw when forecast day elements are not in the DOM', () => {
       document.body.innerHTML = ''
 
-      expect(
-        () =>
-          new WeatherForecast(mockWeatherService as unknown as WeatherService)
-      ).toThrow('Required DOM element not found: #forecast-day-1')
+      expect(() => new WeatherForecast()).toThrow(
+        'Required DOM element not found: #forecast-day-1'
+      )
     })
 
     it('should construct successfully when #forecast element is present', () => {
-      expect(
-        () =>
-          new WeatherForecast(mockWeatherService as unknown as WeatherService)
-      ).not.toThrow()
+      expect(() => new WeatherForecast()).not.toThrow()
     })
   })
 
@@ -133,11 +123,7 @@ describe('WeatherForecast', () => {
       expect(ranges[1].querySelector('.temp-low')?.textContent).toBe('55')
     })
 
-    it('should set the icon SVG path using the mapped icon code', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as Mock)
-        .mockReturnValueOnce('clear-day')
-        .mockReturnValueOnce('partly-cloudy')
-
+    it('should set the icon SVG path using the icon name', () => {
       weatherForecast.updateForecast(THREE_DAYS)
 
       const icons = document.querySelectorAll('.forecast-icon')
@@ -145,15 +131,8 @@ describe('WeatherForecast', () => {
         'weather-icons/clear-day.svg'
       )
       expect((icons[1] as HTMLObjectElement).data).toContain(
-        'weather-icons/partly-cloudy.svg'
+        'weather-icons/partly-cloudy-day.svg'
       )
-    })
-
-    it('should call mapIconCodeToSVG with the correct icon code for each day', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
-
-      expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('01d')
-      expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('02d')
     })
 
     it('should update previous forecast with new data', () => {
@@ -197,12 +176,6 @@ describe('WeatherForecast', () => {
 
       const dayNames = document.querySelectorAll('.forecast-day-name')
       expect(dayNames[0].textContent).toBe('Thu')
-    })
-
-    it('should report the correct count via getForecastDayCount', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
-
-      expect(weatherForecast.getForecastDayCount()).toBe(2)
     })
   })
 
@@ -253,26 +226,6 @@ describe('WeatherForecast', () => {
   })
 
   describe('Validation and error propagation', () => {
-    it('should throw with a descriptive message when forecast array is empty', () => {
-      expect(() => weatherForecast.updateForecast([])).toThrow(
-        'Forecast data is empty'
-      )
-    })
-
-    it('should throw with a descriptive message when forecast data is not an array', () => {
-      expect(() => weatherForecast.updateForecast(null as any)).toThrow(
-        'Forecast data is not an array'
-      )
-    })
-
-    it('should throw with a descriptive message when a day has malformed properties', () => {
-      const invalid = [makeForecastDay({ dayName: '' })]
-
-      expect(() => weatherForecast.updateForecast(invalid)).toThrow(
-        'Invalid forecast day data'
-      )
-    })
-
     it.each([
       '.forecast-day-name',
       '.forecast-icon',
@@ -282,18 +235,7 @@ describe('WeatherForecast', () => {
       document.querySelector(selector)?.remove()
 
       expect(() => weatherForecast.updateForecast(THREE_DAYS)).toThrow(
-        'Forecast day element is missing required child elements'
-      )
-    })
-
-    it('should propagate errors thrown during rendering', () => {
-      const thrownError = new Error('mapping failed')
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
-        throw thrownError
-      })
-
-      expect(() => weatherForecast.updateForecast(THREE_DAYS)).toThrow(
-        thrownError
+        ERROR_MISSING_CHILD_ELEMENTS
       )
     })
   })

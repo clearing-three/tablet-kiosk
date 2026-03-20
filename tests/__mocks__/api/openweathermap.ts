@@ -6,16 +6,16 @@
  */
 
 import type {
-  WeatherData,
+  WeatherApiData,
   WeatherApiError,
-} from '../../../src/types/weather.types'
+} from '../../../src/types/weather-api.types'
 import type { Mock } from 'vitest'
 import { clearSunnyDay } from '../fixtures/weather-scenarios'
 
 /**
  * Mock successful weather data response - now uses 4-day clearSunnyDay scenario
  */
-export const mockSuccessResponse: WeatherData = clearSunnyDay
+export const mockSuccessResponse: WeatherApiData = clearSunnyDay
 
 /**
  * Mock API error responses
@@ -233,7 +233,7 @@ export class OpenWeatherMapMock {
     global.fetch = this.originalFetch
   }
 
-  static mockSuccess(data: WeatherData = mockSuccessResponse) {
+  static mockSuccess(data: WeatherApiData = mockSuccessResponse) {
     ;(global.fetch as Mock).mockResolvedValueOnce(createMockFetchResponse(data))
   }
 

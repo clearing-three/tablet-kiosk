@@ -8,6 +8,9 @@
  * - Path generation and validation
  */
 
+import { existsSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import {
   mapOWMIconToSVG,
   getWeatherIconPath,
@@ -16,6 +19,9 @@ import {
   type OWMIconCode,
   type LocalIconName,
 } from '../../src/utils/iconMapper'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 describe('iconMapper', () => {
   describe('mapOWMIconToSVG', () => {
@@ -319,6 +325,26 @@ describe('iconMapper', () => {
       expect(getWeatherIconPath('01d', '/path')).toBe('/path/clear-day.svg')
       expect(getWeatherIconPath('01d', '/path/')).toBe('/path//clear-day.svg')
       expect(getWeatherIconPath('01d', 'path')).toBe('path/clear-day.svg')
+    })
+
+    it('should have an SVG file for each mapped icon', () => {
+      const iconMappings = getAllIconMappings()
+      const uniqueIcons = new Set(Object.values(iconMappings))
+      const missingIcons: string[] = []
+
+      uniqueIcons.forEach(iconName => {
+        // Path from test file: tests/utils/ -> ../../public/weather-icons/
+        const filePath = join(
+          __dirname,
+          '../../public/weather-icons',
+          `${iconName}.svg`
+        )
+        if (!existsSync(filePath)) {
+          missingIcons.push(iconName)
+        }
+      })
+
+      expect(missingIcons).toEqual([])
     })
   })
 })

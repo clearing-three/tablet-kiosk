@@ -5,7 +5,7 @@
  * success, error, and edge cases for comprehensive testing coverage.
  */
 
-import type { NasaMoonApiResponse } from '../../src/types/nasa.types'
+import type { NasaMoonApiResponse } from '../../src/types/nasa-api.types'
 
 /**
  * Mock successful NASA Dial-a-Moon API response

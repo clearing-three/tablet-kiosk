@@ -4,14 +4,14 @@ import type { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay
 import type { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
 import type { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
-import type { ProcessedWeatherData } from '../../src/types/weather.types'
+import type { WeatherData } from '../../src/types/weather-domain.types'
 
-const mockWeatherData: ProcessedWeatherData = {
+const mockWeatherData: WeatherData = {
   current: {
     temperature: 72,
     feelsLike: 70,
     description: 'clear sky',
-    iconCode: '01d',
+    icon: 'clear-day',
     minTemp: 65,
     maxTemp: 78,
     windSpeed: 5,
@@ -20,7 +20,7 @@ const mockWeatherData: ProcessedWeatherData = {
   forecast: [
     {
       dayName: 'Mon',
-      iconCode: '01d',
+      icon: 'clear-day',
       description: 'clear sky',
       maxTemp: 78,
       minTemp: 65,
@@ -35,7 +35,7 @@ const mockWeatherData: ProcessedWeatherData = {
 }
 
 describe('WeatherUpdateCoordinator', () => {
-  let mockWeatherService: Pick<WeatherService, 'getProcessedWeatherData'>
+  let mockWeatherService: Pick<WeatherService, 'getWeatherData'>
   let mockWeatherDisplay: Pick<WeatherDisplay, 'updateDisplay'>
   let mockWeatherForecast: Pick<WeatherForecast, 'updateForecast'>
   let mockAstronomyTimes: Pick<AstronomyTimes, 'updateTimes'>
@@ -44,7 +44,7 @@ describe('WeatherUpdateCoordinator', () => {
 
   beforeEach(() => {
     mockWeatherService = {
-      getProcessedWeatherData: vi.fn().mockResolvedValue(mockWeatherData),
+      getWeatherData: vi.fn().mockResolvedValue(mockWeatherData),
     }
     mockWeatherDisplay = { updateDisplay: vi.fn() }
     mockWeatherForecast = { updateForecast: vi.fn() }
@@ -61,12 +61,10 @@ describe('WeatherUpdateCoordinator', () => {
   })
 
   describe('update() — success', () => {
-    it('calls getProcessedWeatherData on the weather service', async () => {
+    it('calls getWeatherData on the weather service', async () => {
       await coordinator.update()
 
-      expect(mockWeatherService.getProcessedWeatherData).toHaveBeenCalledTimes(
-        1
-      )
+      expect(mockWeatherService.getWeatherData).toHaveBeenCalledTimes(1)
     })
 
     it('passes current weather to weatherDisplay.updateDisplay', async () => {
@@ -110,9 +108,7 @@ describe('WeatherUpdateCoordinator', () => {
     const fetchError = new Error('network failure')
 
     beforeEach(() => {
-      mockWeatherService.getProcessedWeatherData = vi
-        .fn()
-        .mockRejectedValue(fetchError)
+      mockWeatherService.getWeatherData = vi.fn().mockRejectedValue(fetchError)
     })
 
     it('calls errorDisplay.show with the weather-update key', async () => {

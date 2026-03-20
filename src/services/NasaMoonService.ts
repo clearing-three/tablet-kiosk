@@ -5,7 +5,10 @@
  * Provides type-safe moon image fetching and error handling.
  */
 
-import type { NasaMoonImage, NasaMoonApiResponse } from '../types/nasa.types'
+import type {
+  NasaMoonImage,
+  NasaMoonApiResponse,
+} from '../types/nasa-api.types'
 
 export class NasaMoonService {
   static readonly Errors = {

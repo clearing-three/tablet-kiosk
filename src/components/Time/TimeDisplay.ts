@@ -7,6 +7,7 @@
 
 import { formatCurrentTime, formatCurrentDate } from '../../utils/formatters'
 import { getElement } from '../../utils/dom'
+import { DOM_IDS } from '../../utils/constants'
 
 export class TimeDisplay {
   private elements: {
@@ -25,8 +26,8 @@ export class TimeDisplay {
    */
   private initializeElements() {
     return {
-      time: getElement('time'),
-      date: getElement('date'),
+      time: getElement(DOM_IDS.TIME),
+      date: getElement(DOM_IDS.DATE),
     }
   }
 

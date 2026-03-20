@@ -3,11 +3,9 @@ import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
 import { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
 import { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
 import { TimeDisplay } from '../../src/components/Time/TimeDisplay'
-import type { WeatherService } from '../../src/services/WeatherService'
 
 describe('ComponentFactory', () => {
   let factory: ComponentFactory
-  let mockWeatherService: WeatherService
 
   beforeEach(() => {
     document.body.innerHTML = `
@@ -39,8 +37,7 @@ describe('ComponentFactory', () => {
       <div id="date"></div>
     `
 
-    mockWeatherService = {} as WeatherService
-    factory = new ComponentFactory(mockWeatherService)
+    factory = new ComponentFactory()
   })
 
   describe('createWeatherDisplay()', () => {

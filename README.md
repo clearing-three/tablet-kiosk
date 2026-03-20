@@ -15,7 +15,7 @@ Edit `.env.local` and set OpenWeatherMap API key and coordinates.
 ### Initialization
 
 ```bash
-nvm use
+fnm use
 npm ci
 ```
 

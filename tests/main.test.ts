@@ -5,7 +5,7 @@ import type { DOMValidator } from '../src/core/DOMValidator'
 import type { AssetValidator } from '../src/core/AssetValidator'
 import type { UpdateScheduler } from '../src/core/UpdateScheduler'
 import type { WeatherUpdateCoordinator } from '../src/core/WeatherUpdateCoordinator'
-import type { TimeDisplay } from '../src/components/Time/TimeDisplay'
+import type { TimeController } from '../src/controllers/TimeController'
 import type { NasaMoonDisplay } from '../src/components/Astronomy/NasaMoonDisplay'
 import type { ErrorDisplay } from '../src/components/ErrorDisplay'
 
@@ -14,9 +14,9 @@ describe('TabletKioskApp', () => {
   let mockAssetValidator: Pick<AssetValidator, 'validateAll'>
   let mockWeatherCoordinator: Pick<WeatherUpdateCoordinator, 'update'>
   let mockWeatherScheduler: Pick<UpdateScheduler, 'start' | 'stop'>
-  let mockTimeDisplay: Pick<
-    TimeDisplay,
-    'startUpdates' | 'updateDisplay' | 'destroy'
+  let mockTimeController: Pick<
+    TimeController,
+    'start' | 'updateDisplay' | 'destroy'
   >
   let mockNasaMoonDisplay: Pick<NasaMoonDisplay, 'startUpdates' | 'destroy'>
   let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
@@ -27,7 +27,7 @@ describe('TabletKioskApp', () => {
       mockAssetValidator as AssetValidator,
       mockWeatherCoordinator as WeatherUpdateCoordinator,
       mockWeatherScheduler as UpdateScheduler,
-      mockTimeDisplay as TimeDisplay,
+      mockTimeController as TimeController,
       mockNasaMoonDisplay as NasaMoonDisplay,
       mockErrorDisplay as ErrorDisplay
     )
@@ -47,8 +47,8 @@ describe('TabletKioskApp', () => {
       start: vi.fn(),
       stop: vi.fn(),
     }
-    mockTimeDisplay = {
-      startUpdates: vi.fn(),
+    mockTimeController = {
+      start: vi.fn(),
       updateDisplay: vi.fn(),
       destroy: vi.fn(),
     }
@@ -87,10 +87,10 @@ describe('TabletKioskApp', () => {
       )
     })
 
-    it('starts time display updates', async () => {
+    it('starts time controller', async () => {
       await makeApp().initialize()
 
-      expect(mockTimeDisplay.startUpdates).toHaveBeenCalledOnce()
+      expect(mockTimeController.start).toHaveBeenCalledOnce()
     })
 
     it('starts NASA moon updates', async () => {
@@ -103,27 +103,6 @@ describe('TabletKioskApp', () => {
       await makeApp().initialize()
 
       expect(mockWeatherScheduler.start).toHaveBeenCalledOnce()
-    })
-
-    it('wires onError to show a clock-update error bar', async () => {
-      await makeApp().initialize()
-
-      const [onError] = (mockTimeDisplay.startUpdates as Mock).mock
-        .calls[0] as [(error: unknown) => void]
-      const err = new Error('clock error')
-      onError(err)
-
-      expect(mockErrorDisplay.show).toHaveBeenCalledWith('clock-update', err)
-    })
-
-    it('wires onSuccess to remove the clock-update error bar', async () => {
-      await makeApp().initialize()
-
-      const [, onSuccess] = (mockTimeDisplay.startUpdates as Mock).mock
-        .calls[0] as [unknown, () => void]
-      onSuccess()
-
-      expect(mockErrorDisplay.remove).toHaveBeenCalledWith('clock-update')
     })
 
     it('wires onError to show a nasa-moon error bar', async () => {
@@ -155,10 +134,10 @@ describe('TabletKioskApp', () => {
       expect(mockWeatherScheduler.stop).toHaveBeenCalledOnce()
     })
 
-    it('destroys the time display', () => {
+    it('destroys the time controller', () => {
       makeApp().destroy()
 
-      expect(mockTimeDisplay.destroy).toHaveBeenCalledOnce()
+      expect(mockTimeController.destroy).toHaveBeenCalledOnce()
     })
 
     it('destroys the NASA moon component', () => {
@@ -178,7 +157,7 @@ describe('TabletKioskApp', () => {
     it('updates the time display', async () => {
       await makeApp().refresh()
 
-      expect(mockTimeDisplay.updateDisplay).toHaveBeenCalledOnce()
+      expect(mockTimeController.updateDisplay).toHaveBeenCalledOnce()
     })
   })
 })

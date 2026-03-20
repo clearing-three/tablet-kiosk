@@ -26,7 +26,7 @@ import { DOM_IDS } from './utils/constants'
 
 // Components
 import { ErrorDisplay } from './components/ErrorDisplay'
-import { TimeDisplay } from './components/Time/TimeDisplay'
+import { TimeView } from './components/Time/TimeView'
 import { NasaMoonDisplay } from './components/Astronomy/NasaMoonDisplay'
 
 // Core
@@ -35,6 +35,9 @@ import { AssetValidator } from './core/AssetValidator'
 import { ComponentFactory } from './core/ComponentFactory'
 import { UpdateScheduler } from './core/UpdateScheduler'
 import { WeatherUpdateCoordinator } from './core/WeatherUpdateCoordinator'
+
+// Controllers
+import { TimeController } from './controllers/TimeController'
 
 // Types
 import { DEFAULT_APP_CONFIG } from './types/app.types'
@@ -45,7 +48,7 @@ export class TabletKioskApp {
     private readonly assetValidator: AssetValidator,
     private readonly weatherCoordinator: WeatherUpdateCoordinator,
     private readonly weatherScheduler: UpdateScheduler,
-    private readonly timeDisplay: TimeDisplay,
+    private readonly timeController: TimeController,
     private readonly nasaMoonDisplay: NasaMoonDisplay,
     private readonly errorDisplay: ErrorDisplay
   ) {}
@@ -61,13 +64,7 @@ export class TabletKioskApp {
     this.validateAssetsAsync()
     preloadAssets()
 
-    this.timeDisplay.startUpdates(
-      error => {
-        console.error('Time display error:', error)
-        this.errorDisplay.show('clock-update', error)
-      },
-      () => this.errorDisplay.remove('clock-update')
-    )
+    this.timeController.start()
     this.nasaMoonDisplay.startUpdates(
       error => {
         console.error('NASA moon error:', error)
@@ -92,13 +89,13 @@ export class TabletKioskApp {
 
   destroy(): void {
     this.weatherScheduler.stop()
-    this.timeDisplay.destroy()
+    this.timeController.destroy()
     this.nasaMoonDisplay.destroy()
   }
 
   async refresh(): Promise<void> {
     await this.weatherCoordinator.update()
-    this.timeDisplay.updateDisplay()
+    this.timeController.updateDisplay()
   }
 }
 
@@ -112,7 +109,9 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const weatherDisplay = componentFactory.createWeatherDisplay()
   const weatherForecast = componentFactory.createWeatherForecast()
   const astronomyTimes = componentFactory.createAstronomyTimes()
-  const timeDisplay = componentFactory.createTimeDisplay()
+
+  const timeView = new TimeView()
+  const timeController = new TimeController(timeView, errorDisplay)
 
   const nasaMoonService = new NasaMoonService()
   const nasaMoonDisplay = new NasaMoonDisplay(nasaMoonService)
@@ -133,7 +132,7 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     new AssetValidator(),
     weatherCoordinator,
     weatherScheduler,
-    timeDisplay,
+    timeController,
     nasaMoonDisplay,
     errorDisplay
   )

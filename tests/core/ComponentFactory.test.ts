@@ -2,7 +2,6 @@ import { ComponentFactory } from '../../src/core/ComponentFactory'
 import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
 import { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
 import { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
-import { TimeDisplay } from '../../src/components/Time/TimeDisplay'
 
 describe('ComponentFactory', () => {
   let factory: ComponentFactory
@@ -73,16 +72,6 @@ describe('ComponentFactory', () => {
       expect(factory.createAstronomyTimes()).not.toBe(
         factory.createAstronomyTimes()
       )
-    })
-  })
-
-  describe('createTimeDisplay()', () => {
-    it('returns a TimeDisplay instance', () => {
-      expect(factory.createTimeDisplay()).toBeInstanceOf(TimeDisplay)
-    })
-
-    it('returns a new instance on each call', () => {
-      expect(factory.createTimeDisplay()).not.toBe(factory.createTimeDisplay())
     })
   })
 })

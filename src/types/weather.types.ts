@@ -88,10 +88,6 @@ export const WeatherDataSchema = z.object({
 })
 
 export type WeatherData = z.infer<typeof WeatherDataSchema>
-export type WeatherCondition = z.infer<typeof WeatherConditionSchema>
-export type DailyTemperature = z.infer<typeof DailyTemperatureSchema>
-export type DailyFeelsLike = z.infer<typeof DailyFeelsLikeSchema>
-export type CurrentWeather = z.infer<typeof CurrentWeatherSchema>
 export type DailyWeather = z.infer<typeof DailyWeatherSchema>
 
 // Simplified weather data for component consumption

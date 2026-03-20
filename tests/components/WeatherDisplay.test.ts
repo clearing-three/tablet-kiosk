@@ -3,39 +3,26 @@
  *
  * Tests for WeatherDisplay component covering:
  * - DOM updates with weather data
- * - Icon loading and display
- * - Temperature and description rendering
- * - Error state handling
+ * - Temperature rendering
  */
 
-import type { Mock } from 'vitest'
 import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
-import { WeatherService } from '../../src/services/WeatherService'
 import type { ProcessedWeatherData } from '../../src/types/weather.types'
 
 describe('WeatherDisplay', () => {
   let weatherDisplay: WeatherDisplay
-  let mockWeatherService: Pick<WeatherService, 'mapIconCodeToSVG'>
   let mockCurrentWeather: ProcessedWeatherData['current']
 
   beforeEach(() => {
     document.body.innerHTML = `
-      <object id="weather-icon"></object>
       <div id="temp-now"></div>
       <div id="feels-like"></div>
       <span id="wind-direction"></span>
-      <span id="wind-speed"></span>
-      <div id="weather-desc"></div>
+      <div id="wind-speed"></div>
       <div id="weather-range"></div>
     `
 
-    mockWeatherService = {
-      mapIconCodeToSVG: vi.fn().mockReturnValue('clear-day'),
-    }
-
-    weatherDisplay = new WeatherDisplay(
-      mockWeatherService as unknown as WeatherService
-    )
+    weatherDisplay = new WeatherDisplay()
 
     mockCurrentWeather = {
       temperature: 75,
@@ -53,14 +40,11 @@ describe('WeatherDisplay', () => {
     it('should update all display elements when updateDisplay is called', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('75°')
-      expect(document.getElementById('feels-like')!.textContent).toBe('72°')
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'clear sky'
-      )
+      expect(document.getElementById('temp-now')!.textContent).toBe('75')
+      expect(document.getElementById('feels-like')!.textContent).toBe('72')
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58')
     })
 
     it('should update elements with different weather data', () => {
@@ -75,17 +59,13 @@ describe('WeatherDisplay', () => {
         windDirection: 'W',
         windGust: 19,
       }
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('rain')
 
       weatherDisplay.updateDisplay(rainyWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('45°')
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'heavy intensity rain'
-      )
+      expect(document.getElementById('temp-now')!.textContent).toBe('45')
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('52°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('38°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('52')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('38')
     })
 
     it('should overwrite previous display values on subsequent calls', () => {
@@ -103,88 +83,26 @@ describe('WeatherDisplay', () => {
       }
       weatherDisplay.updateDisplay(updatedWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('60°')
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'overcast clouds'
-      )
+      expect(document.getElementById('temp-now')!.textContent).toBe('60')
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('65°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('50°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('65')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('50')
     })
   })
 
-  describe('Icon loading and display', () => {
-    it('should set the icon data attribute to the mapped SVG path', () => {
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue(
-        'clear-day'
-      )
-
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      const icon = document.getElementById('weather-icon') as HTMLObjectElement
-      expect(icon.data).toContain('weather-icons/clear-day.svg')
-    })
-
-    it('should set the icon alt attribute to the weather description', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      const icon = document.getElementById('weather-icon') as HTMLObjectElement
-      expect(icon.getAttribute('alt')).toBe('clear sky')
-    })
-
-    it('should call mapIconCodeToSVG with the correct icon code', () => {
-      weatherDisplay.updateDisplay(mockCurrentWeather)
-
-      expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('01d')
-    })
-
-    it('should update icon data and alt correctly for a different icon code', () => {
-      const snowWeather: ProcessedWeatherData['current'] = {
-        temperature: 28,
-        feelsLike: 20,
-        description: 'heavy snow',
-        iconCode: '13d',
-        minTemp: 18,
-        maxTemp: 32,
-        windSpeed: 9,
-        windDirection: 'N',
-      }
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockReturnValue('snow')
-
-      weatherDisplay.updateDisplay(snowWeather)
-
-      const icon = document.getElementById('weather-icon') as HTMLObjectElement
-      expect(icon.data).toContain('weather-icons/snow.svg')
-      expect(icon.getAttribute('alt')).toBe('heavy snow')
-    })
-  })
-
-  describe('Temperature and description rendering', () => {
+  describe('Temperature rendering', () => {
     it('should render temperature with a degree symbol', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('75°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('75')
     })
 
     it('should render temperature range with styled high/low spans', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58°')
-    })
-
-    it('should render the weather description exactly as provided', () => {
-      const detailedDesc: ProcessedWeatherData['current'] = {
-        ...mockCurrentWeather,
-        description: 'thunderstorm with heavy rain',
-      }
-
-      weatherDisplay.updateDisplay(detailedDesc)
-
-      expect(document.getElementById('weather-desc')!.textContent).toBe(
-        'thunderstorm with heavy rain'
-      )
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('58')
     })
 
     it('should handle negative temperatures', () => {
@@ -201,10 +119,10 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(coldWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('-15°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('-15')
       const rangeEl = document.getElementById('weather-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-8°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-28°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-8')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-28')
     })
 
     it('should handle zero temperature', () => {
@@ -221,7 +139,7 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(freezingWeather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('0°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('0')
     })
   })
 
@@ -229,7 +147,7 @@ describe('WeatherDisplay', () => {
     it('should render feels-like temperature with degree symbol', () => {
       weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(document.getElementById('feels-like')!.textContent).toBe('72°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('72')
     })
 
     it('should render feels-like independently of current temperature', () => {
@@ -241,8 +159,8 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(weather)
 
-      expect(document.getElementById('temp-now')!.textContent).toBe('90°')
-      expect(document.getElementById('feels-like')!.textContent).toBe('98°')
+      expect(document.getElementById('temp-now')!.textContent).toBe('90')
+      expect(document.getElementById('feels-like')!.textContent).toBe('98')
     })
 
     it('should handle negative feels-like temperature', () => {
@@ -253,7 +171,7 @@ describe('WeatherDisplay', () => {
 
       weatherDisplay.updateDisplay(weather)
 
-      expect(document.getElementById('feels-like')!.textContent).toBe('-10°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('-10')
     })
 
     it('should overwrite previous feels-like value on subsequent calls', () => {
@@ -265,20 +183,58 @@ describe('WeatherDisplay', () => {
       }
       weatherDisplay.updateDisplay(updated)
 
-      expect(document.getElementById('feels-like')!.textContent).toBe('85°')
+      expect(document.getElementById('feels-like')!.textContent).toBe('85')
     })
   })
 
-  describe('Error propagation', () => {
-    it('should throw when updateDisplay encounters an error', () => {
-      const thrownError = new Error('Icon mapping failed')
-      ;(mockWeatherService.mapIconCodeToSVG as Mock).mockImplementation(() => {
-        throw thrownError
-      })
+  describe('Wind display', () => {
+    it('should display wind speed without gust', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
 
-      expect(() => weatherDisplay.updateDisplay(mockCurrentWeather)).toThrow(
-        thrownError
-      )
+      const windSpeed = document.getElementById('wind-speed')!
+      expect(windSpeed.textContent).toBe('5')
+      expect(windSpeed.querySelector('.wind-gust')).toBeNull()
+    })
+
+    it('should display wind direction', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
+
+      const windDirection = document.getElementById('wind-direction')!
+      expect(windDirection.textContent).toBe('SW')
+    })
+
+    it('should display wind speed with gust using separate element', () => {
+      const gustyWeather: ProcessedWeatherData['current'] = {
+        ...mockCurrentWeather,
+        windGust: 19,
+      }
+
+      weatherDisplay.updateDisplay(gustyWeather)
+
+      const windSpeed = document.getElementById('wind-speed')!
+      const gustElement = windSpeed.querySelector('.wind-gust')
+      expect(gustElement).not.toBeNull()
+      expect(gustElement?.textContent).toBe('19')
+    })
+
+    it('should update wind display on subsequent calls', () => {
+      weatherDisplay.updateDisplay(mockCurrentWeather)
+
+      const updatedWeather: ProcessedWeatherData['current'] = {
+        ...mockCurrentWeather,
+        windSpeed: 12,
+        windDirection: 'NE',
+        windGust: 22,
+      }
+      weatherDisplay.updateDisplay(updatedWeather)
+
+      const windSpeed = document.getElementById('wind-speed')!
+      const windDirection = document.getElementById('wind-direction')!
+      const gustElement = windSpeed.querySelector('.wind-gust')
+
+      expect(windDirection.textContent).toBe('NE')
+      expect(windSpeed.textContent).toContain('12')
+      expect(gustElement?.textContent).toBe('22')
     })
   })
 })

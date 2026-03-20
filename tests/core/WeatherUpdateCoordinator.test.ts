@@ -30,8 +30,6 @@ const mockWeatherData: ProcessedWeatherData = {
   astronomy: {
     sunrise: 1640966400,
     sunset: 1641002400,
-    moonrise: 1640980800,
-    moonset: 1641024000,
     moonPhase: 0.25,
   },
 }

@@ -150,8 +150,6 @@ export class WeatherService {
     const astronomy = {
       sunrise: current.sunrise,
       sunset: current.sunset,
-      moonrise: todaysForecast.moonrise,
-      moonset: todaysForecast.moonset,
       moonPhase: todaysForecast.moon_phase,
     }
 

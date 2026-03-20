@@ -8,7 +8,7 @@ export class ComponentFactory {
   constructor(private readonly weatherService: WeatherService) {}
 
   createWeatherDisplay(): WeatherDisplay {
-    return new WeatherDisplay(this.weatherService)
+    return new WeatherDisplay()
   }
 
   createWeatherForecast(): WeatherForecast {

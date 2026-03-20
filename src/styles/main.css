@@ -12,6 +12,8 @@
   --pad: 2vh;
   --gap-lg: 4vw;
   --gap-md: 2vw;
+  --arrow-right-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-6-6l6 6-6 6" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  --person-icon-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="3" fill="black"/><path d="M12 12c-4 0-7 2-7 4.5v2.5h14v-2.5c0-2.5-3-4.5-7-4.5z" fill="black"/></svg>');
 }
 
 *,
@@ -72,7 +74,8 @@ body,
   align-items: center;
   padding: var(--pad);
   position: relative;
-  margin-left: -3vw;
+  margin-left: 0;
+  gap: 2vh;
 }
 
 /* ---------- Left Section: Astro Times & Moon Phase ---------- */
@@ -117,12 +120,9 @@ body,
   color: var(--fg-sun);
 }
 
-.moon-time span {
-  color: var(--fg-moon);
-}
-
 #moon-phase {
   text-align: center;
+  align-self: flex-end;
 }
 
 #moon-phase-render {
@@ -139,40 +139,89 @@ body,
   height: auto;
   display: block;
   object-fit: contain;
+  transform: scale(1.6);
 }
 
 /* ---------- Right Section: Time, Weather & Forecast ---------- */
+
+/* Section containers */
+.section-time,
+.section-date-sun,
+.section-weather,
+.section-forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.section-date-sun {
+  transform: scale(1.2);
+}
+
+.section-forecast {
+  margin-top: auto;
+}
+
 #time {
-  font-size: 18vh;
+  font-size: 19.8vh;
   font-weight: 300;
-  margin-bottom: 0.5vh;
   color: var(--fg-primary);
 }
 
 #date {
-  font-size: 3.5vh;
+  font-size: 3.85vh;
   font-weight: 300;
   color: var(--fg-secondary);
-  margin-bottom: 1vh;
 }
 
-#weather {
+#sun-times {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 1vh;
+  font-size: 2.8vh;
+  font-weight: 300;
+  margin-top: 1vh;
 }
 
-#weather-icon {
-  width: 15vh;
-  height: 15vh;
-  margin-bottom: -2vh;
+.sun-icon {
+  width: 3.2vh;
+  height: 3.2vh;
+  display: block;
+}
+
+#sun-times #sunrise-time,
+#sun-times #sunset-time {
+  color: var(--fg-sun);
+}
+
+#sunrise-time::before {
+  content: '↑';
+  color: #ffa500;
+  font-size: 1.15em;
+  font-weight: 500;
+  margin-right: 0.3em;
+}
+
+#sunset-time::before {
+  content: '↓';
+  color: #ff6b35;
+  font-size: 1.15em;
+  font-weight: 500;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+}
+
+.section-weather {
+  gap: 1vh;
+  margin: auto 0;
+  transform: scale(1.2) translateY(2vh);
 }
 
 #temp-row {
   display: flex;
   align-items: center;
-  gap: 1.2vh;
-  margin-top: -2vh;
+  gap: 1.5vh;
 }
 
 #temp-now {
@@ -181,10 +230,36 @@ body,
   color: var(--fg-tertiary);
 }
 
+#feels-like-display {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+  font-size: 4vh;
+}
+
+#feels-like-display::before {
+  content: '';
+  display: block;
+  width: 0.15vh;
+  height: 1.2em;
+  background-color: var(--fg-feels-like);
+  opacity: 0.5;
+}
+
 #feels-like {
-  font-size: 5.8vh;
   font-weight: 300;
   color: var(--fg-feels-like);
+}
+
+#feels-like::before {
+  content: '';
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.4em;
+  background-color: var(--fg-feels-like);
+  mask: var(--person-icon-svg) center/contain no-repeat;
+  vertical-align: -0.1em;
 }
 
 #wind-display {
@@ -212,15 +287,23 @@ body,
   font-weight: 300;
 }
 
-#feels-like::before {
-  content: '∼';
+.wind-gust::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin: 0 0.3em;
+  background-color: currentcolor;
+  vertical-align: -0.15em;
+  mask: var(--arrow-right-svg) center/contain no-repeat;
 }
 
-#weather-desc {
-  font-size: 3.5vh;
+.wind-gust {
   color: var(--fg-secondary);
-  margin-top: 0.5vh;
-  margin-bottom: 2vh;
+}
+
+.temperature::after {
+  content: '°';
 }
 
 #weather-range {
@@ -245,26 +328,20 @@ body,
   color: #6ab0f5;
 }
 
-#forecast-spacer {
-  flex: 1;
-  max-height: 8vh;
-}
-
 #forecast {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 15vh;
   width: 100%;
 }
 
 .forecast-day {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 3vh;
   opacity: 0.95;
   text-align: center;
-  max-width: 33.33%;
 }
 
 .forecast-day .forecast-icon {
@@ -296,12 +373,6 @@ body,
 
 .moonback {
   fill: #111;
-}
-
-/* ---------- Legacy Color Styles ---------- */
-#sunrise-time,
-#sunset-time {
-  color: var(--fg-sun);
 }
 
 /* ---------- Error Display ---------- */

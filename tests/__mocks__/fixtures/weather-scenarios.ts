@@ -87,8 +87,6 @@ function generateFourDayForecast(
       dt: timestamp,
       sunrise: baseDay.sunrise + dayOffset,
       sunset: baseDay.sunset + dayOffset,
-      moonrise: baseDay.moonrise + dayOffset,
-      moonset: baseDay.moonset + dayOffset,
       moon_phase: (baseDay.moon_phase + i * 0.125) % 1, // Gradual moon phase change
       temp: {
         day: baseDay.temp.day + tempAdjustment,
@@ -157,8 +155,6 @@ export const clearSunnyDay: WeatherData = {
       dt: 1640995200,
       sunrise: 1640966400,
       sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
       moon_phase: 0.0,
       temp: {
         day: 75.2,
@@ -228,8 +224,6 @@ export const rainyStormyDay: WeatherData = {
       dt: 1640995200,
       sunrise: 1640966400,
       sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
       moon_phase: 0.25,
       temp: {
         day: 45.7,
@@ -298,8 +292,6 @@ export const snowyWinterDay: WeatherData = {
       dt: 1640995200,
       sunrise: 1640966400,
       sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
       moon_phase: 0.75,
       temp: {
         day: 28.4,
@@ -347,8 +339,6 @@ export const extremeHeat: WeatherData = {
       dt: 1640995200,
       sunrise: 1640966400,
       sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
       moon_phase: 0.5,
       temp: {
         day: 115.7,
@@ -404,8 +394,6 @@ export const extremeCold: WeatherData = {
       dt: 1640995200,
       sunrise: 1640966400,
       sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
       moon_phase: 0.75,
       temp: {
         day: -15.2,
@@ -447,8 +435,6 @@ export const multiDayForecast: WeatherData = {
       dt: 1640995200,
       sunrise: 1640966400,
       sunset: 1641002400,
-      moonrise: 1640980800,
-      moonset: 1641024000,
       moon_phase: 0.0,
       temp: {
         day: 75.2,
@@ -482,8 +468,6 @@ export const missingMoonData: WeatherData = {
   ...clearSunnyDay,
   daily: clearSunnyDay.daily.map(day => ({
     ...day,
-    moonrise: 0, // No moonrise that day
-    moonset: 0, // No moonset that day
   })),
 }
 

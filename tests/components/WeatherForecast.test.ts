@@ -2,7 +2,7 @@
  * WeatherForecast Component Tests (3.5.2)
  *
  * Tests for WeatherForecast component covering:
- * - Forecast list generation
+ * - Forecast list generation (2-day forecast)
  * - Correct number of forecast days
  * - Proper date formatting for each day
  */
@@ -55,7 +55,22 @@ describe('WeatherForecast', () => {
   let mockWeatherService: Pick<WeatherService, 'mapIconCodeToSVG'>
 
   beforeEach(() => {
-    document.body.innerHTML = '<div id="forecast"></div>'
+    document.body.innerHTML = `
+      <div id="forecast">
+        <div id="forecast-day-1" class="forecast-day">
+          <div class="forecast-day-name"></div>
+          <object type="image/svg+xml" class="forecast-icon"></object>
+          <div class="forecast-desc"></div>
+          <div class="forecast-range"></div>
+        </div>
+        <div id="forecast-day-2" class="forecast-day">
+          <div class="forecast-day-name"></div>
+          <object type="image/svg+xml" class="forecast-icon"></object>
+          <div class="forecast-desc"></div>
+          <div class="forecast-range"></div>
+        </div>
+      </div>
+    `
 
     mockWeatherService = {
       mapIconCodeToSVG: vi.fn().mockReturnValue('clear-day'),
@@ -67,13 +82,13 @@ describe('WeatherForecast', () => {
   })
 
   describe('Constructor', () => {
-    it('should throw when #forecast element is not in the DOM', () => {
+    it('should throw when forecast day elements are not in the DOM', () => {
       document.body.innerHTML = ''
 
       expect(
         () =>
           new WeatherForecast(mockWeatherService as unknown as WeatherService)
-      ).toThrow('WeatherForecast: required element #forecast not found in DOM')
+      ).toThrow('Required DOM element not found: #forecast-day-1')
     })
 
     it('should construct successfully when #forecast element is present', () => {
@@ -89,7 +104,7 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(THREE_DAYS)
 
       const days = document.querySelectorAll('.forecast-day')
-      expect(days).toHaveLength(3)
+      expect(days).toHaveLength(2)
     })
 
     it('should render the day name in each forecast-day element', () => {
@@ -98,7 +113,6 @@ describe('WeatherForecast', () => {
       const dayNames = document.querySelectorAll('.forecast-day-name')
       expect(dayNames[0].textContent).toBe('Mon')
       expect(dayNames[1].textContent).toBe('Tue')
-      expect(dayNames[2].textContent).toBe('Wed')
     })
 
     it('should render the description in each forecast-day element', () => {
@@ -107,26 +121,22 @@ describe('WeatherForecast', () => {
       const descs = document.querySelectorAll('.forecast-desc')
       expect(descs[0].textContent).toBe('clear sky')
       expect(descs[1].textContent).toBe('few clouds')
-      expect(descs[2].textContent).toBe('light rain')
     })
 
     it('should render the temperature range in each forecast-day element', () => {
       weatherForecast.updateForecast(THREE_DAYS)
 
       const ranges = document.querySelectorAll('.forecast-range')
-      expect(ranges[0].querySelector('.temp-high')?.textContent).toBe('75°')
-      expect(ranges[0].querySelector('.temp-low')?.textContent).toBe('58°')
-      expect(ranges[1].querySelector('.temp-high')?.textContent).toBe('70°')
-      expect(ranges[1].querySelector('.temp-low')?.textContent).toBe('55°')
-      expect(ranges[2].querySelector('.temp-high')?.textContent).toBe('62°')
-      expect(ranges[2].querySelector('.temp-low')?.textContent).toBe('50°')
+      expect(ranges[0].querySelector('.temp-high')?.textContent).toBe('75')
+      expect(ranges[0].querySelector('.temp-low')?.textContent).toBe('58')
+      expect(ranges[1].querySelector('.temp-high')?.textContent).toBe('70')
+      expect(ranges[1].querySelector('.temp-low')?.textContent).toBe('55')
     })
 
     it('should set the icon SVG path using the mapped icon code', () => {
       ;(mockWeatherService.mapIconCodeToSVG as Mock)
         .mockReturnValueOnce('clear-day')
         .mockReturnValueOnce('partly-cloudy')
-        .mockReturnValueOnce('rain')
 
       weatherForecast.updateForecast(THREE_DAYS)
 
@@ -137,9 +147,6 @@ describe('WeatherForecast', () => {
       expect((icons[1] as HTMLObjectElement).data).toContain(
         'weather-icons/partly-cloudy.svg'
       )
-      expect((icons[2] as HTMLObjectElement).data).toContain(
-        'weather-icons/rain.svg'
-      )
     })
 
     it('should call mapIconCodeToSVG with the correct icon code for each day', () => {
@@ -147,26 +154,33 @@ describe('WeatherForecast', () => {
 
       expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('01d')
       expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('02d')
-      expect(mockWeatherService.mapIconCodeToSVG).toHaveBeenCalledWith('10d')
     })
 
-    it('should clear previous forecast before rendering new one', () => {
+    it('should update previous forecast with new data', () => {
       weatherForecast.updateForecast(THREE_DAYS)
-      expect(document.querySelectorAll('.forecast-day')).toHaveLength(3)
+      const firstDayName =
+        document.querySelector('.forecast-day-name')?.textContent
+      expect(firstDayName).toBe('Mon')
 
-      weatherForecast.updateForecast([makeForecastDay()])
-      expect(document.querySelectorAll('.forecast-day')).toHaveLength(1)
+      const newForecast = [
+        makeForecastDay({ dayName: 'Sat' }),
+        makeForecastDay({ dayName: 'Sun' }),
+      ]
+      weatherForecast.updateForecast(newForecast)
+      const updatedDayName =
+        document.querySelector('.forecast-day-name')?.textContent
+      expect(updatedDayName).toBe('Sat')
     })
   })
 
   describe('Correct number of forecast days', () => {
-    it('should display all 3 days when given exactly 3', () => {
+    it('should display only 2 days when given 3 or more', () => {
       weatherForecast.updateForecast(THREE_DAYS)
 
-      expect(getForecastDays()).toHaveLength(3)
+      expect(getForecastDays()).toHaveLength(2)
     })
 
-    it('should display only 3 days when given more than 3', () => {
+    it('should display only 2 days when given more than 2', () => {
       const fiveDays = [
         ...THREE_DAYS,
         makeForecastDay({ dayName: 'Thu' }),
@@ -175,19 +189,20 @@ describe('WeatherForecast', () => {
 
       weatherForecast.updateForecast(fiveDays)
 
-      expect(getForecastDays()).toHaveLength(3)
+      expect(getForecastDays()).toHaveLength(2)
     })
 
-    it('should display 1 day when given only 1', () => {
-      weatherForecast.updateForecast([makeForecastDay()])
+    it('should update only first day when given only 1', () => {
+      weatherForecast.updateForecast([makeForecastDay({ dayName: 'Thu' })])
 
-      expect(getForecastDays()).toHaveLength(1)
+      const dayNames = document.querySelectorAll('.forecast-day-name')
+      expect(dayNames[0].textContent).toBe('Thu')
     })
 
     it('should report the correct count via getForecastDayCount', () => {
       weatherForecast.updateForecast(THREE_DAYS)
 
-      expect(weatherForecast.getForecastDayCount()).toBe(3)
+      expect(weatherForecast.getForecastDayCount()).toBe(2)
     })
   })
 
@@ -204,7 +219,6 @@ describe('WeatherForecast', () => {
       const dayNames = document.querySelectorAll('.forecast-day-name')
       expect(dayNames[0].textContent).toBe('Monday')
       expect(dayNames[1].textContent).toBe('Tuesday')
-      expect(dayNames[2].textContent).toBe('Wednesday')
     })
 
     it('should format temperature ranges with styled high/low spans', () => {
@@ -213,8 +227,8 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('82')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61')
     })
 
     it('should round fractional temperatures in the range display', () => {
@@ -223,8 +237,8 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('79°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('79')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('61')
     })
 
     it('should handle negative temperatures in the range display', () => {
@@ -233,8 +247,8 @@ describe('WeatherForecast', () => {
       weatherForecast.updateForecast(days)
 
       const rangeEl = document.querySelector('.forecast-range')!
-      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-5°')
-      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-18°')
+      expect(rangeEl.querySelector('.temp-high')?.textContent).toBe('-5')
+      expect(rangeEl.querySelector('.temp-low')?.textContent).toBe('-18')
     })
   })
 
@@ -256,6 +270,19 @@ describe('WeatherForecast', () => {
 
       expect(() => weatherForecast.updateForecast(invalid)).toThrow(
         'Invalid forecast day data'
+      )
+    })
+
+    it.each([
+      '.forecast-day-name',
+      '.forecast-icon',
+      '.forecast-desc',
+      '.forecast-range',
+    ])('should throw when %s is missing', selector => {
+      document.querySelector(selector)?.remove()
+
+      expect(() => weatherForecast.updateForecast(THREE_DAYS)).toThrow(
+        'Forecast day element is missing required child elements'
       )
     })
 

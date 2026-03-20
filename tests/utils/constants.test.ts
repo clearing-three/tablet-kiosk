@@ -192,17 +192,13 @@ describe('constants', () => {
     })
 
     it('should have all required weather element IDs', () => {
-      expect(DOM_IDS.WEATHER_ICON).toBe('weather-icon')
       expect(DOM_IDS.TEMP_NOW).toBe('temp-now')
-      expect(DOM_IDS.WEATHER_DESC).toBe('weather-desc')
       expect(DOM_IDS.WEATHER_RANGE).toBe('weather-range')
     })
 
     it('should have all required astronomy element IDs', () => {
       expect(DOM_IDS.SUNRISE_TIME).toBe('sunrise-time')
       expect(DOM_IDS.SUNSET_TIME).toBe('sunset-time')
-      expect(DOM_IDS.MOONRISE_TIME).toBe('moonrise-time')
-      expect(DOM_IDS.MOONSET_TIME).toBe('moonset-time')
     })
 
     it('should have all required moon phase element IDs', () => {
@@ -219,7 +215,7 @@ describe('constants', () => {
 
     it('should have kebab-case ID values', () => {
       Object.values(DOM_IDS).forEach(id => {
-        expect(id).toMatch(/^[a-z]+(-[a-z]+)*$/)
+        expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
       })
     })
 

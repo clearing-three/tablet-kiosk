@@ -345,8 +345,8 @@ body,
 }
 
 .forecast-day .forecast-icon {
-  width: 11vh;
-  height: 11vh;
+  width: 8vh;
+  height: 8vh;
   margin-bottom: 0.5vh;
   pointer-events: none;
 }

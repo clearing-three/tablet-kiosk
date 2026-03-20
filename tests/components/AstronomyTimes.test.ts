@@ -68,44 +68,4 @@ describe('AstronomyTimes', () => {
       )
     })
   })
-
-  describe('data validation and error propagation', () => {
-    it('should throw with a descriptive message when data is null', () => {
-      expect(() =>
-        astronomyTimes.updateTimes(null as unknown as AstronomyData)
-      ).toThrow('Astronomy data is null or undefined')
-    })
-
-    it('should throw with a descriptive message when a field is not a number', () => {
-      expect(() =>
-        astronomyTimes.updateTimes({
-          ...mockData,
-          sunrise: 'invalid' as unknown as number,
-        })
-      ).toThrow('Invalid astronomy data: sunrise is not a number')
-    })
-
-    it('should throw with a descriptive message when sunrise is zero or negative', () => {
-      expect(() =>
-        astronomyTimes.updateTimes({ ...mockData, sunrise: 0 })
-      ).toThrow('Invalid astronomy data: sunrise or sunset is zero or negative')
-    })
-
-    it('should throw with a descriptive message when sunset is zero or negative', () => {
-      expect(() =>
-        astronomyTimes.updateTimes({ ...mockData, sunset: 0 })
-      ).toThrow('Invalid astronomy data: sunrise or sunset is zero or negative')
-    })
-  })
-
-  describe('getCurrentDisplayValues', () => {
-    it('should return current DOM values after update', () => {
-      astronomyTimes.updateTimes(mockData)
-
-      const values = astronomyTimes.getCurrentDisplayValues()
-
-      expect(values.sunrise).toBe(formatTimeFromUnix(SUNRISE))
-      expect(values.sunset).toBe(formatTimeFromUnix(SUNSET))
-    })
-  })
 })

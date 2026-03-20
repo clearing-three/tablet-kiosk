@@ -5,8 +5,16 @@
  * and related astronomical data used throughout the application.
  */
 
+import { z } from 'zod'
+
 // Solar times (sunrise and sunset) for a given day
-export interface SolarTimes {
-  sunrise: number // Unix timestamp
-  sunset: number // Unix timestamp
-}
+export const SolarTimesSchema = z
+  .object({
+    sunrise: z.number().positive(),
+    sunset: z.number().positive(),
+  })
+  .refine(data => data.sunrise < data.sunset, {
+    message: 'Sunrise must be before sunset',
+  })
+
+export type SolarTimes = z.infer<typeof SolarTimesSchema>

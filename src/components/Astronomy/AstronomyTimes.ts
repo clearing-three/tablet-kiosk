@@ -45,49 +45,11 @@ export class AstronomyTimes {
   }
 
   /**
-   * Validates astronomy times data. Throws if data is invalid.
-   * @param astronomy Astronomy times data
-   */
-  private validateAstronomyData(astronomy: AstronomyData): void {
-    if (!astronomy) {
-      throw new Error('Astronomy data is null or undefined')
-    }
-
-    const requiredProps = ['sunrise', 'sunset']
-    for (const prop of requiredProps) {
-      if (typeof astronomy[prop as keyof AstronomyData] !== 'number') {
-        throw new Error(`Invalid astronomy data: ${prop} is not a number`)
-      }
-    }
-
-    if (astronomy.sunrise <= 0 || astronomy.sunset <= 0) {
-      throw new Error(
-        'Invalid astronomy data: sunrise or sunset is zero or negative'
-      )
-    }
-  }
-
-  /**
    * Updates all astronomy time displays
    * @param astronomy Astronomy times data
    */
   updateTimes(astronomy: AstronomyData): void {
-    this.validateAstronomyData(astronomy)
     this.updateSunriseTime(astronomy.sunrise)
     this.updateSunsetTime(astronomy.sunset)
-  }
-
-  /**
-   * Gets the current astronomy time values from the DOM
-   * @returns Object with current displayed time values
-   */
-  getCurrentDisplayValues(): {
-    sunrise: string | null
-    sunset: string | null
-  } {
-    return {
-      sunrise: this.elements.sunrise.textContent,
-      sunset: this.elements.sunset.textContent,
-    }
   }
 }

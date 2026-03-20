@@ -88,36 +88,6 @@ export class TimeDisplay {
   }
 
   /**
-   * Gets the current time and date values from the display
-   * @returns Object with current displayed time and date values
-   */
-  getCurrentDisplayValues(): {
-    time: string | null
-    date: string | null
-  } {
-    return {
-      time: this.elements.time.textContent,
-      date: this.elements.date.textContent,
-    }
-  }
-
-  /**
-   * Checks if automatic updates are currently running
-   * @returns boolean True if updates are active
-   */
-  isUpdating(): boolean {
-    return this.updateInterval !== null
-  }
-
-  /**
-   * Gets the current update interval in milliseconds
-   * @returns number Update interval in milliseconds
-   */
-  getUpdateInterval(): number {
-    return this.updateIntervalMs
-  }
-
-  /**
    * Cleanup method to call when component is being destroyed
    */
   destroy(): void {

@@ -115,28 +115,24 @@ describe('TimeDisplay', () => {
 
       expect(document.getElementById('time')!.textContent).toBe('14:32')
     })
-
-    it('should use a 1000ms interval', () => {
-      expect(timeDisplay.getUpdateInterval()).toBe(1000)
-    })
   })
 
   describe('interval management', () => {
-    it('should report isUpdating as false before startUpdates', () => {
-      expect(timeDisplay.isUpdating()).toBe(false)
+    it('should not have active timers before startUpdates', () => {
+      expect(vi.getTimerCount()).toBe(0)
     })
 
-    it('should report isUpdating as true after startUpdates', () => {
+    it('should have active timer after startUpdates', () => {
       timeDisplay.startUpdates()
 
-      expect(timeDisplay.isUpdating()).toBe(true)
+      expect(vi.getTimerCount()).toBe(1)
     })
 
-    it('should report isUpdating as false after stopUpdates', () => {
+    it('should clear timer after stopUpdates', () => {
       timeDisplay.startUpdates()
       timeDisplay.stopUpdates()
 
-      expect(timeDisplay.isUpdating()).toBe(false)
+      expect(vi.getTimerCount()).toBe(0)
     })
 
     it('should stop ticking after stopUpdates', () => {
@@ -166,7 +162,7 @@ describe('TimeDisplay', () => {
       timeDisplay.startUpdates()
       timeDisplay.destroy()
 
-      expect(timeDisplay.isUpdating()).toBe(false)
+      expect(vi.getTimerCount()).toBe(0)
     })
 
     it('should stop ticking after destroy', () => {
@@ -248,24 +244,6 @@ describe('TimeDisplay', () => {
       timeDisplay.startUpdates()
 
       expect(() => vi.advanceTimersByTime(1000)).not.toThrow()
-    })
-  })
-
-  describe('getCurrentDisplayValues', () => {
-    it('should return empty strings before any update', () => {
-      const values = timeDisplay.getCurrentDisplayValues()
-
-      expect(values.time).toBe('')
-      expect(values.date).toBe('')
-    })
-
-    it('should return the current displayed time and date after an update', () => {
-      timeDisplay.updateDisplay()
-
-      const values = timeDisplay.getCurrentDisplayValues()
-
-      expect(values.time).toBe('14:30')
-      expect(values.date).toBe('Friday, February 20')
     })
   })
 })

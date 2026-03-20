@@ -27,7 +27,7 @@ import { DOM_IDS } from './utils/constants'
 // Components
 import { ErrorDisplay } from './components/ErrorDisplay'
 import { TimeView } from './components/Time/TimeView'
-import { NasaMoonDisplay } from './components/Astronomy/NasaMoonDisplay'
+import { MoonView } from './components/Astronomy/MoonView'
 
 // Core
 import { DOMValidator } from './core/DOMValidator'
@@ -38,6 +38,7 @@ import { WeatherUpdateCoordinator } from './core/WeatherUpdateCoordinator'
 
 // Controllers
 import { TimeController } from './controllers/TimeController'
+import { MoonController } from './controllers/MoonController'
 
 // Types
 import { DEFAULT_APP_CONFIG } from './types/app.types'
@@ -49,8 +50,7 @@ export class TabletKioskApp {
     private readonly weatherCoordinator: WeatherUpdateCoordinator,
     private readonly weatherScheduler: UpdateScheduler,
     private readonly timeController: TimeController,
-    private readonly nasaMoonDisplay: NasaMoonDisplay,
-    private readonly errorDisplay: ErrorDisplay
+    private readonly moonController: MoonController
   ) {}
 
   async initialize(): Promise<void> {
@@ -65,13 +65,7 @@ export class TabletKioskApp {
     preloadAssets()
 
     this.timeController.start()
-    this.nasaMoonDisplay.startUpdates(
-      error => {
-        console.error('NASA moon error:', error)
-        this.errorDisplay.show('nasa-moon', error)
-      },
-      () => this.errorDisplay.remove('nasa-moon')
-    )
+    this.moonController.start()
     this.weatherScheduler.start(() => this.weatherCoordinator.update())
   }
 
@@ -90,7 +84,7 @@ export class TabletKioskApp {
   destroy(): void {
     this.weatherScheduler.stop()
     this.timeController.destroy()
-    this.nasaMoonDisplay.destroy()
+    this.moonController.destroy()
   }
 
   async refresh(): Promise<void> {
@@ -114,7 +108,12 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const timeController = new TimeController(timeView, errorDisplay)
 
   const nasaMoonService = new NasaMoonService()
-  const nasaMoonDisplay = new NasaMoonDisplay(nasaMoonService)
+  const moonView = new MoonView()
+  const moonController = new MoonController(
+    moonView,
+    nasaMoonService,
+    errorDisplay
+  )
 
   const weatherCoordinator = new WeatherUpdateCoordinator(
     weatherService,
@@ -133,8 +132,7 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     weatherCoordinator,
     weatherScheduler,
     timeController,
-    nasaMoonDisplay,
-    errorDisplay
+    moonController
   )
 }
 

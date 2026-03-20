@@ -6,82 +6,93 @@
  * daily forecasts, and weather descriptions.
  */
 
+import { z } from 'zod'
+
+const REQUIRED_FORECAST_DAYS = 4
+
 // Individual weather condition object
-export interface WeatherCondition {
-  id: number
-  main: string
-  description: string
-  icon: string
-}
+const WeatherConditionSchema = z.object({
+  id: z.number(),
+  main: z.string(),
+  description: z.string(),
+  icon: z.string(),
+})
 
 // Temperature object for daily forecasts
-export interface DailyTemperature {
-  day: number
-  min: number
-  max: number
-  night: number
-  eve: number
-  morn: number
-}
+const DailyTemperatureSchema = z.object({
+  day: z.number(),
+  min: z.number(),
+  max: z.number(),
+  night: z.number(),
+  eve: z.number(),
+  morn: z.number(),
+})
 
 // Feels like temperature object for daily forecasts
-export interface DailyFeelsLike {
-  day: number
-  night: number
-  eve: number
-  morn: number
-}
+const DailyFeelsLikeSchema = z.object({
+  day: z.number(),
+  night: z.number(),
+  eve: z.number(),
+  morn: z.number(),
+})
 
 // Current weather conditions
-export interface CurrentWeather {
-  dt: number // Unix timestamp
-  sunrise: number // Unix timestamp
-  sunset: number // Unix timestamp
-  temp: number
-  feels_like: number
-  pressure: number
-  humidity: number
-  dew_point: number
-  uvi: number
-  clouds: number
-  visibility: number
-  wind_speed: number
-  wind_deg: number
-  wind_gust?: number
-  weather: WeatherCondition[]
-}
+const CurrentWeatherSchema = z.object({
+  dt: z.number(),
+  sunrise: z.number(),
+  sunset: z.number(),
+  temp: z.number(),
+  feels_like: z.number(),
+  pressure: z.number(),
+  humidity: z.number(),
+  dew_point: z.number(),
+  uvi: z.number(),
+  clouds: z.number(),
+  visibility: z.number(),
+  wind_speed: z.number(),
+  wind_deg: z.number(),
+  wind_gust: z.number().optional(),
+  weather: z.array(WeatherConditionSchema),
+})
 
 // Daily weather forecast
-export interface DailyWeather {
-  dt: number // Unix timestamp
-  sunrise: number // Unix timestamp
-  sunset: number // Unix timestamp
-  moon_phase: number // Moon phase value 0-1
-  temp: DailyTemperature
-  feels_like: DailyFeelsLike
-  pressure: number
-  humidity: number
-  dew_point: number
-  wind_speed: number
-  wind_deg: number
-  wind_gust?: number
-  weather: WeatherCondition[]
-  clouds: number
-  pop: number // Probability of precipitation
-  rain?: number // Rain volume (mm)
-  snow?: number // Snow volume (mm)
-  uvi: number
-}
+const DailyWeatherSchema = z.object({
+  dt: z.number(),
+  sunrise: z.number(),
+  sunset: z.number(),
+  moon_phase: z.number(),
+  temp: DailyTemperatureSchema,
+  feels_like: DailyFeelsLikeSchema,
+  pressure: z.number(),
+  humidity: z.number(),
+  dew_point: z.number(),
+  wind_speed: z.number(),
+  wind_deg: z.number(),
+  wind_gust: z.number().optional(),
+  weather: z.array(WeatherConditionSchema),
+  clouds: z.number(),
+  pop: z.number(),
+  rain: z.number().optional(),
+  snow: z.number().optional(),
+  uvi: z.number(),
+})
 
 // Complete API response structure
-export interface WeatherData {
-  lat: number
-  lon: number
-  timezone: string
-  timezone_offset: number
-  current: CurrentWeather
-  daily: DailyWeather[]
-}
+export const WeatherDataSchema = z.object({
+  lat: z.number(),
+  lon: z.number(),
+  timezone: z.string(),
+  timezone_offset: z.number(),
+  current: CurrentWeatherSchema,
+  daily: z.array(DailyWeatherSchema).min(REQUIRED_FORECAST_DAYS),
+})
+
+export type WeatherData = z.infer<typeof WeatherDataSchema>
+export type WeatherCondition = z.infer<typeof WeatherConditionSchema>
+export type DailyTemperature = z.infer<typeof DailyTemperatureSchema>
+export type DailyFeelsLike = z.infer<typeof DailyFeelsLikeSchema>
+export type CurrentWeather = z.infer<typeof CurrentWeatherSchema>
+export type DailyWeather = z.infer<typeof DailyWeatherSchema>
 
 // Simplified weather data for component consumption
 export interface ProcessedWeatherData {

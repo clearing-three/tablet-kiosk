@@ -79,20 +79,6 @@ export class NasaMoonDisplay {
   }
 
   /**
-   * Checks if automatic updates are currently running
-   */
-  isUpdating(): boolean {
-    return this.updateInterval !== null
-  }
-
-  /**
-   * Gets the current update interval in milliseconds
-   */
-  getUpdateInterval(): number {
-    return this.updateIntervalMs
-  }
-
-  /**
    * Cleanup method to call when component is being destroyed
    */
   destroy(): void {

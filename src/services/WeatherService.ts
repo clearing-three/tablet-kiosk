@@ -5,10 +5,11 @@
  * Provides type-safe weather data fetching, error handling, and data processing.
  */
 
-import type {
-  WeatherData,
-  ProcessedWeatherData,
-  WeatherApiError,
+import {
+  WeatherDataSchema,
+  type WeatherData,
+  type ProcessedWeatherData,
+  type WeatherApiError,
 } from '../types/weather.types'
 import type { WeatherServiceConfig } from '../types/service-config.types'
 import { mapOWMIconToSVG } from '../utils/iconMapper'
@@ -63,22 +64,8 @@ export class WeatherService {
         throw new Error(errorMessage)
       }
 
-      const data: WeatherData = await response.json()
-
-      // Basic validation of response structure
-      if (!data.current || !data.daily || !Array.isArray(data.daily)) {
-        throw new Error('Invalid API response: missing required data fields')
-      }
-
-      if (data.daily.length === 0) {
-        throw new Error('Invalid API response: no daily forecast data')
-      }
-
-      if (data.daily.length < REQUIRED_FORECAST_DAYS) {
-        throw new Error(
-          `Invalid API response: insufficient forecast data. Expected at least ${REQUIRED_FORECAST_DAYS} days, got ${data.daily.length} days`
-        )
-      }
+      const rawData = await response.json()
+      const data = WeatherDataSchema.parse(rawData)
 
       return data
     } catch (error) {

@@ -123,41 +123,37 @@ describe('NasaMoonDisplay', () => {
       const moonElement = document.getElementById('moon') as HTMLImageElement
       expect(moonElement.src).toBe(thirdResponse.image.url)
     })
-
-    it('should use a 3600000ms (60 minute) interval', () => {
-      expect(nasaMoonDisplay.getUpdateInterval()).toBe(3600000)
-    })
   })
 
   describe('interval management', () => {
-    it('should report isUpdating as false before startUpdates', () => {
-      expect(nasaMoonDisplay.isUpdating()).toBe(false)
+    it('should not have active timers before startUpdates', () => {
+      expect(vi.getTimerCount()).toBe(0)
     })
 
-    it('should report isUpdating as true after startUpdates', async () => {
+    it('should have active timer after startUpdates', async () => {
       NasaMoonApiMock.mockSuccess()
       nasaMoonDisplay.startUpdates()
       await vi.waitFor(() => {
-        expect(nasaMoonDisplay.isUpdating()).toBe(true)
+        expect(vi.getTimerCount()).toBe(1)
       })
     })
 
-    it('should report isUpdating as false after stopUpdates', async () => {
+    it('should clear timer after stopUpdates', async () => {
       NasaMoonApiMock.mockSuccess()
       nasaMoonDisplay.startUpdates()
       await vi.waitFor(() => {
-        expect(nasaMoonDisplay.isUpdating()).toBe(true)
+        expect(vi.getTimerCount()).toBe(1)
       })
       nasaMoonDisplay.stopUpdates()
 
-      expect(nasaMoonDisplay.isUpdating()).toBe(false)
+      expect(vi.getTimerCount()).toBe(0)
     })
 
     it('should stop updating after stopUpdates', async () => {
       NasaMoonApiMock.mockSuccess()
       nasaMoonDisplay.startUpdates()
       await vi.waitFor(() => {
-        expect(nasaMoonDisplay.isUpdating()).toBe(true)
+        expect(vi.getTimerCount()).toBe(1)
       })
 
       nasaMoonDisplay.stopUpdates()
@@ -173,7 +169,7 @@ describe('NasaMoonDisplay', () => {
       NasaMoonApiMock.mockSuccess()
       nasaMoonDisplay.startUpdates()
       await vi.waitFor(() => {
-        expect(nasaMoonDisplay.isUpdating()).toBe(true)
+        expect(vi.getTimerCount()).toBe(1)
       })
 
       NasaMoonApiMock.mockSuccess()
@@ -191,19 +187,19 @@ describe('NasaMoonDisplay', () => {
       NasaMoonApiMock.mockSuccess()
       nasaMoonDisplay.startUpdates()
       await vi.waitFor(() => {
-        expect(nasaMoonDisplay.isUpdating()).toBe(true)
+        expect(vi.getTimerCount()).toBe(1)
       })
 
       nasaMoonDisplay.destroy()
 
-      expect(nasaMoonDisplay.isUpdating()).toBe(false)
+      expect(vi.getTimerCount()).toBe(0)
     })
 
     it('should stop updating after destroy', async () => {
       NasaMoonApiMock.mockSuccess()
       nasaMoonDisplay.startUpdates()
       await vi.waitFor(() => {
-        expect(nasaMoonDisplay.isUpdating()).toBe(true)
+        expect(vi.getTimerCount()).toBe(1)
       })
 
       nasaMoonDisplay.destroy()
@@ -308,11 +304,11 @@ describe('NasaMoonDisplay', () => {
 
       nasaMoonDisplay.startUpdates()
       await vi.waitFor(() => {
-        expect(nasaMoonDisplay.isUpdating()).toBe(true)
+        expect(vi.getTimerCount()).toBe(1)
       })
 
       // Should not throw
-      expect(nasaMoonDisplay.isUpdating()).toBe(true)
+      expect(vi.getTimerCount()).toBe(1)
     })
 
     it('passes the error object to onError callback', async () => {

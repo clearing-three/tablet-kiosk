@@ -86,6 +86,16 @@ export const mockErrorResponses = {
       throw new SyntaxError('Unexpected token < in JSON at position 0')
     },
   },
+
+  // HTTP error with non-JSON response body (e.g., HTML error page)
+  errorWithInvalidJson: {
+    status: 503,
+    ok: false,
+    statusText: 'Service Unavailable',
+    json: async () => {
+      throw new SyntaxError('Unexpected token < in JSON at position 0')
+    },
+  },
 }
 
 /**

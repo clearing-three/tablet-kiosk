@@ -16,6 +16,10 @@ After making changes, run:
 npm run validate
 ```
 
+### Git Branch Naming
+
+- use short names, do not prefix with 'feature/', 'bugfix/', etc
+
 ### Branch Protection
 **IMPORTANT**: Never make code changes when on the `main` branch. If the user requests changes while on `main`:
 1. Check current branch with `git branch --show-current`

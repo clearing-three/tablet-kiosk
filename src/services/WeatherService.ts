@@ -8,14 +8,22 @@
 import {
   WeatherDataSchema,
   type WeatherData,
-  type ProcessedWeatherData,
   type WeatherApiError,
-} from '../types/weather.types'
+} from '../types/weather-api.types'
+import type { ProcessedWeatherData } from '../types/weather-domain.types'
 import type { WeatherServiceConfig } from '../types/service-config.types'
 import { mapOWMIconToSVG } from '../utils/iconMapper'
 import { REQUIRED_FORECAST_DAYS } from '../constants/weather.constants'
 
 export class WeatherService {
+  static readonly Errors = {
+    networkError: 'Network error: Unable to connect to weather service',
+    apiError: (cod: string | number, message: string) =>
+      `API Error ${cod}: ${message}`,
+    httpError: (status: number, statusText: string) =>
+      `HTTP ${status}: ${statusText}`,
+  } as const
+
   private readonly config: WeatherServiceConfig
   private readonly baseUrl = 'https://api.openweathermap.org/data/3.0/onecall'
 
@@ -57,9 +65,15 @@ export class WeatherService {
         let errorMessage: string
         try {
           const errorData: WeatherApiError = await response.json()
-          errorMessage = `API Error ${errorData.cod}: ${errorData.message}`
+          errorMessage = WeatherService.Errors.apiError(
+            errorData.cod,
+            errorData.message
+          )
         } catch {
-          errorMessage = `HTTP ${response.status}: ${response.statusText}`
+          errorMessage = WeatherService.Errors.httpError(
+            response.status,
+            response.statusText
+          )
         }
         throw new Error(errorMessage)
       }
@@ -74,7 +88,7 @@ export class WeatherService {
         (error.message.includes('fetch') ||
           error.message.includes('Network request'))
       ) {
-        throw new Error('Network error: Unable to connect to weather service', {
+        throw new Error(WeatherService.Errors.networkError, {
           cause: error,
         })
       }
@@ -84,21 +98,10 @@ export class WeatherService {
 
   /**
    * Processes raw weather data into format suitable for UI components
-   * @param data Raw weather data from API
+   * @param data Raw weather data from API (assumed to be validated by Zod)
    * @returns ProcessedWeatherData Processed data ready for display
    */
   processWeatherData(data: WeatherData): ProcessedWeatherData {
-    // Validate that we have sufficient forecast data
-    if (!data.daily || !Array.isArray(data.daily)) {
-      throw new Error('Invalid weather data: missing daily forecast array')
-    }
-
-    if (data.daily.length < REQUIRED_FORECAST_DAYS) {
-      throw new Error(
-        `Invalid weather data: insufficient forecast data. Expected at least ${REQUIRED_FORECAST_DAYS} days, got ${data.daily.length} days`
-      )
-    }
-
     const current = data.current
     const todaysForecast = data.daily[0]
 

@@ -7,7 +7,7 @@
  */
 
 import { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay'
-import type { ProcessedWeatherData } from '../../src/types/weather.types'
+import type { ProcessedWeatherData } from '../../src/types/weather-domain.types'
 
 describe('WeatherDisplay', () => {
   let weatherDisplay: WeatherDisplay

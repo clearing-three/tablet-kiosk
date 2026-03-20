@@ -4,7 +4,7 @@ import type { WeatherDisplay } from '../../src/components/Weather/WeatherDisplay
 import type { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
 import type { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
-import type { ProcessedWeatherData } from '../../src/types/weather.types'
+import type { ProcessedWeatherData } from '../../src/types/weather-domain.types'
 
 const mockWeatherData: ProcessedWeatherData = {
   current: {

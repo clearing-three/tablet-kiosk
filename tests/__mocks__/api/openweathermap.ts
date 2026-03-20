@@ -8,7 +8,7 @@
 import type {
   WeatherData,
   WeatherApiError,
-} from '../../../src/types/weather.types'
+} from '../../../src/types/weather-api.types'
 import type { Mock } from 'vitest'
 import { clearSunnyDay } from '../fixtures/weather-scenarios'
 

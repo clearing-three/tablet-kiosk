@@ -1,8 +1,8 @@
 // Test utility functions and helpers
 
 import type { Mock } from 'vitest'
-import type { WeatherData } from '../../src/types/weather.types'
-import type { SolarTimes } from '../../src/types/astronomy.types'
+import type { WeatherData } from '../../src/types/weather-api.types'
+import type { SolarTimes } from '../../src/types/weather-domain.types'
 
 /**
  * Creates mock weather data for testing

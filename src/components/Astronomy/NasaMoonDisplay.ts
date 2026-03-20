@@ -7,6 +7,7 @@
 
 import type { NasaMoonService } from '../../services/NasaMoonService'
 import { getElement } from '../../utils/dom'
+import { DOM_IDS } from '../../utils/constants'
 
 export class NasaMoonDisplay {
   private element: HTMLImageElement
@@ -21,7 +22,7 @@ export class NasaMoonDisplay {
    * Initialize DOM element references. Throws if any required element is missing.
    */
   private initializeElements(): HTMLImageElement {
-    return getElement<HTMLImageElement>('moon')
+    return getElement<HTMLImageElement>(DOM_IDS.MOON)
   }
 
   private setImageSource(url: string): void {

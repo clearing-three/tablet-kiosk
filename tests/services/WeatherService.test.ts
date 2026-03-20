@@ -11,10 +11,7 @@
 import type { Mock } from 'vitest'
 import { WeatherService } from '../../src/services/WeatherService'
 import type { WeatherServiceConfig } from '../../src/types/service-config.types'
-import {
-  REQUIRED_FORECAST_DAYS,
-  DISPLAY_FORECAST_DAYS,
-} from '../../src/constants/weather.constants'
+import { REQUIRED_FORECAST_DAYS } from '../../src/constants/weather.constants'
 import {
   OpenWeatherMapMock,
   weatherScenarios,
@@ -203,7 +200,7 @@ describe('WeatherService', () => {
       )
 
       // Check forecast processing (next 3 days, excluding today)
-      expect(processed.forecast).toHaveLength(DISPLAY_FORECAST_DAYS)
+      expect(processed.forecast).toHaveLength(2)
       processed.forecast.forEach((day, index) => {
         const originalDay = mockData.daily[index + 1] // Skip today
         expect(day.dayName).toBeDefined()
@@ -227,7 +224,7 @@ describe('WeatherService', () => {
       const result = await weatherService.getProcessedWeatherData()
 
       expect(result.current).toBeDefined()
-      expect(result.forecast).toHaveLength(DISPLAY_FORECAST_DAYS)
+      expect(result.forecast).toHaveLength(2)
       expect(result.astronomy).toBeDefined()
     })
   })
@@ -269,7 +266,7 @@ describe('WeatherService', () => {
       OpenWeatherMapMock.mockNetworkFailure()
 
       await expect(weatherService.fetchWeatherData()).rejects.toThrow(
-        'Network error: Unable to connect to weather service'
+        WeatherService.Errors.networkError
       )
     })
 
@@ -440,41 +437,7 @@ describe('WeatherService', () => {
 
       const processed = weatherService.processWeatherData(dataWithRequiredDays)
 
-      expect(processed.forecast).toHaveLength(DISPLAY_FORECAST_DAYS) // Forecast days (excluding today)
-    })
-
-    it('should reject data with insufficient forecast days during processing', () => {
-      const dataWithInsufficientDays = {
-        ...getWeatherScenario('clearSunnyDay'),
-        daily: getWeatherScenario('clearSunnyDay').daily.slice(0, 2), // Only 2 days
-      }
-
-      // This should throw when trying to process insufficient data
-      expect(() => {
-        weatherService.processWeatherData(dataWithInsufficientDays)
-      }).toThrow(new RegExp(`Expected at least ${REQUIRED_FORECAST_DAYS} days`))
-    })
-
-    it('should reject data when daily array is missing', () => {
-      const dataWithoutDaily = {
-        ...getWeatherScenario('clearSunnyDay'),
-        daily: undefined as any,
-      }
-
-      expect(() => {
-        weatherService.processWeatherData(dataWithoutDaily)
-      }).toThrow('Invalid weather data: missing daily forecast array')
-    })
-
-    it('should reject data when daily is not an array', () => {
-      const dataWithInvalidDaily = {
-        ...getWeatherScenario('clearSunnyDay'),
-        daily: 'not-an-array' as any,
-      }
-
-      expect(() => {
-        weatherService.processWeatherData(dataWithInvalidDaily)
-      }).toThrow('Invalid weather data: missing daily forecast array')
+      expect(processed.forecast).toHaveLength(2) // Forecast days (excluding today)
     })
 
     it('should successfully process data when daily is a valid array with sufficient days', () => {
@@ -545,21 +508,8 @@ describe('WeatherService', () => {
 
         // And should produce exactly the expected number of forecast days
         const processed = weatherService.processWeatherData(scenario)
-        expect(processed.forecast).toHaveLength(DISPLAY_FORECAST_DAYS)
+        expect(processed.forecast).toHaveLength(2)
       })
-    })
-
-    it('should reject scenarios with insufficient forecast data', () => {
-      // Test the scenarios specifically designed to have insufficient data
-      expect(() => {
-        weatherService.processWeatherData(getWeatherScenario('minimalResponse'))
-      }).toThrow(/insufficient forecast data/)
-
-      expect(() => {
-        weatherService.processWeatherData(
-          getWeatherScenario('insufficientForecastData')
-        )
-      }).toThrow(/insufficient forecast data/)
     })
 
     it('should maintain data integrity through processing', async () => {

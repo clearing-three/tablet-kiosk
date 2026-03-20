@@ -7,8 +7,7 @@
  */
 
 import { z } from 'zod'
-
-const REQUIRED_FORECAST_DAYS = 4
+import { REQUIRED_FORECAST_DAYS } from '../constants/weather.constants'
 
 // Individual weather condition object
 const WeatherConditionSchema = z.object({
@@ -89,34 +88,6 @@ export const WeatherDataSchema = z.object({
 
 export type WeatherData = z.infer<typeof WeatherDataSchema>
 export type DailyWeather = z.infer<typeof DailyWeatherSchema>
-
-// Simplified weather data for component consumption
-export interface ProcessedWeatherData {
-  current: {
-    temperature: number
-    feelsLike: number
-    description: string
-    iconCode: string
-    minTemp: number
-    maxTemp: number
-    windSpeed: number
-    windDirection: string
-    windGust?: number
-  }
-  forecast: Array<{
-    dayName: string
-    iconCode: string
-    description: string
-    maxTemp: number
-    minTemp: number
-    date: Date
-  }>
-  astronomy: {
-    sunrise: number // Unix timestamp
-    sunset: number // Unix timestamp
-    moonPhase: number // Moon phase value 0-1
-  }
-}
 
 // API error response
 export interface WeatherApiError {

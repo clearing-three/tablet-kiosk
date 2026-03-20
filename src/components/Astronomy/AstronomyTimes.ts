@@ -4,9 +4,10 @@
  * Handles display of sunrise and sunset times.
  */
 
-import type { SolarTimes as AstronomyData } from '../../types/astronomy.types'
+import type { SolarTimes as AstronomyData } from '../../types/weather-domain.types'
 import { formatTimeFromUnix } from '../../utils/formatters'
 import { getElement } from '../../utils/dom'
+import { DOM_IDS } from '../../utils/constants'
 
 export class AstronomyTimes {
   private elements: {
@@ -23,8 +24,8 @@ export class AstronomyTimes {
    */
   private initializeElements() {
     return {
-      sunrise: getElement('sunrise-time'),
-      sunset: getElement('sunset-time'),
+      sunrise: getElement(DOM_IDS.SUNRISE_TIME),
+      sunset: getElement(DOM_IDS.SUNSET_TIME),
     }
   }
 

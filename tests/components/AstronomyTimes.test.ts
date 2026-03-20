@@ -7,7 +7,7 @@
 
 import { AstronomyTimes } from '../../src/components/Astronomy/AstronomyTimes'
 import { formatTimeFromUnix } from '../../src/utils/formatters'
-import type { SolarTimes as AstronomyData } from '../../src/types/astronomy.types'
+import type { SolarTimes as AstronomyData } from '../../src/types/weather-domain.types'
 
 // Fixed Unix timestamps for deterministic tests
 const SUNRISE = 1700030400 // 06:00

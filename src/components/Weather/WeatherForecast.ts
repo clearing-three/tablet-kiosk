@@ -5,13 +5,16 @@
  * Updates static forecast day elements with weather data.
  */
 
-import type { ProcessedWeatherData } from '../../types/weather.types'
+import type { ProcessedWeatherData } from '../../types/weather-domain.types'
 
 type ForecastDay = ProcessedWeatherData['forecast'][0]
 import { createTemperatureRangeElements } from '../../utils/formatters'
 import { WeatherService } from '../../services/WeatherService'
 import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
+
+export const ERROR_MISSING_CHILD_ELEMENTS =
+  'Forecast day element is missing required child elements'
 
 export class WeatherForecast {
   private weatherService: WeatherService
@@ -52,7 +55,7 @@ export class WeatherForecast {
     const rangeContainer = element.querySelector('.forecast-range')
 
     if (!dayName || !icon || !desc || !rangeContainer) {
-      throw new Error('Forecast day element is missing required child elements')
+      throw new Error(ERROR_MISSING_CHILD_ELEMENTS)
     }
 
     dayName.textContent = day.dayName
@@ -68,51 +71,15 @@ export class WeatherForecast {
   }
 
   /**
-   * Validates forecast data before rendering. Throws if data is invalid.
-   * @param forecast Array of daily weather data
-   */
-  private validateForecastData(forecast: ForecastDay[]): void {
-    if (!Array.isArray(forecast)) {
-      throw new Error('Forecast data is not an array')
-    }
-
-    if (forecast.length === 0) {
-      throw new Error('Forecast data is empty')
-    }
-
-    for (const day of forecast) {
-      if (
-        !day.dayName ||
-        !day.iconCode ||
-        !day.description ||
-        typeof day.maxTemp !== 'number' ||
-        typeof day.minTemp !== 'number'
-      ) {
-        throw new Error('Invalid forecast day data')
-      }
-    }
-  }
-
-  /**
    * Updates the forecast display with new data
    * @param forecast Array of daily weather forecast data (next 2 days)
    */
   updateForecast(forecast: ForecastDay[]): void {
-    this.validateForecastData(forecast)
-
-    const forecastToShow = forecast.slice(0, 2)
     const dayElements = [this.elements.day1, this.elements.day2]
+    const forecastToShow = forecast.slice(0, dayElements.length)
 
     for (let i = 0; i < forecastToShow.length; i++) {
       this.updateForecastDayElement(dayElements[i], forecastToShow[i])
     }
-  }
-
-  /**
-   * Gets the current number of forecast days displayed
-   * @returns number Number of forecast days currently displayed
-   */
-  getForecastDayCount(): number {
-    return 2
   }
 }

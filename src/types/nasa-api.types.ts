@@ -1,7 +1,7 @@
 /**
- * TypeScript interfaces for NASA Dial-a-Moon API
+ * API types for NASA Dial-a-Moon API
  *
- * These interfaces define the structure of data received from the NASA
+ * These types define the structure of data received from the NASA
  * Dial-a-Moon API, which provides moon imagery for any given timestamp.
  */
 

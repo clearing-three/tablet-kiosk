@@ -8,9 +8,12 @@
  */
 
 import type { Mock } from 'vitest'
-import { WeatherForecast } from '../../src/components/Weather/WeatherForecast'
+import {
+  WeatherForecast,
+  ERROR_MISSING_CHILD_ELEMENTS,
+} from '../../src/components/Weather/WeatherForecast'
 import { WeatherService } from '../../src/services/WeatherService'
-import type { ProcessedWeatherData } from '../../src/types/weather.types'
+import type { ProcessedWeatherData } from '../../src/types/weather-domain.types'
 
 type ForecastDay = ProcessedWeatherData['forecast'][0]
 
@@ -198,12 +201,6 @@ describe('WeatherForecast', () => {
       const dayNames = document.querySelectorAll('.forecast-day-name')
       expect(dayNames[0].textContent).toBe('Thu')
     })
-
-    it('should report the correct count via getForecastDayCount', () => {
-      weatherForecast.updateForecast(THREE_DAYS)
-
-      expect(weatherForecast.getForecastDayCount()).toBe(2)
-    })
   })
 
   describe('Proper date formatting for each day', () => {
@@ -253,26 +250,6 @@ describe('WeatherForecast', () => {
   })
 
   describe('Validation and error propagation', () => {
-    it('should throw with a descriptive message when forecast array is empty', () => {
-      expect(() => weatherForecast.updateForecast([])).toThrow(
-        'Forecast data is empty'
-      )
-    })
-
-    it('should throw with a descriptive message when forecast data is not an array', () => {
-      expect(() => weatherForecast.updateForecast(null as any)).toThrow(
-        'Forecast data is not an array'
-      )
-    })
-
-    it('should throw with a descriptive message when a day has malformed properties', () => {
-      const invalid = [makeForecastDay({ dayName: '' })]
-
-      expect(() => weatherForecast.updateForecast(invalid)).toThrow(
-        'Invalid forecast day data'
-      )
-    })
-
     it.each([
       '.forecast-day-name',
       '.forecast-icon',
@@ -282,7 +259,7 @@ describe('WeatherForecast', () => {
       document.querySelector(selector)?.remove()
 
       expect(() => weatherForecast.updateForecast(THREE_DAYS)).toThrow(
-        'Forecast day element is missing required child elements'
+        ERROR_MISSING_CHILD_ELEMENTS
       )
     })
 

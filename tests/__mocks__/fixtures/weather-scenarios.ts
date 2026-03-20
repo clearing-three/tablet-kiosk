@@ -9,7 +9,7 @@
 import type {
   WeatherData,
   DailyWeather,
-} from '../../../src/types/weather.types'
+} from '../../../src/types/weather-api.types'
 import { REQUIRED_FORECAST_DAYS } from '../../../src/constants/weather.constants'
 
 /**

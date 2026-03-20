@@ -4,11 +4,6 @@
 
 /**
  * Minimum number of daily forecast days required from the weather API.
- * This includes today + 3 forecast days for the weather display.
+ * This includes today + 2 forecast days for the weather display.
  */
-export const REQUIRED_FORECAST_DAYS = 4
-
-/**
- * Number of forecast days to display (excluding today)
- */
-export const DISPLAY_FORECAST_DAYS = REQUIRED_FORECAST_DAYS - 1
+export const REQUIRED_FORECAST_DAYS = 3

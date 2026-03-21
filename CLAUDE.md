@@ -13,7 +13,7 @@ All dependencies must be pinned to exact versions.
 After making changes, run:
 
 ```bash
-npm run validate
+pnpm validate
 ```
 
 ### Git Branch Naming

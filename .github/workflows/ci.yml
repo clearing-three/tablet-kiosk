@@ -16,12 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v6.3.0
         with:
           node-version-file: .node-version
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       - name: Cache ESLint
         if: matrix.task == 'lint'
@@ -30,32 +32,36 @@ jobs:
           path: .eslintcache
           key: eslint-${{ hashFiles('**/*.ts', '**/*.js') }}
 
-      - run: npm run ${{ matrix.task }}
+      - run: pnpm ${{ matrix.task }}
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.2
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v6.3.0
         with:
           node-version-file: .node-version
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
-      - run: npm test
+      - run: pnpm test
 
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6.0.2
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v6.3.0
         with:
           node-version-file: .node-version
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
-      - run: npm run build
+      - run: pnpm build

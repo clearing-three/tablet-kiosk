@@ -16,24 +16,25 @@ Edit `.env.local` and set OpenWeatherMap API key and coordinates.
 
 ```bash
 fnm use
-npm ci
+corepack enable
+pnpm install
 ```
 
 ### Running Locally
-- `npm run dev`: Start development server with hot reload
-- `npm run build`: Build for production (TypeScript compilation + Vite build)
-- `npm run preview`: Preview production build locally
+- `pnpm dev`: Start development server with hot reload
+- `pnpm build`: Build for production (TypeScript compilation + Vite build)
+- `pnpm preview`: Preview production build locally
 
 ### Validation
 ```bash
-npm run validate
+pnpm validate
 ```
 
 ### Test Coverage
-- `npm run test:coverage`: Run tests with coverage report (open `coverage/index.html` to view)
+- `pnpm test:coverage`: Run tests with coverage report (open `coverage/index.html` to view)
 
 ### Dead Code
-- `npm run knip`: Find unused exports, files, and dependencies
+- `pnpm knip`: Find unused exports, files, and dependencies
 
 ## Deployment
 

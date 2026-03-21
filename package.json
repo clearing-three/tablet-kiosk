@@ -4,7 +4,9 @@
   "description": "Weather kiosk application for Samsung Galaxy Tab S8 Ultra",
   "type": "module",
   "main": "dist/index.html",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",

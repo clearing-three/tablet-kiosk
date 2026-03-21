@@ -28,9 +28,9 @@ import { DOM_IDS } from './utils/constants'
 import { ErrorDisplay } from './components/ErrorDisplay'
 import { TimeView } from './components/Time/TimeView'
 import { MoonView } from './components/Astronomy/MoonView'
-import { WeatherView } from './components/Weather/WeatherView'
+import { CurrentConditionsView } from './components/Weather/CurrentConditionsView'
 import { ForecastView } from './components/Weather/ForecastView'
-import { AstronomyView } from './components/Astronomy/AstronomyView'
+import { SunView } from './components/Astronomy/SunView'
 
 // Core
 import { DOMValidator } from './core/DOMValidator'
@@ -110,13 +110,13 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     errorDisplay
   )
 
-  const weatherView = new WeatherView()
+  const weatherView = new CurrentConditionsView()
   const forecastView = new ForecastView()
-  const astronomyView = new AstronomyView()
+  const sunView = new SunView()
   const weatherController = new WeatherController(
     weatherView,
     forecastView,
-    astronomyView,
+    sunView,
     weatherService,
     errorDisplay,
     DEFAULT_APP_CONFIG.weatherUpdateIntervalMs

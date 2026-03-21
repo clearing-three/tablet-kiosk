@@ -1,11 +1,11 @@
 /**
- * AstronomyView Component Tests (3.5.3)
+ * SunView Component Tests (3.5.3)
  *
- * Tests for AstronomyView component covering:
+ * Tests for SunView component covering:
  * - Time display formatting
  */
 
-import { AstronomyView } from '../../src/components/Astronomy/AstronomyView'
+import { SunView } from '../../src/components/Astronomy/SunView'
 import { formatTimeFromUnix } from '../../src/utils/formatters'
 import type { SolarTimes as AstronomyData } from '../../src/types/weather-domain.types'
 
@@ -13,8 +13,8 @@ import type { SolarTimes as AstronomyData } from '../../src/types/weather-domain
 const SUNRISE = 1700030400 // 06:00
 const SUNSET = 1700073600 // 18:00
 
-describe('AstronomyView', () => {
-  let astronomyView: AstronomyView
+describe('SunView', () => {
+  let sunView: SunView
   let mockData: AstronomyData
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('AstronomyView', () => {
       <div id="sunrise-time"></div>
       <div id="sunset-time"></div>
     `
-    astronomyView = new AstronomyView()
+    sunView = new SunView()
     mockData = {
       sunrise: SUNRISE,
       sunset: SUNSET,
@@ -33,21 +33,19 @@ describe('AstronomyView', () => {
     it('should throw when required DOM elements are missing', () => {
       document.body.innerHTML = ''
 
-      expect(() => new AstronomyView()).toThrow(
-        'Required DOM element not found'
-      )
+      expect(() => new SunView()).toThrow('Required DOM element not found')
     })
 
     it('should throw indicating which element is missing', () => {
       document.body.innerHTML = '<div id="sunrise-time"></div>'
 
-      expect(() => new AstronomyView()).toThrow('#sunset-time')
+      expect(() => new SunView()).toThrow('#sunset-time')
     })
   })
 
   describe('time display formatting', () => {
     it('should update sunrise and sunset elements with formatted times', () => {
-      astronomyView.render(mockData)
+      sunView.render(mockData)
 
       expect(document.getElementById('sunrise-time')!.textContent).toBe(
         formatTimeFromUnix(SUNRISE)
@@ -58,10 +56,10 @@ describe('AstronomyView', () => {
     })
 
     it('should overwrite previous values on subsequent calls', () => {
-      astronomyView.render(mockData)
+      sunView.render(mockData)
 
       const updatedData: AstronomyData = { ...mockData, sunrise: SUNSET }
-      astronomyView.render(updatedData)
+      sunView.render(updatedData)
 
       expect(document.getElementById('sunrise-time')!.textContent).toBe(
         formatTimeFromUnix(SUNSET)

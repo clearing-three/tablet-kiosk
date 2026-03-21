@@ -1,5 +1,5 @@
 /**
- * Astronomy View Component
+ * Sun View Component
  *
  * Renders sunrise and sunset times.
  */
@@ -9,7 +9,7 @@ import { formatTimeFromUnix } from '../../utils/formatters'
 import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
 
-export class AstronomyView {
+export class SunView {
   private elements: {
     sunrise: HTMLElement
     sunset: HTMLElement

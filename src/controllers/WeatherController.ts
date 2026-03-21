@@ -9,7 +9,7 @@ import { UpdateScheduler } from '../core/UpdateScheduler'
 import type { WeatherService } from '../services/WeatherService'
 import type { CurrentConditionsView } from '../components/Weather/CurrentConditionsView'
 import type { ForecastView } from '../components/Weather/ForecastView'
-import type { AstronomyView } from '../components/Astronomy/AstronomyView'
+import type { SunView } from '../components/Astronomy/SunView'
 import type { ErrorDisplay } from '../components/ErrorDisplay'
 
 export class WeatherController {
@@ -18,7 +18,7 @@ export class WeatherController {
   constructor(
     private weatherView: CurrentConditionsView,
     private forecastView: ForecastView,
-    private astronomyView: AstronomyView,
+    private sunView: SunView,
     private weatherService: WeatherService,
     private errorDisplay: ErrorDisplay,
     updateIntervalMs: number
@@ -38,7 +38,7 @@ export class WeatherController {
 
       this.weatherView.render(weatherData.current)
       this.forecastView.render(weatherData.forecast)
-      this.astronomyView.render(weatherData.astronomy)
+      this.sunView.render(weatherData.astronomy)
 
       this.errorDisplay.remove('weather-update')
     } catch (error) {

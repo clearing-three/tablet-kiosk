@@ -6,6 +6,9 @@ All dependencies must be pinned to exact versions.
 
 - API key and coordinates are in `.env.local` (gitignored — never commit this file)
 
+## Lit Development
+This project uses the Lit framework. Before writing or reviewing any Lit components, read `.claude/skills/lit-best-practices/SKILL.md` and follow all rules there.
+
 ## Development Workflow
 
 ### Validation

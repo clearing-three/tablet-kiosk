@@ -1,8 +1,8 @@
 import { WeatherController } from '../../src/controllers/WeatherController'
 import type { WeatherService } from '../../src/services/WeatherService'
-import type { WeatherView } from '../../src/components/Weather/WeatherView'
+import type { CurrentConditionsView } from '../../src/components/Weather/CurrentConditionsView'
 import type { ForecastView } from '../../src/components/Weather/ForecastView'
-import type { AstronomyView } from '../../src/components/Astronomy/AstronomyView'
+import type { SunView } from '../../src/components/Astronomy/SunView'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
 import type { WeatherData } from '../../src/types/weather-domain.types'
 
@@ -36,9 +36,9 @@ const mockWeatherData: WeatherData = {
 
 describe('WeatherController', () => {
   let mockWeatherService: Pick<WeatherService, 'getWeatherData'>
-  let mockWeatherView: Pick<WeatherView, 'render'>
+  let mockWeatherView: Pick<CurrentConditionsView, 'render'>
   let mockForecastView: Pick<ForecastView, 'render'>
-  let mockAstronomyView: Pick<AstronomyView, 'render'>
+  let mockSunView: Pick<SunView, 'render'>
   let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
   let controller: WeatherController
 
@@ -48,13 +48,13 @@ describe('WeatherController', () => {
     }
     mockWeatherView = { render: vi.fn() }
     mockForecastView = { render: vi.fn() }
-    mockAstronomyView = { render: vi.fn() }
+    mockSunView = { render: vi.fn() }
     mockErrorDisplay = { show: vi.fn(), remove: vi.fn() }
 
     controller = new WeatherController(
-      mockWeatherView as WeatherView,
+      mockWeatherView as CurrentConditionsView,
       mockForecastView as ForecastView,
-      mockAstronomyView as AstronomyView,
+      mockSunView as SunView,
       mockWeatherService as WeatherService,
       mockErrorDisplay as ErrorDisplay,
       10000 // 10s interval for testing
@@ -84,12 +84,10 @@ describe('WeatherController', () => {
       )
     })
 
-    it('passes astronomy to astronomyView.render', async () => {
+    it('passes astronomy to sunView.render', async () => {
       await controller.update()
 
-      expect(mockAstronomyView.render).toHaveBeenCalledWith(
-        mockWeatherData.astronomy
-      )
+      expect(mockSunView.render).toHaveBeenCalledWith(mockWeatherData.astronomy)
     })
 
     it('removes the weather-update error on success', async () => {
@@ -126,7 +124,7 @@ describe('WeatherController', () => {
 
       expect(mockWeatherView.render).not.toHaveBeenCalled()
       expect(mockForecastView.render).not.toHaveBeenCalled()
-      expect(mockAstronomyView.render).not.toHaveBeenCalled()
+      expect(mockSunView.render).not.toHaveBeenCalled()
     })
 
     it('does not call errorDisplay.remove on failure', async () => {

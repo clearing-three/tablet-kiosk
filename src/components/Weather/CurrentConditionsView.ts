@@ -1,5 +1,5 @@
 /**
- * Weather View Component
+ * Current Conditions View Component
  *
  * Renders current weather display elements in the UI.
  * Manages temperature and temperature range display.
@@ -17,7 +17,7 @@ import {
 import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
 
-export class WeatherView {
+export class CurrentConditionsView {
   private elements: {
     tempNow: HTMLElement
     feelsLike: HTMLElement

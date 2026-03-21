@@ -23,5 +23,7 @@ jobs:
       - run: |
           npm run format:check
           npm run lint
+          npm run stylelint
+          npm run analyze:lit
           npm test
           npm run build

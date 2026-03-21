@@ -8,20 +8,60 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  validate:
+  lint:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: [format:check, lint, stylelint, analyze:lit]
     steps:
       - uses: actions/checkout@v6.0.2
+
+      - uses: pnpm/action-setup@v4
 
       - uses: actions/setup-node@v6.3.0
         with:
           node-version-file: .node-version
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
-      - run: |
-          npm run format:check
-          npm run lint
-          npm test
-          npm run build
+      - name: Cache ESLint
+        if: matrix.task == 'lint'
+        uses: actions/cache@v4
+        with:
+          path: .eslintcache
+          key: eslint-${{ hashFiles('**/*.ts', '**/*.js') }}
+
+      - run: pnpm ${{ matrix.task }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build

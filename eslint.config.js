@@ -2,6 +2,8 @@ import js from '@eslint/js'
 import typescript from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import prettier from 'eslint-config-prettier'
+import lit from 'eslint-plugin-lit'
+import wc from 'eslint-plugin-wc'
 
 export default [
   js.configs.recommended,
@@ -39,14 +41,20 @@ export default [
         Element: 'readonly',
         Event: 'readonly',
         NodeJS: 'readonly',
+        customElements: 'readonly',
+        CSSResult: 'readonly',
       },
     },
     plugins: {
       '@typescript-eslint': typescript,
+      lit,
+      wc,
     },
     rules: {
       ...typescript.configs.recommended.rules,
       ...prettier.rules,
+      ...wc.configs['flat/recommended'].rules,
+      ...lit.configs['flat/recommended'].rules,
 
       // TypeScript-specific rules
       '@typescript-eslint/no-unused-vars': [

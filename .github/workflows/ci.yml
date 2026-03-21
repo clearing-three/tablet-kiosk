@@ -10,9 +10,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        task: [format:check, lint, stylelint, analyze:lit]
     steps:
       - uses: actions/checkout@v6.0.2
 
@@ -26,13 +23,18 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Cache ESLint
-        if: matrix.task == 'lint'
         uses: actions/cache@v4
         with:
           path: .eslintcache
           key: eslint-${{ hashFiles('**/*.ts', '**/*.js') }}
 
-      - run: pnpm ${{ matrix.task }}
+      - name: Run linters in parallel
+        run: |
+          pnpm format:check &
+          pnpm stylelint &
+          pnpm analyze:lit &
+          wait
+          pnpm lint
 
   test:
     runs-on: ubuntu-latest

@@ -23,6 +23,9 @@ npm-debug.log*
 # Coverage
 coverage/
 
+# Cache
+.eslintcache
+
 # Temporary files
 *.tmp
 *.temp

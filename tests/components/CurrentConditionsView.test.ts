@@ -1,16 +1,16 @@
 /**
- * WeatherView Component Tests (3.5.1)
+ * CurrentConditionsView Component Tests (3.5.1)
  *
- * Tests for WeatherView component covering:
+ * Tests for CurrentConditionsView component covering:
  * - DOM updates with weather data
  * - Temperature rendering
  */
 
-import { WeatherView } from '../../src/components/Weather/WeatherView'
+import { CurrentConditionsView } from '../../src/components/Weather/CurrentConditionsView'
 import type { WeatherData } from '../../src/types/weather-domain.types'
 
-describe('WeatherView', () => {
-  let weatherView: WeatherView
+describe('CurrentConditionsView', () => {
+  let weatherView: CurrentConditionsView
   let mockCurrentWeather: WeatherData['current']
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('WeatherView', () => {
       <div id="weather-range"></div>
     `
 
-    weatherView = new WeatherView()
+    weatherView = new CurrentConditionsView()
 
     mockCurrentWeather = {
       temperature: 75,

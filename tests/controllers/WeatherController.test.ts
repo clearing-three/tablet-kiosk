@@ -1,6 +1,6 @@
 import { WeatherController } from '../../src/controllers/WeatherController'
 import type { WeatherService } from '../../src/services/WeatherService'
-import type { WeatherView } from '../../src/components/Weather/WeatherView'
+import type { CurrentConditionsView } from '../../src/components/Weather/CurrentConditionsView'
 import type { ForecastView } from '../../src/components/Weather/ForecastView'
 import type { AstronomyView } from '../../src/components/Astronomy/AstronomyView'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
@@ -36,7 +36,7 @@ const mockWeatherData: WeatherData = {
 
 describe('WeatherController', () => {
   let mockWeatherService: Pick<WeatherService, 'getWeatherData'>
-  let mockWeatherView: Pick<WeatherView, 'render'>
+  let mockWeatherView: Pick<CurrentConditionsView, 'render'>
   let mockForecastView: Pick<ForecastView, 'render'>
   let mockAstronomyView: Pick<AstronomyView, 'render'>
   let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
@@ -52,7 +52,7 @@ describe('WeatherController', () => {
     mockErrorDisplay = { show: vi.fn(), remove: vi.fn() }
 
     controller = new WeatherController(
-      mockWeatherView as WeatherView,
+      mockWeatherView as CurrentConditionsView,
       mockForecastView as ForecastView,
       mockAstronomyView as AstronomyView,
       mockWeatherService as WeatherService,

@@ -36,7 +36,7 @@ clean_files() {
 deploy_files() {
   # Check if dist directory exists
   if [[ ! -d "$SOURCE_DIR" ]]; then
-    echo "Error: $SOURCE_DIR directory not found. Run 'npm run build' first."
+    echo "Error: $SOURCE_DIR directory not found. Run 'pnpm build' first."
     exit 1
   fi
 
@@ -78,7 +78,7 @@ case "$1" in
     clean_files
     ;;
   "")
-    npm run build || exit 1
+    pnpm build || exit 1
     clean_files
     deploy_files
     ;;

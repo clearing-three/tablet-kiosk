@@ -30,7 +30,13 @@ export function preloadAssets(): void {
     document.head.appendChild(link)
   })
 
-  const staticIcons = ['sunrise', 'sunset', 'moonrise', 'moonset', 'wind']
+  const staticIcons = [
+    'sunrise',
+    'sunset',
+    'moonrise',
+    'moonset',
+    'wind-static',
+  ]
   staticIcons.forEach(iconName => {
     const link = document.createElement('link')
     link.rel = 'preload'
@@ -84,7 +90,7 @@ export function getAssetUrls(): string[] {
     'weather-icons/sunset.svg',
     'weather-icons/moonrise.svg',
     'weather-icons/moonset.svg',
-    'weather-icons/wind.svg',
+    'weather-icons/wind-static.svg',
     'moon-phase.js',
   ]
 }

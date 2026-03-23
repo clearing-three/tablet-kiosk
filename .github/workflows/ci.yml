@@ -27,7 +27,7 @@ jobs:
 
       - name: Cache ESLint
         if: matrix.task == 'lint'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .eslintcache
           key: eslint-${{ hashFiles('**/*.ts', '**/*.js') }}

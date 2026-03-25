@@ -22,6 +22,7 @@ pnpm install
 
 ### Running Locally
 - `pnpm dev`: Start development server with hot reload
+- `pnpm dev:legacy`: (pre Lit) Start development server with hot reload
 - `pnpm build`: Build for production (TypeScript compilation + Vite build)
 - `pnpm preview`: Preview production build locally
 

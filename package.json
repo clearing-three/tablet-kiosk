@@ -8,6 +8,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite",
+    "dev:legacy": "vite --open /index-legacy.html",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",

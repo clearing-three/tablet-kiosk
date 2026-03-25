@@ -61,6 +61,7 @@
     "vitest": "4.1.0"
   },
   "dependencies": {
+    "lit": "3.3.2",
     "zod": "4.3.6"
   }
 }

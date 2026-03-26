@@ -7,17 +7,39 @@ import './moon'
 export class Root extends LitElement {
   static styles = css`
     :host {
-      display: block;
+      display: flex;
+      flex-direction: row;
       background: var(--black);
       height: 100vh;
-      padding: 1rem;
+    }
+
+    .pane-left {
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 2vh;
+    }
+
+    .pane-right {
+      width: 55%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2vh;
+      padding: 2vh;
     }
   `
 
   render() {
     return html`
-      <x-clock></x-clock>
-      <x-moon></x-moon>
+      <div class="pane-left">
+        <x-moon></x-moon>
+      </div>
+      <div class="pane-right">
+        <x-clock></x-clock>
+      </div>
     `
   }
 }

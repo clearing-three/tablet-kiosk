@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
+import './time-display'
 
 @customElement('kiosk-app')
 export class KioskApp extends LitElement {
@@ -14,6 +15,6 @@ export class KioskApp extends LitElement {
   `
 
   render() {
-    return html`<div>hello, world</div>`
+    return html`<time-display></time-display>`
   }
 }

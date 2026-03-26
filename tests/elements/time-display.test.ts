@@ -1,14 +1,3 @@
-/**
- * Time Tests
- *
- * Tests for Time element covering:
- * - Component lifecycle (connected/disconnected)
- * - Initial time rendering
- * - Interval-based time updates
- * - Timer cleanup
- * - Rendering output
- */
-
 import type { Mock } from 'vitest'
 import { Time } from '../../src/elements/time-display'
 import * as formatters from '../../src/utils/formatters'
@@ -179,9 +168,7 @@ describe('Time', () => {
       await vi.advanceTimersByTimeAsync(2000)
 
       // Should have updated again after reconnection
-      expect(mockFormatCurrentTime).toHaveBeenCalledTimes(
-        callsAfterConnect + 3
-      ) // reconnect + 2 intervals
+      expect(mockFormatCurrentTime).toHaveBeenCalledTimes(callsAfterConnect + 3) // reconnect + 2 intervals
     })
   })
 

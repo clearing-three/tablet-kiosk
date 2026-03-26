@@ -15,7 +15,7 @@ export class Time extends LitElement {
 
   @state()
   private _currentTime = ''
-  
+
   private _timer?: ReturnType<typeof setInterval>
 
   connectedCallback() {
@@ -27,7 +27,6 @@ export class Time extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback()
     clearInterval(this._timer)
-    
   }
 
   private updateTime() {

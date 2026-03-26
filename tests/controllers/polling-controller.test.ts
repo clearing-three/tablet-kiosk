@@ -216,11 +216,7 @@ describe('PollingController', () => {
     it('should respect custom interval timing', async () => {
       const customInterval = 5000
       mockFetchFn.mockResolvedValue('data')
-      controller = new PollingController(
-        mockHost,
-        mockFetchFn,
-        customInterval
-      )
+      controller = new PollingController(mockHost, mockFetchFn, customInterval)
 
       await controller.hostConnected()
 

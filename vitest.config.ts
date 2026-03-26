@@ -8,7 +8,7 @@ export default defineConfig({
     },
   },
   test: {
-    environment: 'jsdom',
+    environment: 'happy-dom',
     globals: true,
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.test.ts', 'tests/**/*.spec.ts'],
@@ -16,6 +16,7 @@ export default defineConfig({
     clearMocks: true,
     restoreMocks: true,
     env: {
+      NODE_ENV: 'production', 
       VITE_OPENWEATHER_API_KEY: 'test-api-key',
       VITE_LOCATION_LAT: '40.7128',
       VITE_LOCATION_LON: '-74.0060',

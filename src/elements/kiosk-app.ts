@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import './time-display'
+import './moon-phase'
 
 @customElement('kiosk-app')
 export class KioskApp extends LitElement {
@@ -15,6 +16,9 @@ export class KioskApp extends LitElement {
   `
 
   render() {
-    return html`<time-display></time-display>`
+    return html`
+      <time-display></time-display>
+      <moon-phase></moon-phase>
+    `
   }
 }

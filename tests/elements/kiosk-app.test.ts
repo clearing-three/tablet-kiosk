@@ -1,3 +1,7 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+
+mockChildren()
+
 import { KioskApp } from '../../src/elements/kiosk-app'
 
 // Force module evaluation to ensure @customElement decorator runs
@@ -17,12 +21,25 @@ describe('KioskApp', () => {
   })
 
   describe('rendering', () => {
-    it('should render a time-display element', async () => {
+    it('should render time-display and moon-phase elements', async () => {
       document.body.appendChild(element)
       await element.updateComplete
 
       const timeDisplay = element.shadowRoot?.querySelector('time-display')
+      const moonPhase = element.shadowRoot?.querySelector('moon-phase')
+
       expect(timeDisplay).toBeDefined()
+      expect(moonPhase).toBeDefined()
     })
   })
 })
+
+function mockChildren() {
+  vi.mock('../../src/elements/time-display', () => {
+    return {}
+  })
+
+  vi.mock('../../src/elements/moon-phase', () => {
+    return {}
+  })
+}

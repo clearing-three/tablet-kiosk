@@ -16,7 +16,7 @@ export default defineConfig({
     clearMocks: true,
     restoreMocks: true,
     env: {
-      NODE_ENV: 'production', 
+      NODE_ENV: 'production',
       VITE_OPENWEATHER_API_KEY: 'test-api-key',
       VITE_LOCATION_LAT: '40.7128',
       VITE_LOCATION_LON: '-74.0060',

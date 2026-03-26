@@ -7,9 +7,10 @@ export class Time extends LitElement {
   static styles = css`
     :host {
       display: block;
+      font-family: var(--font-family-base);
       font-size: 19.8vh;
       font-weight: 300;
-      color: #66b2ff;
+      color: var(--color-text-primary);
     }
   `
 

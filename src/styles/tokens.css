@@ -1,0 +1,65 @@
+:root {
+  /* === TYPOGRAPHY === */
+  --font-family-base: roboto, sans-serif;
+
+  /* === COLOR PALETTE === */
+
+  /* Grays */
+  --black: #000;
+  --white: #fff;
+
+  /* Blues */
+  --blue-500: #66b2ff;
+  --blue-400: #6ab0f5;
+  --blue-300: #a8cfff;
+  --blue-200: #c2e5ff;
+  --blue-100: #b0c4de;
+
+  /* Oranges & Ambers */
+  --orange-500: #ffa500;
+  --orange-400: #ff6b35;
+  --orange-300: #ffcc80;
+  --amber-500: #f5a623;
+
+  /* Reds (error states) */
+  --red-900: #4a0f0f;
+  --red-800: #7a1a1a;
+  --red-100: #fcc;
+
+  /* === SEMANTIC COLORS === */
+
+  /* Background & Base */
+  --color-bg: var(--black);
+
+  /* Text Colors */
+  --color-text-primary: var(--blue-500);
+  --color-text-secondary: var(--blue-300);
+  --color-text-tertiary: var(--blue-200);
+
+  /* Weather-specific */
+  --color-sun: var(--orange-300);
+  --color-sunrise: var(--orange-500);
+  --color-sunset: var(--orange-400);
+  --color-feels-like: var(--blue-100);
+  --color-temp-high: var(--amber-500);
+  --color-temp-low: var(--blue-400);
+
+  /* Error States */
+  --color-error-bg: var(--red-800);
+  --color-error-detail-bg: var(--red-900);
+  --color-error-text: var(--white);
+  --color-error-detail-text: var(--red-100);
+  --color-error-hover: rgb(255 255 255 / 15%);
+
+  /* SVG Icon Colors */
+  --color-icon: var(--black);
+
+  /* === SPACING === */
+  --pad: 2vh;
+  --gap-lg: 4vw;
+  --gap-md: 2vw;
+
+  /* === SVG ASSETS === */
+  --arrow-right-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-6-6l6 6-6 6" stroke="%23000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  --person-icon-svg: url('data:image/svg+xml,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="3" fill="%23000"/><path d="M12 12c-4 0-7 2-7 4.5v2.5h14v-2.5c0-2.5-3-4.5-7-4.5z" fill="%23000"/></svg>');
+}

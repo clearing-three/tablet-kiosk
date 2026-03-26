@@ -5,16 +5,25 @@ import * as formatters from '../../src/utils/formatters'
 describe('Clock', () => {
   let element: Clock
   let mockFormatCurrentTime: Mock
+  let mockFormatCurrentDate: Mock
 
-  const getRenderedText = (el: Clock): string => {
-    return el.shadowRoot?.textContent?.trim() ?? ''
+  const getTimeText = (el: Clock): string => {
+    return el.shadowRoot?.querySelector('.time')?.textContent?.trim() ?? ''
+  }
+
+  const getDateText = (el: Clock): string => {
+    return el.shadowRoot?.querySelector('.date')?.textContent?.trim() ?? ''
   }
 
   beforeEach(() => {
     vi.useFakeTimers()
     mockFormatCurrentTime = vi.fn()
+    mockFormatCurrentDate = vi.fn()
     vi.spyOn(formatters, 'formatCurrentTime').mockImplementation(
       mockFormatCurrentTime
+    )
+    vi.spyOn(formatters, 'formatCurrentDate').mockImplementation(
+      mockFormatCurrentDate
     )
     element = document.createElement('x-clock') as Clock
   })
@@ -36,156 +45,124 @@ describe('Clock', () => {
       expect(element).toBeInstanceOf(Clock)
     })
 
-    it('should not fetch time before being connected', () => {
+    it('should not fetch time or date before being connected', () => {
       expect(mockFormatCurrentTime).not.toHaveBeenCalled()
+      expect(mockFormatCurrentDate).not.toHaveBeenCalled()
     })
   })
 
   describe('connectedCallback', () => {
-    it('should update time immediately on connection', () => {
+    it('should render time and date immediately on connection', async () => {
+      // given
       mockFormatCurrentTime.mockReturnValue('14:30')
-      document.body.appendChild(element)
+      mockFormatCurrentDate.mockReturnValue('Monday, March 26')
 
-      expect(mockFormatCurrentTime).toHaveBeenCalledOnce()
+      // when
+      document.body.appendChild(element)
+      await element.updateComplete
+
+      // then
+      expect(getTimeText(element)).toBe('14:30')
+      expect(getDateText(element)).toBe('Monday, March 26')
     })
 
-    it('should start interval timer on connection', async () => {
-      mockFormatCurrentTime.mockReturnValue('14:30')
-      document.body.appendChild(element)
-
-      // Initial call
-      expect(mockFormatCurrentTime).toHaveBeenCalledOnce()
-
-      // Advance time by 1 second
-      await vi.advanceTimersByTimeAsync(1000)
-
-      expect(mockFormatCurrentTime).toHaveBeenCalledTimes(2)
-    })
-
-    it('should continue updating every second', async () => {
-      mockFormatCurrentTime.mockReturnValue('14:30')
-      document.body.appendChild(element)
-
-      // Advance time by 5 seconds
-      await vi.advanceTimersByTimeAsync(5000)
-
-      expect(mockFormatCurrentTime).toHaveBeenCalledTimes(6) // initial + 5 intervals
-    })
-
-    it('should update displayed time on each interval', async () => {
+    it('should update displayed time and date every second', async () => {
+      // given
       mockFormatCurrentTime
         .mockReturnValueOnce('14:30')
         .mockReturnValueOnce('14:31')
         .mockReturnValueOnce('14:32')
-
+      mockFormatCurrentDate
+        .mockReturnValueOnce('Monday, March 26')
+        .mockReturnValueOnce('Monday, March 26')
+        .mockReturnValueOnce('Tuesday, March 27')
       document.body.appendChild(element)
       await element.updateComplete
 
-      expect(getRenderedText(element)).toBe('14:30')
+      expect(getTimeText(element)).toBe('14:30')
+      expect(getDateText(element)).toBe('Monday, March 26')
 
+      // when
       await vi.advanceTimersByTimeAsync(1000)
       await element.updateComplete
-      expect(getRenderedText(element)).toBe('14:31')
 
+      // then
+      expect(getTimeText(element)).toBe('14:31')
+      expect(getDateText(element)).toBe('Monday, March 26')
+
+      // when
       await vi.advanceTimersByTimeAsync(1000)
       await element.updateComplete
-      expect(getRenderedText(element)).toBe('14:32')
+
+      // then
+      expect(getTimeText(element)).toBe('14:32')
+      expect(getDateText(element)).toBe('Tuesday, March 27')
     })
   })
 
   describe('disconnectedCallback', () => {
-    it('should clear interval timer on disconnection', async () => {
-      mockFormatCurrentTime.mockReturnValue('14:30')
-      document.body.appendChild(element)
-
-      const callsBefore = mockFormatCurrentTime.mock.calls.length
-
-      element.remove()
-
-      // Advance time by several seconds
-      await vi.advanceTimersByTimeAsync(5000)
-
-      // Should not have called again after disconnect
-      expect(mockFormatCurrentTime).toHaveBeenCalledTimes(callsBefore)
-    })
-
-    it('should not throw when disconnected before connected', () => {
-      expect(() => element.disconnectedCallback()).not.toThrow()
-    })
-
-    it('should handle multiple disconnections safely', () => {
-      document.body.appendChild(element)
-      element.remove()
-
-      expect(() => element.disconnectedCallback()).not.toThrow()
-    })
-  })
-
-  describe('rendering', () => {
-    it('should render the current time', async () => {
-      mockFormatCurrentTime.mockReturnValue('09:45')
+    it('should stop updating when disconnected', async () => {
+      // given
+      mockFormatCurrentTime
+        .mockReturnValueOnce('14:30')
+        .mockReturnValueOnce('14:31')
+      mockFormatCurrentDate.mockReturnValue('Monday, March 26')
       document.body.appendChild(element)
       await element.updateComplete
 
-      expect(getRenderedText(element)).toBe('09:45')
-    })
+      expect(getTimeText(element)).toBe('14:30')
 
-    it('should update rendering when time changes', async () => {
-      mockFormatCurrentTime.mockReturnValue('12:00')
-      document.body.appendChild(element)
-      await element.updateComplete
-
-      expect(getRenderedText(element)).toBe('12:00')
-
-      mockFormatCurrentTime.mockReturnValue('12:01')
+      // when
+      element.remove()
       await vi.advanceTimersByTimeAsync(1000)
-      await element.updateComplete
 
-      expect(getRenderedText(element)).toBe('12:01')
+      // then
+      expect(getTimeText(element)).toBe('14:30')
     })
-  })
 
-  describe('styles', () => {
-    it('should have defined static styles', () => {
-      expect(Clock.styles).toBeDefined()
+    it('should handle disconnection safely', () => {
+      expect(() => element.disconnectedCallback()).not.toThrow()
+
+      document.body.appendChild(element)
+      element.remove()
+
+      expect(() => element.disconnectedCallback()).not.toThrow()
     })
   })
 
   describe('reconnection', () => {
     it('should restart timer when reconnected', async () => {
-      mockFormatCurrentTime.mockReturnValue('10:00')
+      // given
+      mockFormatCurrentTime
+        .mockReturnValueOnce('10:00')
+        .mockReturnValueOnce('10:01')
+        .mockReturnValueOnce('10:02')
+      mockFormatCurrentDate.mockReturnValue('Monday, March 26')
       document.body.appendChild(element)
-      const callsAfterConnect = mockFormatCurrentTime.mock.calls.length
+      await element.updateComplete
 
+      expect(getTimeText(element)).toBe('10:00')
+
+      // when
       element.remove()
-      await vi.advanceTimersByTimeAsync(5000)
+      await vi.advanceTimersByTimeAsync(1000)
 
-      // Should not have updated while disconnected
-      expect(mockFormatCurrentTime).toHaveBeenCalledTimes(callsAfterConnect)
+      // then
+      expect(getTimeText(element)).toBe('10:00')
 
-      // Reconnect
+      // when
       document.body.appendChild(element)
-      await vi.advanceTimersByTimeAsync(2000)
+      await element.updateComplete
 
-      // Should have updated again after reconnection
-      expect(mockFormatCurrentTime).toHaveBeenCalledTimes(callsAfterConnect + 3) // reconnect + 2 intervals
-    })
-  })
+      // then
+      expect(getTimeText(element)).toBe('10:01')
 
-  describe('time formatting', () => {
-    it('should handle different time formats', async () => {
-      const times = ['00:00', '12:00', '23:59', '08:30']
+      // when
+      await vi.advanceTimersByTimeAsync(1000)
+      await element.updateComplete
 
-      for (const time of times) {
-        mockFormatCurrentTime.mockReturnValue(time)
-        const testElement = document.createElement('x-clock') as Clock
-        document.body.appendChild(testElement)
-        await testElement.updateComplete
-
-        expect(getRenderedText(testElement)).toBe(time)
-
-        testElement.remove()
-      }
+      // then
+      expect(getTimeText(element)).toBe('10:02')
     })
   })
 })

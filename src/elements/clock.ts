@@ -1,21 +1,35 @@
 import { LitElement, html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { formatCurrentTime } from '../utils/formatters.js'
+import { formatCurrentTime, formatCurrentDate } from '../utils/formatters.js'
 
 @customElement('x-clock')
 export class Clock extends LitElement {
   static styles = css`
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       font-family: var(--font-family-base);
-      font-size: 19.8vh;
+    }
+
+    .time {
+      font-size: 20vh;
       font-weight: 300;
       color: var(--color-text-primary);
+    }
+
+    .date {
+      font-size: 5vh;
+      font-weight: 300;
+      color: var(--color-text-secondary);
     }
   `
 
   @state()
   private _currentTime = ''
+
+  @state()
+  private _currentDate = ''
 
   private _timer?: ReturnType<typeof setInterval>
 
@@ -32,9 +46,13 @@ export class Clock extends LitElement {
 
   private updateTime() {
     this._currentTime = formatCurrentTime()
+    this._currentDate = formatCurrentDate()
   }
 
   render() {
-    return html`${this._currentTime}`
+    return html`
+      <div class="time">${this._currentTime}</div>
+      <div class="date">${this._currentDate}</div>
+    `
   }
 }

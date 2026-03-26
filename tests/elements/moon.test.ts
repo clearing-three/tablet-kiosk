@@ -10,10 +10,10 @@ vi.mock('../../src/services/NasaMoonService', () => ({
   }),
 }))
 
-import { MoonPhase, SIXTY_MINUTES_MILLIS } from '../../src/elements/moon-phase'
+import { Moon, SIXTY_MINUTES_MILLIS } from '../../src/elements/moon'
 
-describe('MoonPhase', () => {
-  let element: MoonPhase
+describe('Moon', () => {
+  let element: Moon
 
   const mockMoonImage: NasaMoonImage = {
     url: 'https://example.org/moon.jpg',
@@ -22,16 +22,16 @@ describe('MoonPhase', () => {
     alt_text: 'Waxing Gibbous Moon',
   }
 
-  const getMoonImage = (el: MoonPhase): HTMLImageElement | null => {
+  const getMoonImage = (el: Moon): HTMLImageElement | null => {
     return el.shadowRoot?.querySelector('.moon') ?? null
   }
 
-  const getMoonImageSrc = (el: MoonPhase): string => {
+  const getMoonImageSrc = (el: Moon): string => {
     const img = getMoonImage(el)
     return img?.getAttribute('src') ?? ''
   }
 
-  const waitForMoonUpdate = async (el: MoonPhase) => {
+  const waitForMoonUpdate = async (el: Moon) => {
     await el.updateComplete // initial update after connectedCallback
     // Wait for async updateMoon to complete (flush microtask queue)
     await Promise.resolve()
@@ -51,12 +51,12 @@ describe('MoonPhase', () => {
   describe('initialization', () => {
     it('should be defined as a custom element', () => {
       // expect
-      expect(customElements.get('moon-phase')).toBeDefined()
+      expect(customElements.get('x-moon')).toBeDefined()
     })
 
     it('should not fetch moon data before being connected', () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
 
       // expect
       expect(mockGetCurrentMoonImage).not.toHaveBeenCalled()
@@ -66,7 +66,7 @@ describe('MoonPhase', () => {
   describe('connectedCallback', () => {
     it('should update moon immediately on connection', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
 
       // when
       document.body.appendChild(element)
@@ -79,7 +79,7 @@ describe('MoonPhase', () => {
 
     it('should start interval timer on connection', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
       await element.updateComplete
 
@@ -96,7 +96,7 @@ describe('MoonPhase', () => {
 
     it('should continue updating every hour', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
       await element.updateComplete
 
@@ -123,7 +123,7 @@ describe('MoonPhase', () => {
         .mockResolvedValueOnce(firstMoonImage)
         .mockResolvedValueOnce(secondMoonImage)
 
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
       await waitForMoonUpdate(element)
 
@@ -143,7 +143,7 @@ describe('MoonPhase', () => {
   describe('disconnectedCallback', () => {
     it('should clear interval timer on disconnection', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
       await element.updateComplete
 
@@ -159,7 +159,7 @@ describe('MoonPhase', () => {
 
     it('should not throw when disconnected before connected', () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
 
       // expect
       expect(() => element.disconnectedCallback()).not.toThrow()
@@ -167,7 +167,7 @@ describe('MoonPhase', () => {
 
     it('should handle multiple disconnections safely', () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
 
       // when
@@ -181,7 +181,7 @@ describe('MoonPhase', () => {
   describe('rendering', () => {
     it('should render moon image with correct URL', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
 
       // when
       document.body.appendChild(element)
@@ -196,7 +196,7 @@ describe('MoonPhase', () => {
 
     it('should render moon image with correct alt text', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
 
       // when
       document.body.appendChild(element)
@@ -210,7 +210,7 @@ describe('MoonPhase', () => {
 
     it('should render moon image with correct CSS class', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
 
       // when
       document.body.appendChild(element)
@@ -224,7 +224,7 @@ describe('MoonPhase', () => {
 
     it('should render container with correct CSS class', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
 
       // when
       document.body.appendChild(element)
@@ -256,7 +256,7 @@ describe('MoonPhase', () => {
         .mockResolvedValueOnce(firstMoon)
         .mockResolvedValueOnce(secondMoon)
 
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
       await waitForMoonUpdate(element)
 
@@ -280,7 +280,7 @@ describe('MoonPhase', () => {
   describe('reconnection', () => {
     it('should restart timer when reconnected', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
       await waitForMoonUpdate(element)
 
@@ -309,7 +309,7 @@ describe('MoonPhase', () => {
   describe('interval timing', () => {
     it('should use specified interval', async () => {
       // given
-      element = document.createElement('moon-phase') as MoonPhase
+      element = document.createElement('x-moon') as Moon
       document.body.appendChild(element)
       await waitForMoonUpdate(element)
 

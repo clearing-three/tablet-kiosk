@@ -21,6 +21,12 @@ pnpm validate
 
 - use short names, do not prefix with 'feature/', 'bugfix/', etc
 
+### Lit Element Naming
+- element names should begin with 'x-', e.g. x-root, x-moon
+- element classes should drop the prefix, e.g. Root, Moon
+- files containing elements should be named using lower case based on the class
+    - e.g the file name for the Root class is root.ts
+
 ### Branch Protection
 **IMPORTANT**: Never make code changes when on the `main` branch. If the user requests changes while on `main`:
 1. Check current branch with `git branch --show-current`

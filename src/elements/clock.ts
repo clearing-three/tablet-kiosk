@@ -2,8 +2,8 @@ import { LitElement, html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import { formatCurrentTime } from '../utils/formatters.js'
 
-@customElement('time-display')
-export class Time extends LitElement {
+@customElement('x-clock')
+export class Clock extends LitElement {
   static styles = css`
     :host {
       display: block;

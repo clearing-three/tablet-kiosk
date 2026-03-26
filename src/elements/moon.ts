@@ -4,8 +4,8 @@ import { NasaMoonService } from '../services/NasaMoonService.js'
 
 export const SIXTY_MINUTES_MILLIS = 3600000
 
-@customElement('moon-phase')
-export class MoonPhase extends LitElement {
+@customElement('x-moon')
+export class Moon extends LitElement {
   static styles = css`
     :host {
       display: block;

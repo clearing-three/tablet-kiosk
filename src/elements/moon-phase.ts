@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import { NasaMoonService } from '../services/NasaMoonService.js'
 
-const SIXTY_MINUTES_MILLIS = 3600000
+export const SIXTY_MINUTES_MILLIS = 3600000
 
 @customElement('moon-phase')
 export class MoonPhase extends LitElement {
@@ -44,7 +44,6 @@ export class MoonPhase extends LitElement {
   connectedCallback() {
     super.connectedCallback()
     this.updateMoon()
-    // Update every hour
     this._timer = setInterval(() => this.updateMoon(), SIXTY_MINUTES_MILLIS)
   }
 

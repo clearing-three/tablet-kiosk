@@ -33,6 +33,7 @@ export default defineConfig({
         'src/config/environment.ts',
         'src/types/**',
         'src/main.ts',
+        'src/main-legacy.ts',
       ],
       thresholds: {
         branches: 80,

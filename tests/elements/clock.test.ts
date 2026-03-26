@@ -1,12 +1,12 @@
 import type { Mock } from 'vitest'
-import { Time } from '../../src/elements/time-display'
+import { Clock } from '../../src/elements/clock'
 import * as formatters from '../../src/utils/formatters'
 
-describe('Time', () => {
-  let element: Time
+describe('Clock', () => {
+  let element: Clock
   let mockFormatCurrentTime: Mock
 
-  const getRenderedText = (el: Time): string => {
+  const getRenderedText = (el: Clock): string => {
     return el.shadowRoot?.textContent?.trim() ?? ''
   }
 
@@ -16,7 +16,7 @@ describe('Time', () => {
     vi.spyOn(formatters, 'formatCurrentTime').mockImplementation(
       mockFormatCurrentTime
     )
-    element = document.createElement('time-display') as Time
+    element = document.createElement('x-clock') as Clock
   })
 
   afterEach(() => {
@@ -29,11 +29,11 @@ describe('Time', () => {
 
   describe('initialization', () => {
     it('should be defined as a custom element', () => {
-      expect(customElements.get('time-display')).toBeDefined()
+      expect(customElements.get('x-clock')).toBeDefined()
     })
 
     it('should create an instance', () => {
-      expect(element).toBeInstanceOf(Time)
+      expect(element).toBeInstanceOf(Clock)
     })
 
     it('should not fetch time before being connected', () => {
@@ -147,7 +147,7 @@ describe('Time', () => {
 
   describe('styles', () => {
     it('should have defined static styles', () => {
-      expect(Time.styles).toBeDefined()
+      expect(Clock.styles).toBeDefined()
     })
   })
 
@@ -178,7 +178,7 @@ describe('Time', () => {
 
       for (const time of times) {
         mockFormatCurrentTime.mockReturnValue(time)
-        const testElement = document.createElement('time-display') as Time
+        const testElement = document.createElement('x-clock') as Clock
         document.body.appendChild(testElement)
         await testElement.updateComplete
 

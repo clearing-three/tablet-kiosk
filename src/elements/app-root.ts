@@ -3,14 +3,13 @@ import { customElement } from 'lit/decorators.js'
 import './time-display'
 import './moon-phase'
 
-@customElement('kiosk-app')
-export class KioskApp extends LitElement {
+@customElement('app-root')
+export class AppRoot extends LitElement {
   static styles = css`
     :host {
       display: block;
-      background: black;
-      color: #00bfff;
-      min-height: 100vh;
+      background: var(--black);
+      height: 100vh;
       padding: 1rem;
     }
   `

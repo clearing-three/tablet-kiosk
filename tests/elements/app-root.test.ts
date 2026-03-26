@@ -2,16 +2,16 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 
 mockChildren()
 
-import { KioskApp } from '../../src/elements/kiosk-app'
+import { AppRoot } from '../../src/elements/app-root'
 
 // Force module evaluation to ensure @customElement decorator runs
-void KioskApp
+void AppRoot
 
-describe('KioskApp', () => {
-  let element: KioskApp
+describe('AppRoot', () => {
+  let element: AppRoot
 
   beforeEach(() => {
-    element = document.createElement('kiosk-app') as KioskApp
+    element = document.createElement('app-root') as AppRoot
   })
 
   afterEach(() => {

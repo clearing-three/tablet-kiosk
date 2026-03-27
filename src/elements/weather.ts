@@ -4,6 +4,7 @@ import { customElement } from 'lit/decorators.js'
 import { weatherServiceConfig } from '../config/environment'
 import { WeatherContext } from '../context/weather-context.js'
 import { WeatherService } from '../services/WeatherService.js'
+import './sun-times.js'
 
 @customElement('x-weather')
 export class Weather extends LitElement {
@@ -41,6 +42,6 @@ export class Weather extends LitElement {
   }
 
   render() {
-    return html``
+    return html`<x-sun-times></x-sun-times>`
   }
 }

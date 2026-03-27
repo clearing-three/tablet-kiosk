@@ -6,7 +6,6 @@
     "experimentalDecorators": true,
 
     /* Path aliases */
-    "baseUrl": ".",
     "module": "ESNext",
 
     /* Bundler mode */

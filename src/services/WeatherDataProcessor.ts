@@ -57,7 +57,6 @@ export class WeatherDataProcessor {
     const astronomy = {
       sunrise: current.sunrise,
       sunset: current.sunset,
-      moonPhase: todaysForecast.moon_phase,
     }
 
     return {

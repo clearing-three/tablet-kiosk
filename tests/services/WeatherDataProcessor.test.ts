@@ -59,7 +59,6 @@ describe('weatherDataProcessor', () => {
       // Check astronomy data processing
       expect(processed.astronomy.sunrise).toBe(mockData.current.sunrise)
       expect(processed.astronomy.sunset).toBe(mockData.current.sunset)
-      expect(processed.astronomy.moonPhase).toBe(mockData.daily[0].moon_phase)
     })
   })
 

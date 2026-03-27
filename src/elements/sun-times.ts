@@ -5,6 +5,8 @@ import { customElement, state } from 'lit/decorators.js'
 import { WeatherContext } from '../context/weather-context.js'
 import { formatTimeFromUnix } from '../utils/formatters.js'
 
+export const SUN_ICON_PATH = 'weather-icons/clear-day.svg'
+
 @customElement('x-sun-times')
 export class SunTimes extends LitElement {
   static styles = css`
@@ -65,7 +67,7 @@ export class SunTimes extends LitElement {
   render() {
     return html`
       <img
-        src="weather-icons/clear-day.svg"
+        src="${SUN_ICON_PATH}"
         alt="Sun"
         class="sun-icon"
       />

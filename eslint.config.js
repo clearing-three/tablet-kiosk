@@ -12,11 +12,7 @@ export default antfu(
     },
     ignores: [
       'dist/**',
-      'src/dist/**',
       'node_modules/**',
-      'public/**',
-      'app.js',
-      'moon-phase.js',
     ],
   },
   {

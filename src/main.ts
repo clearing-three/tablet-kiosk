@@ -5,44 +5,44 @@
  * Initializes services, components, and manages application lifecycle.
  */
 
-import './styles/main.css'
+import { MoonView } from './components/Astronomy/MoonView'
 
-// Services
-import { WeatherService } from './services/WeatherService'
-import { NasaMoonService } from './services/NasaMoonService'
+import { SunView } from './components/Astronomy/SunView'
+// Components
+import { ErrorDisplay } from './components/ErrorDisplay'
+
+import { TimeView } from './components/Time/TimeView'
+
+import { CurrentConditionsView } from './components/Weather/CurrentConditionsView'
+
+import { ForecastView } from './components/Weather/ForecastView'
 
 // Configuration
 import { weatherServiceConfig } from './config/environment'
-
-// Asset management
-import {
-  preloadAssets,
-  getAssetUrls,
-  reportMissingAssets,
-} from './utils/assets'
-
-// Constants
-import { DOM_IDS } from './utils/constants'
-
-// Components
-import { ErrorDisplay } from './components/ErrorDisplay'
-import { TimeView } from './components/Time/TimeView'
-import { MoonView } from './components/Astronomy/MoonView'
-import { CurrentConditionsView } from './components/Weather/CurrentConditionsView'
-import { ForecastView } from './components/Weather/ForecastView'
-import { SunView } from './components/Astronomy/SunView'
-
-// Core
-import { DOMValidator } from './core/DOMValidator'
-import { AssetValidator } from './core/AssetValidator'
-
+import { MoonController } from './controllers/MoonController'
 // Controllers
 import { TimeController } from './controllers/TimeController'
-import { MoonController } from './controllers/MoonController'
 import { WeatherController } from './controllers/WeatherController'
+import { AssetValidator } from './core/AssetValidator'
+// Core
+import { DOMValidator } from './core/DOMValidator'
+
+import { NasaMoonService } from './services/NasaMoonService'
+// Services
+import { WeatherService } from './services/WeatherService'
 
 // Types
 import { DEFAULT_APP_CONFIG } from './types/app.types'
+// Asset management
+import {
+  getAssetUrls,
+  preloadAssets,
+  reportMissingAssets,
+} from './utils/assets'
+// Constants
+import { DOM_IDS } from './utils/constants'
+
+import './styles/main.css'
 
 export class TabletKioskApp {
   constructor(
@@ -50,14 +50,14 @@ export class TabletKioskApp {
     private readonly assetValidator: AssetValidator,
     private readonly weatherController: WeatherController,
     private readonly timeController: TimeController,
-    private readonly moonController: MoonController
+    private readonly moonController: MoonController,
   ) {}
 
   async initialize(): Promise<void> {
     const domValidation = this.domValidator.validate(Object.values(DOM_IDS))
     if (!domValidation.valid) {
       throw new Error(
-        `Missing DOM elements: ${domValidation.missing.join(', ')}`
+        `Missing DOM elements: ${domValidation.missing.join(', ')}`,
       )
     }
 
@@ -71,12 +71,13 @@ export class TabletKioskApp {
 
   private async validateAssetsAsync(): Promise<void> {
     try {
-      const assetValidation =
-        await this.assetValidator.validateAll(getAssetUrls())
+      const assetValidation
+        = await this.assetValidator.validateAll(getAssetUrls())
       if (!assetValidation.valid) {
         reportMissingAssets(assetValidation.missing)
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.warn('Asset validation failed:', error)
     }
   }
@@ -107,7 +108,7 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
   const moonController = new MoonController(
     moonView,
     nasaMoonService,
-    errorDisplay
+    errorDisplay,
   )
 
   const weatherView = new CurrentConditionsView()
@@ -119,7 +120,7 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     sunView,
     weatherService,
     errorDisplay,
-    DEFAULT_APP_CONFIG.weatherUpdateIntervalMs
+    DEFAULT_APP_CONFIG.weatherUpdateIntervalMs,
   )
 
   return new TabletKioskApp(
@@ -127,7 +128,7 @@ function createApp(errorDisplay: ErrorDisplay): TabletKioskApp {
     new AssetValidator(),
     weatherController,
     timeController,
-    moonController
+    moonController,
   )
 }
 
@@ -141,9 +142,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     await app.initialize()
 
     // Make app globally available for debugging
-    ;(globalThis as typeof globalThis & { kioskApp: TabletKioskApp }).kioskApp =
-      app
-  } catch (error) {
+    ;(globalThis as typeof globalThis & { kioskApp: TabletKioskApp }).kioskApp
+      = app
+  }
+  catch (error) {
     console.error('Failed to start application:', error)
     errorDisplay.show('init', error)
   }

@@ -1,8 +1,8 @@
-import type { Mock } from 'vitest'
 import type { ReactiveControllerHost } from 'lit'
+import type { Mock } from 'vitest'
 import { PollingController } from '../../src/controllers/polling-controller'
 
-describe('PollingController', () => {
+describe('pollingController', () => {
   let mockHost: ReactiveControllerHost
   let mockFetchFn: Mock<() => Promise<string>>
   let controller: PollingController<string>
@@ -175,7 +175,7 @@ describe('PollingController', () => {
       const numberController = new PollingController(
         mockHost,
         numberFetch,
-        intervalMillis
+        intervalMillis,
       )
 
       await numberController.hostConnected()
@@ -189,7 +189,7 @@ describe('PollingController', () => {
       const objectController = new PollingController(
         mockHost,
         objectFetch,
-        intervalMillis
+        intervalMillis,
       )
 
       await objectController.hostConnected()
@@ -203,7 +203,7 @@ describe('PollingController', () => {
       const arrayController = new PollingController(
         mockHost,
         arrayFetch,
-        intervalMillis
+        intervalMillis,
       )
 
       await arrayController.hostConnected()

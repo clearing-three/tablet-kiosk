@@ -5,41 +5,41 @@
 /**
  * Type definition for OpenWeatherMap icon codes
  */
-export type OWMIconCode =
-  | '01d'
-  | '01n' // Clear sky
-  | '02d'
-  | '02n' // Few clouds
-  | '03d'
-  | '03n' // Scattered clouds
-  | '04d'
-  | '04n' // Broken clouds
-  | '09d'
-  | '09n' // Shower rain
-  | '10d'
-  | '10n' // Rain
-  | '11d'
-  | '11n' // Thunderstorm
-  | '13d'
-  | '13n' // Snow
-  | '50d'
-  | '50n' // Mist
+export type OWMIconCode
+  = | '01d'
+    | '01n' // Clear sky
+    | '02d'
+    | '02n' // Few clouds
+    | '03d'
+    | '03n' // Scattered clouds
+    | '04d'
+    | '04n' // Broken clouds
+    | '09d'
+    | '09n' // Shower rain
+    | '10d'
+    | '10n' // Rain
+    | '11d'
+    | '11n' // Thunderstorm
+    | '13d'
+    | '13n' // Snow
+    | '50d'
+    | '50n' // Mist
 
 /**
  * Type definition for local SVG icon names
  */
-export type LocalIconName =
-  | 'clear-day'
-  | 'clear-night'
-  | 'partly-cloudy-day'
-  | 'partly-cloudy-night'
-  | 'overcast'
-  | 'rain'
-  | 'thunderstorms-day'
-  | 'thunderstorms-night'
-  | 'snow'
-  | 'mist'
-  | 'na' // fallback for unknown codes
+export type LocalIconName
+  = | 'clear-day'
+    | 'clear-night'
+    | 'partly-cloudy-day'
+    | 'partly-cloudy-night'
+    | 'overcast'
+    | 'rain'
+    | 'thunderstorms-day'
+    | 'thunderstorms-night'
+    | 'snow'
+    | 'mist'
+    | 'na' // fallback for unknown codes
 
 /**
  * Mapping from OpenWeatherMap icon codes to local SVG file names
@@ -78,7 +78,7 @@ export function mapOWMIconToSVG(owmCode: string): LocalIconName {
 
   // Fallback for unknown codes
   console.warn(
-    `Unknown OpenWeatherMap icon code: ${owmCode}, using fallback 'na'`
+    `Unknown OpenWeatherMap icon code: ${owmCode}, using fallback 'na'`,
   )
   return 'na'
 }
@@ -89,7 +89,7 @@ export function mapOWMIconToSVG(owmCode: string): LocalIconName {
  * @returns True if the code is a valid OWM icon code
  */
 function isValidOWMIconCode(code: string): code is OWMIconCode {
-  return Object.prototype.hasOwnProperty.call(ICON_MAP, code)
+  return Object.hasOwn(ICON_MAP, code)
 }
 
 /**
@@ -100,7 +100,7 @@ function isValidOWMIconCode(code: string): code is OWMIconCode {
  */
 export function getWeatherIconPath(
   owmCode: string,
-  basePath: string = 'weather-icons'
+  basePath: string = 'weather-icons',
 ): string {
   const iconName = mapOWMIconToSVG(owmCode)
   return `${basePath}/${iconName}.svg`

@@ -9,12 +9,12 @@
  */
 
 import type { Mock } from 'vitest'
-import { MoonController } from '../../src/controllers/MoonController'
 import type { MoonView } from '../../src/components/Astronomy/MoonView'
-import type { NasaMoonService } from '../../src/services/NasaMoonService'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
+import type { NasaMoonService } from '../../src/services/NasaMoonService'
+import { MoonController } from '../../src/controllers/MoonController'
 
-describe('MoonController', () => {
+describe('moonController', () => {
   let moonController: MoonController
   let mockMoonView: Pick<MoonView, 'render'>
   let mockNasaMoonService: Pick<NasaMoonService, 'getCurrentMoonImage'>
@@ -40,7 +40,7 @@ describe('MoonController', () => {
     moonController = new MoonController(
       mockMoonView as MoonView,
       mockNasaMoonService as NasaMoonService,
-      mockErrorDisplay as ErrorDisplay
+      mockErrorDisplay as ErrorDisplay,
     )
   })
 
@@ -55,7 +55,7 @@ describe('MoonController', () => {
       await vi.waitFor(() => {
         expect(mockNasaMoonService.getCurrentMoonImage).toHaveBeenCalledOnce()
         expect(mockMoonView.render).toHaveBeenCalledWith(
-          'https://svs.gsfc.nasa.gov/moon.jpg'
+          'https://svs.gsfc.nasa.gov/moon.jpg',
         )
       })
     })
@@ -75,7 +75,7 @@ describe('MoonController', () => {
       await vi.advanceTimersByTimeAsync(3600000) // 1 hour
 
       expect(mockMoonView.render).toHaveBeenCalledWith(
-        'https://svs.gsfc.nasa.gov/moon2.jpg'
+        'https://svs.gsfc.nasa.gov/moon2.jpg',
       )
     })
 
@@ -99,13 +99,12 @@ describe('MoonController', () => {
       })
 
       moonController.stop()
-      const callsBefore = (mockNasaMoonService.getCurrentMoonImage as Mock).mock
-        .calls.length
+      const callsBefore = (mockNasaMoonService.getCurrentMoonImage as Mock).mock.calls.length
 
       await vi.advanceTimersByTimeAsync(7200000)
 
       expect(mockNasaMoonService.getCurrentMoonImage).toHaveBeenCalledTimes(
-        callsBefore
+        callsBefore,
       )
     })
 
@@ -122,13 +121,12 @@ describe('MoonController', () => {
       })
 
       moonController.destroy()
-      const callsBefore = (mockNasaMoonService.getCurrentMoonImage as Mock).mock
-        .calls.length
+      const callsBefore = (mockNasaMoonService.getCurrentMoonImage as Mock).mock.calls.length
 
       await vi.advanceTimersByTimeAsync(7200000)
 
       expect(mockNasaMoonService.getCurrentMoonImage).toHaveBeenCalledTimes(
-        callsBefore
+        callsBefore,
       )
     })
   })
@@ -146,7 +144,7 @@ describe('MoonController', () => {
 
     it('should show error on each failing tick', async () => {
       ;(mockNasaMoonService.getCurrentMoonImage as Mock).mockRejectedValue(
-        new Error('fail')
+        new Error('fail'),
       )
 
       moonController.start()
@@ -212,7 +210,7 @@ describe('MoonController', () => {
 
     it('should not call view render when fetch fails', async () => {
       ;(mockNasaMoonService.getCurrentMoonImage as Mock).mockRejectedValue(
-        new Error('fail')
+        new Error('fail'),
       )
 
       moonController.start()

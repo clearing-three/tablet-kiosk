@@ -5,12 +5,12 @@
  * Owns the update interval and coordinates weather-related views.
  */
 
-import { UpdateScheduler } from '../core/UpdateScheduler'
-import type { WeatherService } from '../services/WeatherService'
-import type { CurrentConditionsView } from '../components/Weather/CurrentConditionsView'
-import type { ForecastView } from '../components/Weather/ForecastView'
 import type { SunView } from '../components/Astronomy/SunView'
 import type { ErrorDisplay } from '../components/ErrorDisplay'
+import type { CurrentConditionsView } from '../components/Weather/CurrentConditionsView'
+import type { ForecastView } from '../components/Weather/ForecastView'
+import type { WeatherService } from '../services/WeatherService'
+import { UpdateScheduler } from '../core/UpdateScheduler'
 
 export class WeatherController {
   private scheduler: UpdateScheduler
@@ -21,7 +21,7 @@ export class WeatherController {
     private sunView: SunView,
     private weatherService: WeatherService,
     private errorDisplay: ErrorDisplay,
-    updateIntervalMs: number
+    updateIntervalMs: number,
   ) {
     this.scheduler = new UpdateScheduler(updateIntervalMs)
   }
@@ -41,7 +41,8 @@ export class WeatherController {
       this.sunView.render(weatherData.astronomy)
 
       this.errorDisplay.remove('weather-update')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to update weather data:', error)
       this.errorDisplay.show('weather-update', error)
     }

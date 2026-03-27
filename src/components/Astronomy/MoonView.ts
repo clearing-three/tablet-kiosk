@@ -4,8 +4,8 @@
  * Renders NASA Dial-a-Moon API images.
  */
 
-import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
+import { getElement } from '../../utils/dom'
 
 export class MoonView {
   private element: HTMLImageElement

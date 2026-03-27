@@ -15,18 +15,18 @@ export interface SolarTimes {
  * Weather icon names for standard weather conditions.
  * These are provider-agnostic icon identifiers mapped from API responses.
  */
-export type WeatherIcon =
-  | 'clear-day'
-  | 'clear-night'
-  | 'partly-cloudy-day'
-  | 'partly-cloudy-night'
-  | 'overcast'
-  | 'rain'
-  | 'thunderstorms-day'
-  | 'thunderstorms-night'
-  | 'snow'
-  | 'mist'
-  | 'na' // fallback for unknown conditions
+export type WeatherIcon
+  = | 'clear-day'
+    | 'clear-night'
+    | 'partly-cloudy-day'
+    | 'partly-cloudy-night'
+    | 'overcast'
+    | 'rain'
+    | 'thunderstorms-day'
+    | 'thunderstorms-night'
+    | 'snow'
+    | 'mist'
+    | 'na' // fallback for unknown conditions
 
 // Simplified weather data for component consumption
 export interface WeatherData {

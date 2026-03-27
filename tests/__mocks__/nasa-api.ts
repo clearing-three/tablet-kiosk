@@ -117,7 +117,7 @@ export class NasaMoonApiMock {
    * Sets up the global fetch mock
    */
   static setup(): void {
-    global.fetch = vi.fn()
+    globalThis.fetch = vi.fn()
   }
 
   /**
@@ -138,9 +138,9 @@ export class NasaMoonApiMock {
    * Mocks a successful API response
    */
   static mockSuccess(
-    data: NasaMoonApiResponse = mockNasaSuccessResponse
+    data: NasaMoonApiResponse = mockNasaSuccessResponse,
   ): void {
-    ;(global.fetch as any).mockResolvedValueOnce({
+    ;(globalThis.fetch as any).mockResolvedValueOnce({
       ok: true,
       status: 200,
       statusText: 'OK',
@@ -153,7 +153,7 @@ export class NasaMoonApiMock {
    */
   static mockError(errorType: keyof typeof mockNasaErrorResponses): void {
     const errorResponse = mockNasaErrorResponses[errorType]
-    ;(global.fetch as any).mockResolvedValueOnce(errorResponse)
+    ;(globalThis.fetch as any).mockResolvedValueOnce(errorResponse)
   }
 
   /**
@@ -161,15 +161,15 @@ export class NasaMoonApiMock {
    */
   static mockEdgeCase(caseType: keyof typeof mockNasaEdgeCaseResponses): void {
     const edgeCaseResponse = mockNasaEdgeCaseResponses[caseType]
-    ;(global.fetch as any).mockResolvedValueOnce(edgeCaseResponse)
+    ;(globalThis.fetch as any).mockResolvedValueOnce(edgeCaseResponse)
   }
 
   /**
    * Mocks a network failure
    */
   static mockNetworkFailure(): void {
-    ;(global.fetch as any).mockRejectedValueOnce(
-      new TypeError('Network request failed')
+    ;(globalThis.fetch as any).mockRejectedValueOnce(
+      new TypeError('Network request failed'),
     )
   }
 }

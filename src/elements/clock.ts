@@ -1,6 +1,6 @@
-import { LitElement, html, css } from 'lit'
+import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { formatCurrentTime, formatCurrentDate } from '../utils/formatters.js'
+import { formatCurrentDate, formatCurrentTime } from '../utils/formatters.js'
 
 @customElement('x-clock')
 export class Clock extends LitElement {

@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        task: [format:check, lint, stylelint, analyze:lit]
+        task: [lint, stylelint, analyze:lit]
     steps:
       - uses: actions/checkout@v6.0.2
 

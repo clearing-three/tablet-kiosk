@@ -1,8 +1,8 @@
 // Global test setup file
 import {
+  resetAllMocks,
   setupAllMocks,
   teardownAllMocks,
-  resetAllMocks,
 } from './__mocks__/setup'
 
 // Set up all mocks before tests start
@@ -62,7 +62,8 @@ expect.extend({
           `expected ${received} not to be within range ${floor} - ${ceiling}`,
         pass: true,
       }
-    } else {
+    }
+    else {
       return {
         message: () =>
           `expected ${received} to be within range ${floor} - ${ceiling}`,
@@ -74,6 +75,6 @@ expect.extend({
 
 declare module 'vitest' {
   interface Assertion<T = any> {
-    toBeWithinRange(floor: number, ceiling: number): T
+    toBeWithinRange: (floor: number, ceiling: number) => T
   }
 }

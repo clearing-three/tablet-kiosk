@@ -9,9 +9,9 @@
 
 import type { Mock } from 'vitest'
 import { NasaMoonService } from '../../src/services/NasaMoonService'
-import { NasaMoonApiMock, mockNasaSuccessResponse } from '../__mocks__/nasa-api'
+import { mockNasaSuccessResponse, NasaMoonApiMock } from '../__mocks__/nasa-api'
 
-describe('NasaMoonService', () => {
+describe('nasaMoonService', () => {
   let nasaMoonService: NasaMoonService
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('NasaMoonService', () => {
     NasaMoonApiMock.reset()
   })
 
-  describe('Timestamp Formatting', () => {
+  describe('timestamp Formatting', () => {
     it('should format timestamp to YYYY-MM-DDTHH:MM format in UTC', () => {
       const date = new Date('2026-03-13T15:30:45.123Z')
       const formatted = nasaMoonService.formatTimestamp(date)
@@ -54,7 +54,7 @@ describe('NasaMoonService', () => {
     })
   })
 
-  describe('Successful API Calls', () => {
+  describe('successful API Calls', () => {
     it('should fetch moon image data for a given date', async () => {
       NasaMoonApiMock.mockSuccess()
       const date = new Date('2026-03-13T15:30:00.000Z')
@@ -74,11 +74,11 @@ describe('NasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1)
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
 
       expect(fetchCall).toBe(
-        'https://svs.gsfc.nasa.gov/api/dialamoon/2026-03-13T15:30'
+        'https://svs.gsfc.nasa.gov/api/dialamoon/2026-03-13T15:30',
       )
     })
 
@@ -88,7 +88,7 @@ describe('NasaMoonService', () => {
       const result = await nasaMoonService.getCurrentMoonImage()
 
       expect(result).toEqual(mockNasaSuccessResponse.image)
-      expect(global.fetch).toHaveBeenCalledTimes(1)
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1)
     })
 
     it('should return valid moon image structure', async () => {
@@ -103,12 +103,12 @@ describe('NasaMoonService', () => {
     })
   })
 
-  describe('Error Handling', () => {
+  describe('error Handling', () => {
     it('should handle HTTP 404 Not Found errors', async () => {
       NasaMoonApiMock.mockError('notFound')
 
       await expect(nasaMoonService.getCurrentMoonImage()).rejects.toThrow(
-        NasaMoonService.Errors.httpError(404, 'Not Found')
+        NasaMoonService.Errors.httpError(404, 'Not Found'),
       )
     })
 
@@ -116,7 +116,7 @@ describe('NasaMoonService', () => {
       NasaMoonApiMock.mockError('serverError')
 
       await expect(nasaMoonService.getCurrentMoonImage()).rejects.toThrow(
-        NasaMoonService.Errors.httpError(500, 'Internal Server Error')
+        NasaMoonService.Errors.httpError(500, 'Internal Server Error'),
       )
     })
 
@@ -124,7 +124,7 @@ describe('NasaMoonService', () => {
       NasaMoonApiMock.mockNetworkFailure()
 
       await expect(nasaMoonService.getCurrentMoonImage()).rejects.toThrow(
-        TypeError
+        TypeError,
       )
     })
 
@@ -132,7 +132,7 @@ describe('NasaMoonService', () => {
       NasaMoonApiMock.mockError('invalidJson')
 
       await expect(nasaMoonService.getCurrentMoonImage()).rejects.toThrow(
-        SyntaxError
+        SyntaxError,
       )
     })
 
@@ -140,7 +140,7 @@ describe('NasaMoonService', () => {
       NasaMoonApiMock.mockEdgeCase('missingImage')
 
       await expect(nasaMoonService.getCurrentMoonImage()).rejects.toThrow(
-        NasaMoonService.Errors.missingImageData
+        NasaMoonService.Errors.missingImageData,
       )
     })
 
@@ -148,7 +148,7 @@ describe('NasaMoonService', () => {
       NasaMoonApiMock.mockEdgeCase('missingUrl')
 
       await expect(nasaMoonService.getCurrentMoonImage()).rejects.toThrow(
-        NasaMoonService.Errors.missingImageUrl
+        NasaMoonService.Errors.missingImageUrl,
       )
     })
 
@@ -156,19 +156,19 @@ describe('NasaMoonService', () => {
       NasaMoonApiMock.mockEdgeCase('invalidUrlType')
 
       await expect(nasaMoonService.getCurrentMoonImage()).rejects.toThrow(
-        NasaMoonService.Errors.missingImageUrl
+        NasaMoonService.Errors.missingImageUrl,
       )
     })
   })
 
-  describe('Date Handling Edge Cases', () => {
+  describe('date Handling Edge Cases', () => {
     it('should handle dates across different years', async () => {
       NasaMoonApiMock.mockSuccess()
       const date = new Date('2025-12-31T23:59:00.000Z')
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
       expect(fetchCall).toContain('2025-12-31T23:59')
     })
 
@@ -178,7 +178,7 @@ describe('NasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
       expect(fetchCall).toContain('2020-01-01T12:00')
     })
 
@@ -188,7 +188,7 @@ describe('NasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
       expect(fetchCall).toContain('2030-06-15T18:45')
     })
 
@@ -198,12 +198,12 @@ describe('NasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
       expect(fetchCall).toContain('2024-02-29T12:00')
     })
   })
 
-  describe('Multiple Calls', () => {
+  describe('multiple Calls', () => {
     it('should handle multiple sequential calls', async () => {
       NasaMoonApiMock.mockSuccess()
       await nasaMoonService.getCurrentMoonImage()
@@ -211,25 +211,25 @@ describe('NasaMoonService', () => {
       NasaMoonApiMock.mockSuccess()
       await nasaMoonService.getCurrentMoonImage()
 
-      expect(global.fetch).toHaveBeenCalledTimes(2)
+      expect(globalThis.fetch).toHaveBeenCalledTimes(2)
     })
 
     it('should maintain independence between calls', async () => {
       NasaMoonApiMock.mockSuccess()
       const result1 = await nasaMoonService.fetchMoonImage(
-        new Date('2026-03-13T10:00:00.000Z')
+        new Date('2026-03-13T10:00:00.000Z'),
       )
 
       NasaMoonApiMock.mockSuccess()
       const result2 = await nasaMoonService.fetchMoonImage(
-        new Date('2026-03-14T10:00:00.000Z')
+        new Date('2026-03-14T10:00:00.000Z'),
       )
 
       expect(result1).toEqual(mockNasaSuccessResponse.image)
       expect(result2).toEqual(mockNasaSuccessResponse.image)
 
-      const call1 = (global.fetch as Mock).mock.calls[0][0]
-      const call2 = (global.fetch as Mock).mock.calls[1][0]
+      const call1 = (globalThis.fetch as Mock).mock.calls[0][0]
+      const call2 = (globalThis.fetch as Mock).mock.calls[1][0]
 
       expect(call1).toContain('2026-03-13T10:00')
       expect(call2).toContain('2026-03-14T10:00')

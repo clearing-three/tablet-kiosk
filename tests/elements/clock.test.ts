@@ -4,7 +4,7 @@ import * as formatters from '../../src/utils/formatters'
 
 void Clock // Force module evaluation to ensure @customElement decorator runs
 
-describe('Clock', () => {
+describe('clock', () => {
   let element: Clock
   let mockFormatCurrentTime: Mock
   let mockFormatCurrentDate: Mock
@@ -22,10 +22,10 @@ describe('Clock', () => {
     mockFormatCurrentTime = vi.fn()
     mockFormatCurrentDate = vi.fn()
     vi.spyOn(formatters, 'formatCurrentTime').mockImplementation(
-      mockFormatCurrentTime
+      mockFormatCurrentTime,
     )
     vi.spyOn(formatters, 'formatCurrentDate').mockImplementation(
-      mockFormatCurrentDate
+      mockFormatCurrentDate,
     )
     element = document.createElement('x-clock') as Clock
   })

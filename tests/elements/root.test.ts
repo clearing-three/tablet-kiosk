@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-
-mockChildren()
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { Root } from '../../src/elements/root'
+
+mockChildren()
 
 // Force module evaluation to ensure @customElement decorator runs
 void Root
 
-describe('Root', () => {
+describe('root', () => {
   let element: Root
 
   beforeEach(() => {

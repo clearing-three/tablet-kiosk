@@ -1,5 +1,7 @@
 import type { WeatherData } from '../../src/types/weather-domain.types'
 
+import { Weather } from '../../src/elements/weather'
+
 const mockGetWeatherData = vi.fn()
 const mockSetValue = vi.fn()
 
@@ -10,8 +12,8 @@ vi.mock('../../src/services/WeatherService', () => ({
 }))
 
 vi.mock('@lit/context', async () => {
-  const actual =
-    await vi.importActual<typeof import('@lit/context')>('@lit/context')
+  const actual
+    = await vi.importActual<typeof import('@lit/context')>('@lit/context')
   return {
     ...actual,
     ContextProvider: vi.fn().mockImplementation(function (this: any) {
@@ -20,9 +22,7 @@ vi.mock('@lit/context', async () => {
   }
 })
 
-import { Weather } from '../../src/elements/weather'
-
-describe('Weather', () => {
+describe('weather', () => {
   let element: Weather
   let mockWeatherData: WeatherData
 

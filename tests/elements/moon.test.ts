@@ -1,4 +1,7 @@
+import type { Moon } from '../../src/elements/moon'
+
 import type { NasaMoonImage } from '../../src/types/nasa-api.types'
+import { SIXTY_MINUTES_MILLIS } from '../../src/elements/moon'
 
 const mockGetCurrentMoonImage = vi.fn()
 
@@ -10,9 +13,7 @@ vi.mock('../../src/services/NasaMoonService', () => ({
   }),
 }))
 
-import { Moon, SIXTY_MINUTES_MILLIS } from '../../src/elements/moon'
-
-describe('Moon', () => {
+describe('moon', () => {
   let element: Moon
 
   const mockMoonImage: NasaMoonImage = {
@@ -295,7 +296,7 @@ describe('Moon', () => {
 
       // then
       expect(mockGetCurrentMoonImage).toHaveBeenCalledTimes(
-        callsAfterConnect + 3
+        callsAfterConnect + 3,
       )
       element.remove()
     })

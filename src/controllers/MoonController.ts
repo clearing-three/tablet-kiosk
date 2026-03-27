@@ -5,10 +5,10 @@
  * Owns the update interval, fetches moon data, and coordinates MoonView rendering.
  */
 
-import { UpdateScheduler } from '../core/UpdateScheduler'
 import type { MoonView } from '../components/Astronomy/MoonView'
-import type { NasaMoonService } from '../services/NasaMoonService'
 import type { ErrorDisplay } from '../components/ErrorDisplay'
+import type { NasaMoonService } from '../services/NasaMoonService'
+import { UpdateScheduler } from '../core/UpdateScheduler'
 
 export class MoonController {
   private scheduler: UpdateScheduler
@@ -17,7 +17,7 @@ export class MoonController {
   constructor(
     private moonView: MoonView,
     private nasaMoonService: NasaMoonService,
-    private errorDisplay: ErrorDisplay
+    private errorDisplay: ErrorDisplay,
   ) {
     this.scheduler = new UpdateScheduler(3600000) // 1h
   }
@@ -30,7 +30,8 @@ export class MoonController {
           this.lastUpdateFailed = false
           this.errorDisplay.remove('nasa-moon')
         }
-      } catch (error) {
+      }
+      catch (error) {
         this.lastUpdateFailed = true
         this.errorDisplay.show('nasa-moon', error)
       }

@@ -1,13 +1,13 @@
 type ErrorSource = 'init' | 'weather-update' | 'clock-update' | 'nasa-moon'
 
-function getErrorDetails(error: unknown): { message: string; stack?: string } {
+function getErrorDetails(error: unknown): { message: string, stack?: string } {
   if (error instanceof Error)
     return { message: error.message, stack: error.stack }
   return { message: String(error) }
 }
 
 const SOURCE_LABELS: Record<ErrorSource, string> = {
-  init: 'Init',
+  'init': 'Init',
   'weather-update': 'Weather',
   'clock-update': 'Clock',
   'nasa-moon': 'Nasa Moon',
@@ -74,7 +74,8 @@ export class ErrorDisplay {
     const existing = this.bars.get(source)
     if (existing) {
       this.container.replaceChild(bar, existing)
-    } else {
+    }
+    else {
       this.container.appendChild(bar)
     }
     this.bars.set(source, bar)
@@ -82,7 +83,8 @@ export class ErrorDisplay {
 
   remove(source: ErrorSource): void {
     const bar = this.bars.get(source)
-    if (!bar) return
+    if (!bar)
+      return
     this.container.removeChild(bar)
     this.bars.delete(source)
   }

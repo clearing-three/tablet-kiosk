@@ -5,11 +5,11 @@
  * success, error, and edge cases for comprehensive testing coverage.
  */
 
+import type { Mock } from 'vitest'
 import type {
   WeatherApiData,
   WeatherApiError,
 } from '../../../src/types/weather-api.types'
-import type { Mock } from 'vitest'
 import { clearSunnyDay } from '../fixtures/weather-scenarios'
 
 /**
@@ -199,7 +199,7 @@ export const mockEdgeCaseResponses = {
  */
 export function createMockFetchResponse(
   data: unknown,
-  init: Partial<Response> = {}
+  init: Partial<Response> = {},
 ) {
   return Promise.resolve({
     ok: true,
@@ -222,41 +222,41 @@ export function createMockFetchRejection(error: Error) {
  * Utility to mock OpenWeatherMap API calls
  */
 export class OpenWeatherMapMock {
-  private static originalFetch: typeof global.fetch
+  private static originalFetch: typeof globalThis.fetch
 
   static setup() {
-    this.originalFetch = global.fetch
-    global.fetch = vi.fn()
+    this.originalFetch = globalThis.fetch
+    globalThis.fetch = vi.fn()
   }
 
   static teardown() {
-    global.fetch = this.originalFetch
+    globalThis.fetch = this.originalFetch
   }
 
   static mockSuccess(data: WeatherApiData = mockSuccessResponse) {
-    ;(global.fetch as Mock).mockResolvedValueOnce(createMockFetchResponse(data))
+    ;(globalThis.fetch as Mock).mockResolvedValueOnce(createMockFetchResponse(data))
   }
 
   static mockError(errorType: keyof typeof mockErrorResponses) {
     const errorResponse = mockErrorResponses[errorType]
-    ;(global.fetch as Mock).mockResolvedValueOnce(errorResponse)
+    ;(globalThis.fetch as Mock).mockResolvedValueOnce(errorResponse)
   }
 
   static mockEdgeCase(caseType: keyof typeof mockEdgeCaseResponses) {
     const edgeCaseData = mockEdgeCaseResponses[caseType]
-    ;(global.fetch as Mock).mockResolvedValueOnce(
-      createMockFetchResponse(edgeCaseData)
+    ;(globalThis.fetch as Mock).mockResolvedValueOnce(
+      createMockFetchResponse(edgeCaseData),
     )
   }
 
   static mockNetworkFailure() {
-    ;(global.fetch as Mock).mockRejectedValueOnce(
-      new TypeError('Network request failed')
+    ;(globalThis.fetch as Mock).mockRejectedValueOnce(
+      new TypeError('Network request failed'),
     )
   }
 
   static mockCustomResponse(response: Partial<Response>) {
-    ;(global.fetch as Mock).mockResolvedValueOnce({
+    ;(globalThis.fetch as Mock).mockResolvedValueOnce({
       ok: true,
       status: 200,
       statusText: 'OK',
@@ -266,14 +266,14 @@ export class OpenWeatherMapMock {
   }
 
   static verifyApiCall(expectedUrl: string, expectedOptions?: RequestInit) {
-    expect(global.fetch).toHaveBeenCalledWith(expectedUrl, expectedOptions)
+    expect(globalThis.fetch).toHaveBeenCalledWith(expectedUrl, expectedOptions)
   }
 
   static verifyApiCallCount(expectedCount: number) {
-    expect(global.fetch).toHaveBeenCalledTimes(expectedCount)
+    expect(globalThis.fetch).toHaveBeenCalledTimes(expectedCount)
   }
 
   static reset() {
-    ;(global.fetch as Mock).mockReset()
+    ;(globalThis.fetch as Mock).mockReset()
   }
 }

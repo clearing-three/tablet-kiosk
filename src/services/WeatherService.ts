@@ -5,10 +5,10 @@
  * Provides a simplified interface for weather operations.
  */
 
+import type { WeatherServiceConfig } from '../types/service-config.types'
+import type { WeatherData } from '../types/weather-domain.types'
 import { OpenWeatherApiClient } from './OpenWeatherApiClient'
 import { WeatherDataProcessor } from './WeatherDataProcessor'
-import type { WeatherData } from '../types/weather-domain.types'
-import type { WeatherServiceConfig } from '../types/service-config.types'
 
 export class WeatherService {
   private readonly client: OpenWeatherApiClient

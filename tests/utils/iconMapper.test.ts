@@ -8,16 +8,17 @@
  * - Path generation and validation
  */
 
+import type { LocalIconName, OWMIconCode } from '../../src/utils/iconMapper'
 import { existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
-  mapOWMIconToSVG,
-  getWeatherIconPath,
   getAllIconMappings,
+  getWeatherIconPath,
   hasIconMapping,
-  type OWMIconCode,
-  type LocalIconName,
+
+  mapOWMIconToSVG,
+
 } from '../../src/utils/iconMapper'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -94,7 +95,7 @@ describe('iconMapper', () => {
       mapOWMIconToSVG('unknown-code')
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        "Unknown OpenWeatherMap icon code: unknown-code, using fallback 'na'"
+        'Unknown OpenWeatherMap icon code: unknown-code, using fallback \'na\'',
       )
 
       consoleSpy.mockRestore()
@@ -109,17 +110,17 @@ describe('iconMapper', () => {
 
     it('should generate correct path with custom base path', () => {
       expect(getWeatherIconPath('01d', '/assets/icons')).toBe(
-        '/assets/icons/clear-day.svg'
+        '/assets/icons/clear-day.svg',
       )
       expect(getWeatherIconPath('11n', 'public/weather')).toBe(
-        'public/weather/thunderstorms-night.svg'
+        'public/weather/thunderstorms-night.svg',
       )
     })
 
     it('should handle fallback icons in path generation', () => {
       expect(getWeatherIconPath('invalid-code')).toBe('weather-icons/na.svg')
       expect(getWeatherIconPath('99x', '/custom/path')).toBe(
-        '/custom/path/na.svg'
+        '/custom/path/na.svg',
       )
     })
 
@@ -164,7 +165,7 @@ describe('iconMapper', () => {
         '50n',
       ]
 
-      expectedCodes.forEach(code => {
+      expectedCodes.forEach((code) => {
         expect(mappings).toHaveProperty(code)
       })
     })
@@ -194,7 +195,7 @@ describe('iconMapper', () => {
         'na',
       ]
 
-      Object.values(mappings).forEach(localIcon => {
+      Object.values(mappings).forEach((localIcon) => {
         expect(validLocalIcons).toContain(localIcon)
       })
     })
@@ -223,7 +224,7 @@ describe('iconMapper', () => {
         '50n',
       ]
 
-      validCodes.forEach(code => {
+      validCodes.forEach((code) => {
         expect(hasIconMapping(code)).toBe(true)
       })
     })
@@ -242,7 +243,7 @@ describe('iconMapper', () => {
         '01D',
       ]
 
-      invalidCodes.forEach(code => {
+      invalidCodes.forEach((code) => {
         expect(hasIconMapping(code)).toBe(false)
       })
     })
@@ -314,7 +315,7 @@ describe('iconMapper', () => {
     it('should generate valid SVG file extensions', () => {
       const testCodes = ['01d', '10n', '11d', 'invalid']
 
-      testCodes.forEach(code => {
+      testCodes.forEach((code) => {
         const path = getWeatherIconPath(code)
         expect(path).toMatch(/\.svg$/)
       })
@@ -332,12 +333,12 @@ describe('iconMapper', () => {
       const uniqueIcons = new Set(Object.values(iconMappings))
       const missingIcons: string[] = []
 
-      uniqueIcons.forEach(iconName => {
+      uniqueIcons.forEach((iconName) => {
         // Path from test file: tests/utils/ -> ../../public/weather-icons/
         const filePath = join(
           __dirname,
           '../../public/weather-icons',
-          `${iconName}.svg`
+          `${iconName}.svg`,
         )
         if (!existsSync(filePath)) {
           missingIcons.push(iconName)

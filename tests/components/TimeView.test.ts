@@ -10,7 +10,7 @@ import type { Mock } from 'vitest'
 import { TimeView } from '../../src/components/Time/TimeView'
 import * as formatters from '../../src/utils/formatters'
 
-describe('TimeView', () => {
+describe('timeView', () => {
   let timeView: TimeView
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('TimeView', () => {
     `
     vi.spyOn(formatters, 'formatCurrentTime').mockReturnValue('14:30')
     vi.spyOn(formatters, 'formatCurrentDate').mockReturnValue(
-      'Friday, February 20'
+      'Friday, February 20',
     )
     timeView = new TimeView()
   })
@@ -54,7 +54,7 @@ describe('TimeView', () => {
       timeView.render()
 
       expect(document.getElementById('date')!.textContent).toBe(
-        'Friday, February 20'
+        'Friday, February 20',
       )
     })
 
@@ -78,7 +78,7 @@ describe('TimeView', () => {
 
       expect(document.getElementById('time')!.textContent).toBe('09:05')
       expect(document.getElementById('date')!.textContent).toBe(
-        'Monday, March 2'
+        'Monday, March 2',
       )
     })
   })

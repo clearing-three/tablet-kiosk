@@ -22,7 +22,7 @@ export function preloadAssets(): void {
     'na',
   ]
 
-  dynamicIcons.forEach(iconName => {
+  dynamicIcons.forEach((iconName) => {
     const link = document.createElement('link')
     link.rel = 'preload'
     link.as = 'image'
@@ -37,7 +37,7 @@ export function preloadAssets(): void {
     'moonset',
     'wind-static',
   ]
-  staticIcons.forEach(iconName => {
+  staticIcons.forEach((iconName) => {
     const link = document.createElement('link')
     link.rel = 'preload'
     link.as = 'image'
@@ -64,7 +64,8 @@ export async function validateAssetExists(assetPath: string): Promise<boolean> {
   try {
     const response = await fetch(assetPath, { method: 'HEAD' })
     return response.ok
-  } catch {
+  }
+  catch {
     return false
   }
 }

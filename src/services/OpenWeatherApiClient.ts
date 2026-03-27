@@ -5,12 +5,13 @@
  * Provides type-safe weather data fetching and error handling.
  */
 
-import {
-  WeatherApiDataSchema,
-  type WeatherApiData,
-  type WeatherApiError,
-} from '../types/weather-api.types'
 import type { WeatherServiceConfig } from '../types/service-config.types'
+import type { WeatherApiData, WeatherApiError } from '../types/weather-api.types'
+import {
+
+  WeatherApiDataSchema,
+
+} from '../types/weather-api.types'
 
 export class OpenWeatherApiClient {
   static readonly Errors = {
@@ -64,12 +65,13 @@ export class OpenWeatherApiClient {
           const errorData: WeatherApiError = await response.json()
           errorMessage = OpenWeatherApiClient.Errors.apiError(
             errorData.cod,
-            errorData.message
+            errorData.message,
           )
-        } catch {
+        }
+        catch {
           errorMessage = OpenWeatherApiClient.Errors.httpError(
             response.status,
-            response.statusText
+            response.statusText,
           )
         }
         throw new Error(errorMessage)
@@ -79,11 +81,12 @@ export class OpenWeatherApiClient {
       const data = WeatherApiDataSchema.parse(rawData)
 
       return data
-    } catch (error) {
+    }
+    catch (error) {
       if (
-        error instanceof TypeError &&
-        (error.message.includes('fetch') ||
-          error.message.includes('Network request'))
+        error instanceof TypeError
+        && (error.message.includes('fetch')
+          || error.message.includes('Network request'))
       ) {
         throw new Error(OpenWeatherApiClient.Errors.networkError, {
           cause: error,

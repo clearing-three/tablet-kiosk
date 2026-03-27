@@ -4,11 +4,11 @@
  * Tests for WeatherService orchestration of API client and data processor.
  */
 
-import { WeatherService } from '../../src/services/WeatherService'
 import type { WeatherServiceConfig } from '../../src/types/service-config.types'
-import { OpenWeatherMapMock, getWeatherScenario } from '../__mocks__'
+import { WeatherService } from '../../src/services/WeatherService'
+import { getWeatherScenario, OpenWeatherMapMock } from '../__mocks__'
 
-describe('WeatherService', () => {
+describe('weatherService', () => {
   let weatherService: WeatherService
   let testConfig: WeatherServiceConfig
 
@@ -29,7 +29,7 @@ describe('WeatherService', () => {
     OpenWeatherMapMock.reset()
   })
 
-  describe('Constructor and Configuration', () => {
+  describe('constructor and Configuration', () => {
     it('should initialize with provided configuration', () => {
       const config = weatherService.getConfig()
 
@@ -67,7 +67,7 @@ describe('WeatherService', () => {
     })
   })
 
-  describe('Integration - Fetch and Process', () => {
+  describe('integration - Fetch and Process', () => {
     it('should get processed weather data in one call', async () => {
       const mockData = getWeatherScenario('multiDayForecast')
       OpenWeatherMapMock.mockSuccess(mockData)
@@ -91,7 +91,7 @@ describe('WeatherService', () => {
 
       // Verify processing applied correctly
       expect(processedData.current.temperature).toBe(
-        Math.round(originalData.current.temp)
+        Math.round(originalData.current.temp),
       )
     })
 
@@ -99,7 +99,7 @@ describe('WeatherService', () => {
       OpenWeatherMapMock.mockError('unauthorized')
 
       await expect(weatherService.getWeatherData()).rejects.toThrow(
-        'API Error 401'
+        'API Error 401',
       )
     })
 
@@ -107,7 +107,7 @@ describe('WeatherService', () => {
       OpenWeatherMapMock.mockNetworkFailure()
 
       await expect(weatherService.getWeatherData()).rejects.toThrow(
-        'Network error'
+        'Network error',
       )
     })
 
@@ -122,7 +122,7 @@ describe('WeatherService', () => {
       expect(typeof result.current.icon).toBe('string')
       expect(result.current.icon).not.toMatch(/^\d{2}[dn]$/) // Should not be OWM format
 
-      result.forecast.forEach(day => {
+      result.forecast.forEach((day) => {
         expect(day.icon).toBeDefined()
         expect(typeof day.icon).toBe('string')
         expect(day.icon).not.toMatch(/^\d{2}[dn]$/)

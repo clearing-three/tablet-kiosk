@@ -1,5 +1,5 @@
 export class DOMValidator {
-  validate(elementIds: string[]): { valid: boolean; missing: string[] } {
+  validate(elementIds: string[]): { valid: boolean, missing: string[] } {
     const missing: string[] = []
 
     for (const id of elementIds) {

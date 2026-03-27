@@ -5,15 +5,15 @@
  * - Time display formatting
  */
 
+import type { SolarTimes as AstronomyData } from '../../src/types/weather-domain.types'
 import { SunView } from '../../src/components/Astronomy/SunView'
 import { formatTimeFromUnix } from '../../src/utils/formatters'
-import type { SolarTimes as AstronomyData } from '../../src/types/weather-domain.types'
 
 // Fixed Unix timestamps for deterministic tests
 const SUNRISE = 1700030400 // 06:00
 const SUNSET = 1700073600 // 18:00
 
-describe('SunView', () => {
+describe('sunView', () => {
   let sunView: SunView
   let mockData: AstronomyData
 
@@ -48,10 +48,10 @@ describe('SunView', () => {
       sunView.render(mockData)
 
       expect(document.getElementById('sunrise-time')!.textContent).toBe(
-        formatTimeFromUnix(SUNRISE)
+        formatTimeFromUnix(SUNRISE),
       )
       expect(document.getElementById('sunset-time')!.textContent).toBe(
-        formatTimeFromUnix(SUNSET)
+        formatTimeFromUnix(SUNSET),
       )
     })
 
@@ -62,7 +62,7 @@ describe('SunView', () => {
       sunView.render(updatedData)
 
       expect(document.getElementById('sunrise-time')!.textContent).toBe(
-        formatTimeFromUnix(SUNSET)
+        formatTimeFromUnix(SUNSET),
       )
     })
   })

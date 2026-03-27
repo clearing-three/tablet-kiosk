@@ -2,11 +2,11 @@ import { validateAssetExists } from '../utils/assets'
 
 export class AssetValidator {
   async validateAll(
-    assetUrls: string[]
-  ): Promise<{ valid: boolean; missing: string[] }> {
+    assetUrls: string[],
+  ): Promise<{ valid: boolean, missing: string[] }> {
     const missing: string[] = []
 
-    const validationPromises = assetUrls.map(async url => {
+    const validationPromises = assetUrls.map(async (url) => {
       const exists = await validateAssetExists(url)
       if (!exists) {
         missing.push(url)

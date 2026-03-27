@@ -1,12 +1,12 @@
+import type { MoonController } from '../src/controllers/MoonController'
+import type { TimeController } from '../src/controllers/TimeController'
+import type { WeatherController } from '../src/controllers/WeatherController'
+import type { AssetValidator } from '../src/core/AssetValidator'
+import type { DOMValidator } from '../src/core/DOMValidator'
 import { TabletKioskApp } from '../src/main'
 import { DOM_IDS } from '../src/utils/constants'
-import type { DOMValidator } from '../src/core/DOMValidator'
-import type { AssetValidator } from '../src/core/AssetValidator'
-import type { WeatherController } from '../src/controllers/WeatherController'
-import type { TimeController } from '../src/controllers/TimeController'
-import type { MoonController } from '../src/controllers/MoonController'
 
-describe('TabletKioskApp', () => {
+describe('tabletKioskApp', () => {
   let mockDomValidator: Pick<DOMValidator, 'validate'>
   let mockAssetValidator: Pick<AssetValidator, 'validateAll'>
   let mockWeatherController: Pick<
@@ -25,7 +25,7 @@ describe('TabletKioskApp', () => {
       mockAssetValidator as AssetValidator,
       mockWeatherController as WeatherController,
       mockTimeController as TimeController,
-      mockMoonController as MoonController
+      mockMoonController as MoonController,
     )
   }
 
@@ -63,7 +63,7 @@ describe('TabletKioskApp', () => {
       await makeApp().initialize()
 
       expect(mockDomValidator.validate).toHaveBeenCalledWith(
-        Object.values(DOM_IDS)
+        Object.values(DOM_IDS),
       )
     })
 
@@ -73,7 +73,7 @@ describe('TabletKioskApp', () => {
         .mockReturnValue({ valid: false, missing: ['time', 'date'] })
 
       await expect(makeApp().initialize()).rejects.toThrow(
-        'Missing DOM elements: time, date'
+        'Missing DOM elements: time, date',
       )
     })
 

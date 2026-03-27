@@ -7,8 +7,8 @@
  */
 
 import type {
-  WeatherApiData,
   DailyWeather,
+  WeatherApiData,
 } from '../../../src/types/weather-api.types'
 import { REQUIRED_FORECAST_DAYS } from '../../../src/constants/weather.constants'
 
@@ -17,7 +17,7 @@ import { REQUIRED_FORECAST_DAYS } from '../../../src/constants/weather.constants
  */
 function generateFourDayForecast(
   baseDay: DailyWeather,
-  weatherPattern: 'clear' | 'rainy' | 'snowy' | 'mixed' = 'clear'
+  weatherPattern: 'clear' | 'rainy' | 'snowy' | 'mixed' = 'clear',
 ): DailyWeather[] {
   const days: DailyWeather[] = []
   const baseTimestamp = baseDay.dt
@@ -31,8 +31,8 @@ function generateFourDayForecast(
 
     switch (weatherPattern) {
       case 'rainy':
-        weatherCondition =
-          i === 0
+        weatherCondition
+          = i === 0
             ? baseDay.weather[0]
             : {
                 id: 500 + (i % 3),
@@ -45,8 +45,8 @@ function generateFourDayForecast(
         tempAdjustment = -2 * i // Gets cooler over time
         break
       case 'snowy':
-        weatherCondition =
-          i === 0
+        weatherCondition
+          = i === 0
             ? baseDay.weather[0]
             : {
                 id: 600 + (i % 3),
@@ -70,8 +70,8 @@ function generateFourDayForecast(
         break
       }
       default: // clear
-        weatherCondition =
-          i === 0
+        weatherCondition
+          = i === 0
             ? baseDay.weather[0]
             : {
                 id: 800 + (i % 2),
@@ -177,7 +177,7 @@ export const clearSunnyDay: WeatherApiData = {
       pop: 0.0,
       uvi: 8.5,
     },
-    'clear'
+    'clear',
   ),
 }
 
@@ -252,7 +252,7 @@ export const rainyStormyDay: WeatherApiData = {
       rain: 8.5,
       uvi: 1.2,
     },
-    'rainy'
+    'rainy',
   ),
 }
 
@@ -315,7 +315,7 @@ export const snowyWinterDay: WeatherApiData = {
       snow: 5.2,
       uvi: 2.1,
     },
-    'snowy'
+    'snowy',
   ),
 }
 
@@ -361,7 +361,7 @@ export const extremeHeat: WeatherApiData = {
       pop: 0.0,
       uvi: 11.5,
     },
-    'clear'
+    'clear',
   ),
 }
 
@@ -417,7 +417,7 @@ export const extremeCold: WeatherApiData = {
       snow: 12.3,
       uvi: 1.2,
     },
-    'snowy'
+    'snowy',
   ),
 }
 
@@ -457,7 +457,7 @@ export const multiDayForecast: WeatherApiData = {
       pop: 0.0,
       uvi: 8.5,
     },
-    'mixed'
+    'mixed',
   ),
 }
 
@@ -551,7 +551,7 @@ export const weatherScenarios = {
  * Helper function to get a scenario by name
  */
 export function getWeatherScenario(
-  scenarioName: keyof typeof weatherScenarios
+  scenarioName: keyof typeof weatherScenarios,
 ): WeatherApiData {
   return weatherScenarios[scenarioName]
 }
@@ -561,7 +561,7 @@ export function getWeatherScenario(
  */
 export function createCustomScenario(
   baseScenario: WeatherApiData,
-  overrides: Partial<WeatherApiData>
+  overrides: Partial<WeatherApiData>,
 ): WeatherApiData {
   return {
     ...baseScenario,

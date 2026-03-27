@@ -8,8 +8,8 @@
 
 import type { WeatherApiData } from '../types/weather-api.types'
 import type { WeatherData } from '../types/weather-domain.types'
-import { mapOWMIconToSVG } from '../utils/iconMapper'
 import { REQUIRED_FORECAST_DAYS } from '../constants/weather.constants'
+import { mapOWMIconToSVG } from '../utils/iconMapper'
 
 export class WeatherDataProcessor {
   /**
@@ -41,7 +41,7 @@ export class WeatherDataProcessor {
     }
 
     // Process forecast (next 3 days, skipping today)
-    const forecast = data.daily.slice(1, REQUIRED_FORECAST_DAYS).map(day => {
+    const forecast = data.daily.slice(1, REQUIRED_FORECAST_DAYS).map((day) => {
       const date = new Date(day.dt * 1000)
       return {
         dayName: date.toLocaleDateString(undefined, { weekday: 'short' }),

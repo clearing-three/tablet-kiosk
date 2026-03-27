@@ -7,25 +7,25 @@
  * - Proper date formatting for each day
  */
 
-import {
-  ForecastView,
-  ERROR_MISSING_CHILD_ELEMENTS,
-} from '../../src/components/Weather/ForecastView'
 import type { WeatherData } from '../../src/types/weather-domain.types'
+import {
+  ERROR_MISSING_CHILD_ELEMENTS,
+  ForecastView,
+} from '../../src/components/Weather/ForecastView'
 
 type ForecastDay = WeatherData['forecast'][0]
 
-const makeForecastDay = (
-  overrides: Partial<ForecastDay> = {}
-): ForecastDay => ({
-  dayName: 'Mon',
-  icon: 'clear-day',
-  description: 'clear sky',
-  maxTemp: 75,
-  minTemp: 58,
-  date: new Date('2022-01-03'),
-  ...overrides,
-})
+function makeForecastDay(overrides: Partial<ForecastDay> = {}): ForecastDay {
+  return {
+    dayName: 'Mon',
+    icon: 'clear-day',
+    description: 'clear sky',
+    maxTemp: 75,
+    minTemp: 58,
+    date: new Date('2022-01-03'),
+    ...overrides,
+  }
+}
 
 const THREE_DAYS: ForecastDay[] = [
   makeForecastDay({
@@ -51,7 +51,7 @@ const THREE_DAYS: ForecastDay[] = [
   }),
 ]
 
-describe('ForecastView', () => {
+describe('forecastView', () => {
   let forecastView: ForecastView
 
   beforeEach(() => {
@@ -75,12 +75,12 @@ describe('ForecastView', () => {
     forecastView = new ForecastView()
   })
 
-  describe('Constructor', () => {
+  describe('constructor', () => {
     it('should throw when forecast day elements are not in the DOM', () => {
       document.body.innerHTML = ''
 
       expect(() => new ForecastView()).toThrow(
-        'Required DOM element not found: #forecast-day-1'
+        'Required DOM element not found: #forecast-day-1',
       )
     })
 
@@ -89,7 +89,7 @@ describe('ForecastView', () => {
     })
   })
 
-  describe('Forecast list generation', () => {
+  describe('forecast list generation', () => {
     it('should create a forecast-day element for each day', () => {
       forecastView.render(THREE_DAYS)
 
@@ -128,17 +128,17 @@ describe('ForecastView', () => {
 
       const icons = document.querySelectorAll('.forecast-icon')
       expect((icons[0] as HTMLObjectElement).data).toContain(
-        'weather-icons/clear-day.svg'
+        'weather-icons/clear-day.svg',
       )
       expect((icons[1] as HTMLObjectElement).data).toContain(
-        'weather-icons/partly-cloudy-day.svg'
+        'weather-icons/partly-cloudy-day.svg',
       )
     })
 
     it('should update previous forecast with new data', () => {
       forecastView.render(THREE_DAYS)
-      const firstDayName =
-        document.querySelector('.forecast-day-name')?.textContent
+      const firstDayName
+        = document.querySelector('.forecast-day-name')?.textContent
       expect(firstDayName).toBe('Mon')
 
       const newForecast = [
@@ -146,13 +146,13 @@ describe('ForecastView', () => {
         makeForecastDay({ dayName: 'Sun' }),
       ]
       forecastView.render(newForecast)
-      const updatedDayName =
-        document.querySelector('.forecast-day-name')?.textContent
+      const updatedDayName
+        = document.querySelector('.forecast-day-name')?.textContent
       expect(updatedDayName).toBe('Sat')
     })
   })
 
-  describe('Correct number of forecast days', () => {
+  describe('correct number of forecast days', () => {
     it('should display only 2 days when given 3 or more', () => {
       forecastView.render(THREE_DAYS)
 
@@ -179,7 +179,7 @@ describe('ForecastView', () => {
     })
   })
 
-  describe('Proper date formatting for each day', () => {
+  describe('proper date formatting for each day', () => {
     it('should render day names exactly as provided', () => {
       const days = [
         makeForecastDay({ dayName: 'Monday' }),
@@ -225,17 +225,17 @@ describe('ForecastView', () => {
     })
   })
 
-  describe('Validation and error propagation', () => {
+  describe('validation and error propagation', () => {
     it.each([
       '.forecast-day-name',
       '.forecast-icon',
       '.forecast-desc',
       '.forecast-range',
-    ])('should throw when %s is missing', selector => {
+    ])('should throw when %s is missing', (selector) => {
       document.querySelector(selector)?.remove()
 
       expect(() => forecastView.render(THREE_DAYS)).toThrow(
-        ERROR_MISSING_CHILD_ELEMENTS
+        ERROR_MISSING_CHILD_ELEMENTS,
       )
     })
   })

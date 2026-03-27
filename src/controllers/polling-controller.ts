@@ -1,4 +1,4 @@
-import { ReactiveController, ReactiveControllerHost } from 'lit'
+import type { ReactiveController, ReactiveControllerHost } from 'lit'
 
 export class PollingController<T> implements ReactiveController {
   data?: T
@@ -7,7 +7,7 @@ export class PollingController<T> implements ReactiveController {
   constructor(
     private host: ReactiveControllerHost,
     private fetchFn: () => Promise<T>,
-    private intervalMillis: number
+    private intervalMillis: number,
   ) {
     host.addController(this)
   }

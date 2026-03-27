@@ -6,11 +6,11 @@
 
 import type { WeatherServiceConfig } from '../types/service-config.types'
 import {
-  validateRequiredEnvVar,
-  validateNumericEnvVar,
+  checkApiKeyLength,
   validateLatitude,
   validateLongitude,
-  checkApiKeyLength,
+  validateNumericEnvVar,
+  validateRequiredEnvVar,
 } from './env-validators'
 
 interface EnvironmentConfig {
@@ -34,28 +34,28 @@ function loadEnvironmentConfig(): EnvironmentConfig {
     const config: EnvironmentConfig = {
       openWeatherApiKey: validateRequiredEnvVar(
         'VITE_OPENWEATHER_API_KEY',
-        import.meta.env.VITE_OPENWEATHER_API_KEY
+        import.meta.env.VITE_OPENWEATHER_API_KEY,
       ),
       location: {
         lat: validateRequiredEnvVar(
           'VITE_LOCATION_LAT',
-          import.meta.env.VITE_LOCATION_LAT
+          import.meta.env.VITE_LOCATION_LAT,
         ),
         lon: validateRequiredEnvVar(
           'VITE_LOCATION_LON',
-          import.meta.env.VITE_LOCATION_LON
+          import.meta.env.VITE_LOCATION_LON,
         ),
       },
       intervals: {
         weatherUpdate: validateNumericEnvVar(
           'VITE_WEATHER_UPDATE_INTERVAL',
           import.meta.env.VITE_WEATHER_UPDATE_INTERVAL,
-          600000 // 10 minutes default
+          600000, // 10 minutes default
         ),
         clockUpdate: validateNumericEnvVar(
           'VITE_CLOCK_UPDATE_INTERVAL',
           import.meta.env.VITE_CLOCK_UPDATE_INTERVAL,
-          1000 // 1 second default
+          1000, // 1 second default
         ),
       },
     }
@@ -65,7 +65,8 @@ function loadEnvironmentConfig(): EnvironmentConfig {
     validateLongitude(config.location.lon)
 
     return config
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Environment configuration validation failed:', error)
     throw error
   }

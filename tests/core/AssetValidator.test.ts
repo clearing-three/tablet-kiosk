@@ -1,14 +1,14 @@
 import { AssetValidator } from '../../src/core/AssetValidator'
 import * as assets from '../../src/utils/assets'
 
-vi.mock('../../src/utils/assets', async importOriginal => {
+vi.mock('../../src/utils/assets', async (importOriginal) => {
   const original = await importOriginal<typeof assets>()
   return { ...original, validateAssetExists: vi.fn() }
 })
 
 const mockValidateAssetExists = vi.mocked(assets.validateAssetExists)
 
-describe('AssetValidator', () => {
+describe('assetValidator', () => {
   let validator: AssetValidator
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('AssetValidator', () => {
 
     it('returns invalid and lists missing assets', async () => {
       mockValidateAssetExists.mockImplementation(url =>
-        Promise.resolve(url !== 'missing.svg')
+        Promise.resolve(url !== 'missing.svg'),
       )
 
       const result = await validator.validateAll(['ok.svg', 'missing.svg'])

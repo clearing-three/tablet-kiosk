@@ -6,7 +6,7 @@ import './weather'
 
 @customElement('x-root')
 export class Root extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: flex;
       flex-direction: row;
@@ -33,7 +33,7 @@ export class Root extends LitElement {
     }
   `
 
-  render() {
+  override render() {
     return html`
       <div class="pane-left">
         <x-moon></x-moon>

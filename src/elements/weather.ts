@@ -10,7 +10,7 @@ import './sun-times.js'
 export class Weather extends LitElement {
   public static readonly TEN_MINUTES_MILLIS = 10 * 60 * 1000
 
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
     }
@@ -20,7 +20,7 @@ export class Weather extends LitElement {
   private _weatherService = new WeatherService(weatherServiceConfig)
   private _provider = new ContextProvider(this, { context: WeatherContext })
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback?.()
     this.updateWeather()
     this._timer = setInterval(
@@ -29,7 +29,7 @@ export class Weather extends LitElement {
     )
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback?.()
     if (this._timer) {
       clearInterval(this._timer)
@@ -41,7 +41,7 @@ export class Weather extends LitElement {
     this._provider.setValue(weatherData)
   }
 
-  render() {
+  override render() {
     return html`<x-sun-times></x-sun-times>`
   }
 }

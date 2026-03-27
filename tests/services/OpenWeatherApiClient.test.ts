@@ -79,7 +79,7 @@ describe('openWeatherApiClient', () => {
 
       // Verify the fetch was called and check the URL contains expected parts
       expect(globalThis.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
 
       expect(fetchCall).toContain(
         'https://api.openweathermap.org/data/3.0/onecall',
@@ -107,7 +107,7 @@ describe('openWeatherApiClient', () => {
 
       // Verify the fetch was called and check the URL contains expected parts
       expect(globalThis.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
 
       expect(fetchCall).toContain('lat=51.5074')
       expect(fetchCall).toContain('lon=-0.1278')
@@ -132,7 +132,7 @@ describe('openWeatherApiClient', () => {
 
       // Verify the fetch was called and check the URL does not contain lang parameter
       expect(globalThis.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
 
       expect(fetchCall).not.toContain('lang=')
     })
@@ -166,8 +166,8 @@ describe('openWeatherApiClient', () => {
         const result = await apiClient.fetchWeatherData()
 
         expect(result.current.weather).toBeDefined()
-        expect(result.current.weather[0].main).toBeDefined()
-        expect(result.daily[0].weather[0].main).toBeDefined()
+        expect(result.current.weather[0]!.main).toBeDefined()
+        expect(result.daily[0]!.weather[0]!.main).toBeDefined()
 
         OpenWeatherMapMock.reset()
       }

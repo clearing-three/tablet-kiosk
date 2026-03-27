@@ -101,26 +101,26 @@ describe('forecastView', () => {
       forecastView.render(THREE_DAYS)
 
       const dayNames = document.querySelectorAll('.forecast-day-name')
-      expect(dayNames[0].textContent).toBe('Mon')
-      expect(dayNames[1].textContent).toBe('Tue')
+      expect(dayNames[0]!.textContent).toBe('Mon')
+      expect(dayNames[1]!.textContent).toBe('Tue')
     })
 
     it('should render the description in each forecast-day element', () => {
       forecastView.render(THREE_DAYS)
 
       const descs = document.querySelectorAll('.forecast-desc')
-      expect(descs[0].textContent).toBe('clear sky')
-      expect(descs[1].textContent).toBe('few clouds')
+      expect(descs[0]!.textContent).toBe('clear sky')
+      expect(descs[1]!.textContent).toBe('few clouds')
     })
 
     it('should render the temperature range in each forecast-day element', () => {
       forecastView.render(THREE_DAYS)
 
       const ranges = document.querySelectorAll('.forecast-range')
-      expect(ranges[0].querySelector('.temp-high')?.textContent).toBe('75')
-      expect(ranges[0].querySelector('.temp-low')?.textContent).toBe('58')
-      expect(ranges[1].querySelector('.temp-high')?.textContent).toBe('70')
-      expect(ranges[1].querySelector('.temp-low')?.textContent).toBe('55')
+      expect(ranges[0]!.querySelector('.temp-high')?.textContent).toBe('75')
+      expect(ranges[0]!.querySelector('.temp-low')?.textContent).toBe('58')
+      expect(ranges[1]!.querySelector('.temp-high')?.textContent).toBe('70')
+      expect(ranges[1]!.querySelector('.temp-low')?.textContent).toBe('55')
     })
 
     it('should set the icon SVG path using the icon name', () => {
@@ -175,7 +175,7 @@ describe('forecastView', () => {
       forecastView.render([makeForecastDay({ dayName: 'Thu' })])
 
       const dayNames = document.querySelectorAll('.forecast-day-name')
-      expect(dayNames[0].textContent).toBe('Thu')
+      expect(dayNames[0]!.textContent).toBe('Thu')
     })
   })
 
@@ -190,8 +190,8 @@ describe('forecastView', () => {
       forecastView.render(days)
 
       const dayNames = document.querySelectorAll('.forecast-day-name')
-      expect(dayNames[0].textContent).toBe('Monday')
-      expect(dayNames[1].textContent).toBe('Tuesday')
+      expect(dayNames[0]!.textContent).toBe('Monday')
+      expect(dayNames[1]!.textContent).toBe('Tuesday')
     })
 
     it('should format temperature ranges with styled high/low spans', () => {

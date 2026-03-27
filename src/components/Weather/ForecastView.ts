@@ -74,7 +74,7 @@ export class ForecastView {
     const forecastToShow = forecast.slice(0, dayElements.length)
 
     for (let i = 0; i < forecastToShow.length; i++) {
-      this.updateForecastDayElement(dayElements[i], forecastToShow[i])
+      this.updateForecastDayElement(dayElements[i]!, forecastToShow[i]!)
     }
   }
 }

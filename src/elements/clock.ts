@@ -4,7 +4,7 @@ import { formatCurrentDate, formatCurrentTime } from '../utils/formatters.js'
 
 @customElement('x-clock')
 export class Clock extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: flex;
       flex-direction: column;
@@ -33,13 +33,13 @@ export class Clock extends LitElement {
 
   private _timer?: ReturnType<typeof setInterval>
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback?.()
     this.updateTime()
     this._timer = setInterval(() => this.updateTime(), 1000)
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback?.()
     clearInterval(this._timer)
   }
@@ -49,7 +49,7 @@ export class Clock extends LitElement {
     this._currentDate = formatCurrentDate()
   }
 
-  render() {
+  override render() {
     return html`
       <div class="time">${this._currentTime}</div>
       <div class="date">${this._currentDate}</div>

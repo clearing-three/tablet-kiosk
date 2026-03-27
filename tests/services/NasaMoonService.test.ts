@@ -75,7 +75,7 @@ describe('nasaMoonService', () => {
       await nasaMoonService.fetchMoonImage(date)
 
       expect(globalThis.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
 
       expect(fetchCall).toBe(
         'https://svs.gsfc.nasa.gov/api/dialamoon/2026-03-13T15:30',
@@ -168,7 +168,7 @@ describe('nasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
       expect(fetchCall).toContain('2025-12-31T23:59')
     })
 
@@ -178,7 +178,7 @@ describe('nasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
       expect(fetchCall).toContain('2020-01-01T12:00')
     })
 
@@ -188,7 +188,7 @@ describe('nasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
       expect(fetchCall).toContain('2030-06-15T18:45')
     })
 
@@ -198,7 +198,7 @@ describe('nasaMoonService', () => {
 
       await nasaMoonService.fetchMoonImage(date)
 
-      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0]![0]
       expect(fetchCall).toContain('2024-02-29T12:00')
     })
   })
@@ -228,8 +228,8 @@ describe('nasaMoonService', () => {
       expect(result1).toEqual(mockNasaSuccessResponse.image)
       expect(result2).toEqual(mockNasaSuccessResponse.image)
 
-      const call1 = (globalThis.fetch as Mock).mock.calls[0][0]
-      const call2 = (globalThis.fetch as Mock).mock.calls[1][0]
+      const call1 = (globalThis.fetch as Mock).mock.calls[0]![0]
+      const call2 = (globalThis.fetch as Mock).mock.calls[1]![0]
 
       expect(call1).toContain('2026-03-13T10:00')
       expect(call2).toContain('2026-03-14T10:00')

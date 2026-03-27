@@ -6,7 +6,7 @@ export const SIXTY_MINUTES_MILLIS = 3600000
 
 @customElement('x-moon')
 export class Moon extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
       text-align: center;
@@ -41,13 +41,13 @@ export class Moon extends LitElement {
   private _timer?: ReturnType<typeof setInterval>
   private _moonService = new NasaMoonService()
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback?.()
     this.updateMoon()
     this._timer = setInterval(() => this.updateMoon(), SIXTY_MINUTES_MILLIS)
   }
 
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback?.()
     if (this._timer) {
       clearInterval(this._timer)
@@ -60,7 +60,7 @@ export class Moon extends LitElement {
     this._moonImageAlt = moonImage.alt_text
   }
 
-  render() {
+  override render() {
     return html`
       <div class="moon-phase-render">
         <img

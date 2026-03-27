@@ -51,7 +51,7 @@ const CurrentWeatherSchema = z.object({
   wind_speed: z.number(),
   wind_deg: z.number(),
   wind_gust: z.number().optional(),
-  weather: z.array(WeatherConditionSchema),
+  weather: z.array(WeatherConditionSchema).nonempty(),
 })
 
 // Daily weather forecast
@@ -68,7 +68,7 @@ const DailyWeatherSchema = z.object({
   wind_speed: z.number(),
   wind_deg: z.number(),
   wind_gust: z.number().optional(),
-  weather: z.array(WeatherConditionSchema),
+  weather: z.array(WeatherConditionSchema).nonempty(),
   clouds: z.number(),
   pop: z.number(),
   rain: z.number().optional(),

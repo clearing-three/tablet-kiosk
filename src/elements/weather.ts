@@ -20,7 +20,7 @@ export class Weather extends LitElement {
   private _provider = new ContextProvider(this, { context: WeatherContext })
 
   connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback?.()
     this.updateWeather()
     this._timer = setInterval(
       () => this.updateWeather(),
@@ -29,7 +29,7 @@ export class Weather extends LitElement {
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback()
+    super.disconnectedCallback?.()
     if (this._timer) {
       clearInterval(this._timer)
     }

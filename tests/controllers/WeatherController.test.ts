@@ -30,7 +30,6 @@ const mockWeatherData: WeatherData = {
   astronomy: {
     sunrise: 1640966400,
     sunset: 1641002400,
-    moonPhase: 0.25,
   },
 }
 

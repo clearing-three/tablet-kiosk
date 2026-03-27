@@ -2,6 +2,7 @@ import { css, html, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import './clock'
 import './moon'
+import './weather'
 
 @customElement('x-root')
 export class Root extends LitElement {
@@ -27,7 +28,7 @@ export class Root extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2vh;
+      gap: 1vh;
       padding: 2vh;
     }
   `

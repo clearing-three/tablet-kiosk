@@ -52,6 +52,5 @@ export interface WeatherData {
   astronomy: {
     sunrise: number // Unix timestamp
     sunset: number // Unix timestamp
-    moonPhase: number // Moon phase value 0-1
   }
 }

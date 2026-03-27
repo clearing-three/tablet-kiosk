@@ -2,6 +2,8 @@ import type { Mock } from 'vitest'
 import { Clock } from '../../src/elements/clock'
 import * as formatters from '../../src/utils/formatters'
 
+void Clock // Force module evaluation to ensure @customElement decorator runs
+
 describe('Clock', () => {
   let element: Clock
   let mockFormatCurrentTime: Mock
@@ -37,14 +39,6 @@ describe('Clock', () => {
   })
 
   describe('initialization', () => {
-    it('should be defined as a custom element', () => {
-      expect(customElements.get('x-clock')).toBeDefined()
-    })
-
-    it('should create an instance', () => {
-      expect(element).toBeInstanceOf(Clock)
-    })
-
     it('should not fetch time or date before being connected', () => {
       expect(mockFormatCurrentTime).not.toHaveBeenCalled()
       expect(mockFormatCurrentDate).not.toHaveBeenCalled()

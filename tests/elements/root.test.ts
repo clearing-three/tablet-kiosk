@@ -27,9 +27,12 @@ describe('Root', () => {
 
       const clock = element.shadowRoot?.querySelector('x-clock')
       const moon = element.shadowRoot?.querySelector('x-moon')
+      const weather = element.shadowRoot?.querySelector('x-weather')
+
 
       expect(clock).toBeDefined()
       expect(moon).toBeDefined()
+      expect(weather).toBeDefined()
     })
   })
 })
@@ -40,6 +43,10 @@ function mockChildren() {
   })
 
   vi.mock('../../src/elements/moon', () => {
+    return {}
+  })
+
+  vi.mock('../../src/elements/weather', () => {
     return {}
   })
 }

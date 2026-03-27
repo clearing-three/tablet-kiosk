@@ -39,6 +39,7 @@ export class Root extends LitElement {
       </div>
       <div class="pane-right">
         <x-clock></x-clock>
+        <x-weather></x-weather>
       </div>
     `
   }

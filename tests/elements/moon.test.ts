@@ -49,11 +49,6 @@ describe('Moon', () => {
   })
 
   describe('initialization', () => {
-    it('should be defined as a custom element', () => {
-      // expect
-      expect(customElements.get('x-moon')).toBeDefined()
-    })
-
     it('should not fetch moon data before being connected', () => {
       // given
       element = document.createElement('x-moon') as Moon

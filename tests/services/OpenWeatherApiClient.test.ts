@@ -8,11 +8,11 @@
  */
 
 import type { Mock } from 'vitest'
-import { OpenWeatherApiClient } from '../../src/services/OpenWeatherApiClient'
 import type { WeatherServiceConfig } from '../../src/types/service-config.types'
-import { OpenWeatherMapMock, getWeatherScenario } from '../__mocks__'
+import { OpenWeatherApiClient } from '../../src/services/OpenWeatherApiClient'
+import { getWeatherScenario, OpenWeatherMapMock } from '../__mocks__'
 
-describe('OpenWeatherApiClient', () => {
+describe('openWeatherApiClient', () => {
   let apiClient: OpenWeatherApiClient
   let testConfig: WeatherServiceConfig
 
@@ -33,7 +33,7 @@ describe('OpenWeatherApiClient', () => {
     OpenWeatherMapMock.reset()
   })
 
-  describe('Constructor and Configuration', () => {
+  describe('constructor and Configuration', () => {
     it('should initialize with provided configuration', () => {
       const config = apiClient.getConfig()
 
@@ -71,18 +71,18 @@ describe('OpenWeatherApiClient', () => {
     })
   })
 
-  describe('API URL Construction', () => {
+  describe('aPI URL Construction', () => {
     it('should build correct API URL with all parameters', async () => {
       OpenWeatherMapMock.mockSuccess()
 
       await apiClient.fetchWeatherData()
 
       // Verify the fetch was called and check the URL contains expected parts
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1)
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
 
       expect(fetchCall).toContain(
-        'https://api.openweathermap.org/data/3.0/onecall'
+        'https://api.openweathermap.org/data/3.0/onecall',
       )
       expect(fetchCall).toContain('lat=40.7128')
       expect(fetchCall).toContain('lon=-74.0060')
@@ -106,8 +106,8 @@ describe('OpenWeatherApiClient', () => {
       await customClient.fetchWeatherData()
 
       // Verify the fetch was called and check the URL contains expected parts
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1)
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
 
       expect(fetchCall).toContain('lat=51.5074')
       expect(fetchCall).toContain('lon=-0.1278')
@@ -124,21 +124,21 @@ describe('OpenWeatherApiClient', () => {
         units: 'imperial',
       }
       const clientWithoutLanguage = new OpenWeatherApiClient(
-        configWithoutLanguage
+        configWithoutLanguage,
       )
       OpenWeatherMapMock.mockSuccess()
 
       await clientWithoutLanguage.fetchWeatherData()
 
       // Verify the fetch was called and check the URL does not contain lang parameter
-      expect(global.fetch).toHaveBeenCalledTimes(1)
-      const fetchCall = (global.fetch as Mock).mock.calls[0][0]
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1)
+      const fetchCall = (globalThis.fetch as Mock).mock.calls[0][0]
 
       expect(fetchCall).not.toContain('lang=')
     })
   })
 
-  describe('Successful API Calls', () => {
+  describe('successful API Calls', () => {
     it('should fetch and return valid weather data', async () => {
       const mockData = getWeatherScenario('clearSunnyDay')
       OpenWeatherMapMock.mockSuccess(mockData)
@@ -174,12 +174,12 @@ describe('OpenWeatherApiClient', () => {
     })
   })
 
-  describe('Error Handling', () => {
+  describe('error Handling', () => {
     it('should handle HTTP 401 Unauthorized errors', async () => {
       OpenWeatherMapMock.mockError('unauthorized')
 
       await expect(apiClient.fetchWeatherData()).rejects.toThrow(
-        'API Error 401: Invalid API key'
+        'API Error 401: Invalid API key',
       )
     })
 
@@ -187,7 +187,7 @@ describe('OpenWeatherApiClient', () => {
       OpenWeatherMapMock.mockError('notFound')
 
       await expect(apiClient.fetchWeatherData()).rejects.toThrow(
-        'API Error 404: city not found'
+        'API Error 404: city not found',
       )
     })
 
@@ -195,7 +195,7 @@ describe('OpenWeatherApiClient', () => {
       OpenWeatherMapMock.mockError('rateLimited')
 
       await expect(apiClient.fetchWeatherData()).rejects.toThrow(
-        'API Error 429:'
+        'API Error 429:',
       )
     })
 
@@ -203,7 +203,7 @@ describe('OpenWeatherApiClient', () => {
       OpenWeatherMapMock.mockError('serverError')
 
       await expect(apiClient.fetchWeatherData()).rejects.toThrow(
-        'API Error 500: Internal server error'
+        'API Error 500: Internal server error',
       )
     })
 
@@ -211,7 +211,7 @@ describe('OpenWeatherApiClient', () => {
       OpenWeatherMapMock.mockNetworkFailure()
 
       await expect(apiClient.fetchWeatherData()).rejects.toThrow(
-        'Network error: Unable to connect to weather service'
+        'Network error: Unable to connect to weather service',
       )
     })
 
@@ -225,7 +225,7 @@ describe('OpenWeatherApiClient', () => {
       OpenWeatherMapMock.mockError('errorWithInvalidJson')
 
       await expect(apiClient.fetchWeatherData()).rejects.toThrow(
-        OpenWeatherApiClient.Errors.httpError(503, 'Service Unavailable')
+        OpenWeatherApiClient.Errors.httpError(503, 'Service Unavailable'),
       )
     })
 

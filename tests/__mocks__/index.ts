@@ -8,30 +8,30 @@
 // API Mocks
 export * from './api/openweathermap'
 
+// Convenience re-exports for common testing patterns
+export {
+  mockEdgeCaseResponses,
+  mockErrorResponses,
+  mockSuccessResponse,
+  OpenWeatherMapMock,
+} from './api/openweathermap'
+
 // DOM and Browser API Mocks
 export * from './dom/browser-apis'
+
+export {
+  browserApiHelpers,
+  BrowserApiMock,
+  ConsoleMock,
+  LocalStorageMock,
+  TimerMock,
+} from './dom/browser-apis'
 
 // Test Fixtures
 export * from './fixtures/weather-scenarios'
 
-// Convenience re-exports for common testing patterns
 export {
-  OpenWeatherMapMock,
-  mockSuccessResponse,
-  mockErrorResponses,
-  mockEdgeCaseResponses,
-} from './api/openweathermap'
-
-export {
-  BrowserApiMock,
-  browserApiHelpers,
-  TimerMock,
-  LocalStorageMock,
-  ConsoleMock,
-} from './dom/browser-apis'
-
-export {
-  weatherScenarios,
-  getWeatherScenario,
   createCustomScenario,
+  getWeatherScenario,
+  weatherScenarios,
 } from './fixtures/weather-scenarios'

@@ -9,13 +9,13 @@
  */
 
 import {
-  formatTimeFromUnix,
-  formatCurrentTime,
-  formatCurrentDate,
-  formatDayNameFromUnix,
-  formatTemperature,
   createTemperatureRangeElements,
   createWindSpeedElements,
+  formatCurrentDate,
+  formatCurrentTime,
+  formatDayNameFromUnix,
+  formatTemperature,
+  formatTimeFromUnix,
 } from '../../src/utils/formatters'
 
 describe('formatters', () => {
@@ -106,7 +106,7 @@ describe('formatters', () => {
       // Should not contain abbreviations like "Mon" or "Jan"
       expect(result).not.toMatch(/\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\b/)
       expect(result).not.toMatch(
-        /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/
+        /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/,
       )
     })
 
@@ -140,7 +140,7 @@ describe('formatters', () => {
         1704585600, // Sunday
       ]
 
-      testCases.forEach(unix => {
+      testCases.forEach((unix) => {
         const result = formatDayNameFromUnix(unix)
         expect(result).toMatch(/^[A-Z][a-z]{2}$/)
       })
@@ -281,7 +281,7 @@ describe('formatters', () => {
 
   describe('edge cases and error handling', () => {
     it('should handle NaN input gracefully', () => {
-      expect(formatTemperature(NaN)).toBe('NaN')
+      expect(formatTemperature(Number.NaN)).toBe('NaN')
     })
 
     it('should handle Infinity values', () => {

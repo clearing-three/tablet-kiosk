@@ -6,10 +6,10 @@
  * - Temperature rendering
  */
 
-import { CurrentConditionsView } from '../../src/components/Weather/CurrentConditionsView'
 import type { WeatherData } from '../../src/types/weather-domain.types'
+import { CurrentConditionsView } from '../../src/components/Weather/CurrentConditionsView'
 
-describe('CurrentConditionsView', () => {
+describe('currentConditionsView', () => {
   let weatherView: CurrentConditionsView
   let mockCurrentWeather: WeatherData['current']
 
@@ -36,7 +36,7 @@ describe('CurrentConditionsView', () => {
     }
   })
 
-  describe('DOM updates with weather data', () => {
+  describe('dOM updates with weather data', () => {
     it('should update all display elements when render is called', () => {
       weatherView.render(mockCurrentWeather)
 
@@ -90,7 +90,7 @@ describe('CurrentConditionsView', () => {
     })
   })
 
-  describe('Temperature rendering', () => {
+  describe('temperature rendering', () => {
     it('should render temperature with a degree symbol', () => {
       weatherView.render(mockCurrentWeather)
 
@@ -143,7 +143,7 @@ describe('CurrentConditionsView', () => {
     })
   })
 
-  describe('Feels-like temperature rendering', () => {
+  describe('feels-like temperature rendering', () => {
     it('should render feels-like temperature with degree symbol', () => {
       weatherView.render(mockCurrentWeather)
 
@@ -187,7 +187,7 @@ describe('CurrentConditionsView', () => {
     })
   })
 
-  describe('Wind display', () => {
+  describe('wind display', () => {
     it('should display wind speed without gust', () => {
       weatherView.render(mockCurrentWeather)
 

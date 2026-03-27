@@ -8,11 +8,11 @@
  */
 export function validateRequiredEnvVar(
   name: string,
-  value: string | undefined
+  value: string | undefined,
 ): string {
   if (!value || value.trim() === '') {
     throw new Error(
-      `Required environment variable ${name} is not set or is empty`
+      `Required environment variable ${name} is not set or is empty`,
     )
   }
   return value.trim()
@@ -24,16 +24,16 @@ export function validateRequiredEnvVar(
 export function validateNumericEnvVar(
   name: string,
   value: string | undefined,
-  defaultValue: number
+  defaultValue: number,
 ): number {
   if (!value) {
     return defaultValue
   }
 
-  const numValue = parseInt(value, 10)
-  if (isNaN(numValue) || numValue <= 0) {
+  const numValue = Number.parseInt(value, 10)
+  if (Number.isNaN(numValue) || numValue <= 0) {
     throw new Error(
-      `Environment variable ${name} must be a positive number, got: ${value}`
+      `Environment variable ${name} must be a positive number, got: ${value}`,
     )
   }
 
@@ -44,8 +44,8 @@ export function validateNumericEnvVar(
  * Validates a latitude string is within [-90, 90]
  */
 export function validateLatitude(lat: string): void {
-  const value = parseFloat(lat)
-  if (isNaN(value) || value < -90 || value > 90) {
+  const value = Number.parseFloat(lat)
+  if (Number.isNaN(value) || value < -90 || value > 90) {
     throw new Error(`Invalid latitude: ${lat}. Must be between -90 and 90.`)
   }
 }
@@ -54,8 +54,8 @@ export function validateLatitude(lat: string): void {
  * Validates a longitude string is within [-180, 180]
  */
 export function validateLongitude(lon: string): void {
-  const value = parseFloat(lon)
-  if (isNaN(value) || value < -180 || value > 180) {
+  const value = Number.parseFloat(lon)
+  if (Number.isNaN(value) || value < -180 || value > 180) {
     throw new Error(`Invalid longitude: ${lon}. Must be between -180 and 180.`)
   }
 }
@@ -66,7 +66,7 @@ export function validateLongitude(lon: string): void {
 export function checkApiKeyLength(key: string): void {
   if (key.length < 32) {
     console.warn(
-      'OpenWeatherMap API key appears to be too short. Please verify it is correct.'
+      'OpenWeatherMap API key appears to be too short. Please verify it is correct.',
     )
   }
 }

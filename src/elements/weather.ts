@@ -1,9 +1,9 @@
-import { LitElement, html, css } from 'lit'
+import { ContextProvider } from '@lit/context'
+import { css, html, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
+import { weatherServiceConfig } from '../config/environment'
 import { WeatherContext } from '../context/weather-context.js'
 import { WeatherService } from '../services/WeatherService.js'
-import { ContextProvider } from '@lit/context'
-import { weatherServiceConfig } from '../config/environment'
 
 @customElement('x-weather')
 export class Weather extends LitElement {
@@ -24,7 +24,7 @@ export class Weather extends LitElement {
     this.updateWeather()
     this._timer = setInterval(
       () => this.updateWeather(),
-      Weather.TEN_MINUTES_MILLIS
+      Weather.TEN_MINUTES_MILLIS,
     )
   }
 

@@ -11,29 +11,29 @@
 
 import type { MockInstance } from 'vitest'
 import {
-  validateRequiredEnvVar,
-  validateNumericEnvVar,
+  checkApiKeyLength,
   validateLatitude,
   validateLongitude,
-  checkApiKeyLength,
+  validateNumericEnvVar,
+  validateRequiredEnvVar,
 } from '../../src/config/env-validators'
 
 describe('validateRequiredEnvVar', () => {
   it('throws when value is undefined', () => {
     expect(() => validateRequiredEnvVar('MY_VAR', undefined)).toThrow(
-      'Required environment variable MY_VAR is not set or is empty'
+      'Required environment variable MY_VAR is not set or is empty',
     )
   })
 
   it('throws when value is an empty string', () => {
     expect(() => validateRequiredEnvVar('MY_VAR', '')).toThrow(
-      'Required environment variable MY_VAR is not set or is empty'
+      'Required environment variable MY_VAR is not set or is empty',
     )
   })
 
   it('throws when value is whitespace only', () => {
     expect(() => validateRequiredEnvVar('MY_VAR', '   ')).toThrow(
-      'Required environment variable MY_VAR is not set or is empty'
+      'Required environment variable MY_VAR is not set or is empty',
     )
   })
 
@@ -47,7 +47,7 @@ describe('validateRequiredEnvVar', () => {
 
   it('includes the variable name in the error message', () => {
     expect(() =>
-      validateRequiredEnvVar('VITE_OPENWEATHER_API_KEY', undefined)
+      validateRequiredEnvVar('VITE_OPENWEATHER_API_KEY', undefined),
     ).toThrow('VITE_OPENWEATHER_API_KEY')
   })
 })
@@ -67,25 +67,25 @@ describe('validateNumericEnvVar', () => {
 
   it('throws when value is not a number', () => {
     expect(() => validateNumericEnvVar('INTERVAL', 'abc', 600000)).toThrow(
-      'Environment variable INTERVAL must be a positive number, got: abc'
+      'Environment variable INTERVAL must be a positive number, got: abc',
     )
   })
 
   it('throws when value is zero', () => {
     expect(() => validateNumericEnvVar('INTERVAL', '0', 600000)).toThrow(
-      'Environment variable INTERVAL must be a positive number, got: 0'
+      'Environment variable INTERVAL must be a positive number, got: 0',
     )
   })
 
   it('throws when value is negative', () => {
     expect(() => validateNumericEnvVar('INTERVAL', '-1', 600000)).toThrow(
-      'Environment variable INTERVAL must be a positive number, got: -1'
+      'Environment variable INTERVAL must be a positive number, got: -1',
     )
   })
 
   it('includes the variable name in the error message', () => {
     expect(() =>
-      validateNumericEnvVar('VITE_WEATHER_UPDATE_INTERVAL', 'bad', 600000)
+      validateNumericEnvVar('VITE_WEATHER_UPDATE_INTERVAL', 'bad', 600000),
     ).toThrow('VITE_WEATHER_UPDATE_INTERVAL')
   })
 })
@@ -105,19 +105,19 @@ describe('validateLatitude', () => {
 
   it('throws for latitude above 90', () => {
     expect(() => validateLatitude('91')).toThrow(
-      'Invalid latitude: 91. Must be between -90 and 90.'
+      'Invalid latitude: 91. Must be between -90 and 90.',
     )
   })
 
   it('throws for latitude below -90', () => {
     expect(() => validateLatitude('-91')).toThrow(
-      'Invalid latitude: -91. Must be between -90 and 90.'
+      'Invalid latitude: -91. Must be between -90 and 90.',
     )
   })
 
   it('throws for a non-numeric string', () => {
     expect(() => validateLatitude('not-a-number')).toThrow(
-      'Invalid latitude: not-a-number. Must be between -90 and 90.'
+      'Invalid latitude: not-a-number. Must be between -90 and 90.',
     )
   })
 })
@@ -137,19 +137,19 @@ describe('validateLongitude', () => {
 
   it('throws for longitude above 180', () => {
     expect(() => validateLongitude('181')).toThrow(
-      'Invalid longitude: 181. Must be between -180 and 180.'
+      'Invalid longitude: 181. Must be between -180 and 180.',
     )
   })
 
   it('throws for longitude below -180', () => {
     expect(() => validateLongitude('-181')).toThrow(
-      'Invalid longitude: -181. Must be between -180 and 180.'
+      'Invalid longitude: -181. Must be between -180 and 180.',
     )
   })
 
   it('throws for a non-numeric string', () => {
     expect(() => validateLongitude('not-a-number')).toThrow(
-      'Invalid longitude: not-a-number. Must be between -180 and 180.'
+      'Invalid longitude: not-a-number. Must be between -180 and 180.',
     )
   })
 })
@@ -168,7 +168,7 @@ describe('checkApiKeyLength', () => {
   it('warns when the key is shorter than 32 characters', () => {
     checkApiKeyLength('short-key')
     expect(warnSpy).toHaveBeenCalledWith(
-      'OpenWeatherMap API key appears to be too short. Please verify it is correct.'
+      'OpenWeatherMap API key appears to be too short. Please verify it is correct.',
     )
   })
 

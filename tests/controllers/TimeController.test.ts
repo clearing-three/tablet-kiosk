@@ -8,11 +8,11 @@
  */
 
 import type { Mock } from 'vitest'
-import { TimeController } from '../../src/controllers/TimeController'
-import type { TimeView } from '../../src/components/Time/TimeView'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
+import type { TimeView } from '../../src/components/Time/TimeView'
+import { TimeController } from '../../src/controllers/TimeController'
 
-describe('TimeController', () => {
+describe('timeController', () => {
   let timeController: TimeController
   let mockTimeView: Pick<TimeView, 'render'>
   let mockErrorDisplay: Pick<ErrorDisplay, 'show' | 'remove'>
@@ -28,7 +28,7 @@ describe('TimeController', () => {
     }
     timeController = new TimeController(
       mockTimeView as TimeView,
-      mockErrorDisplay as ErrorDisplay
+      mockErrorDisplay as ErrorDisplay,
     )
   })
 

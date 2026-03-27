@@ -6,8 +6,8 @@
  */
 
 import type {
-  NasaMoonImage,
   NasaMoonApiResponse,
+  NasaMoonImage,
 } from '../types/nasa-api.types'
 
 export class NasaMoonService {
@@ -49,7 +49,7 @@ export class NasaMoonService {
 
     if (!response.ok) {
       throw new Error(
-        NasaMoonService.Errors.httpError(response.status, response.statusText)
+        NasaMoonService.Errors.httpError(response.status, response.statusText),
       )
     }
 

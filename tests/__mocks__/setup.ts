@@ -95,7 +95,7 @@ export class TestMockManager {
    * Set up specific mocks for a test
    */
   setup(mockTypes: Array<'api' | 'browser-apis' | 'all'>) {
-    mockTypes.forEach(type => {
+    mockTypes.forEach((type) => {
       switch (type) {
         case 'api':
           OpenWeatherMapMock.setup()
@@ -131,7 +131,8 @@ export class TestMockManager {
   teardown() {
     if (this.activeMocks.has('all')) {
       teardownAllMocks()
-    } else {
+    }
+    else {
       if (this.activeMocks.has('browser-apis')) {
         BrowserApiMock.teardown()
       }
@@ -148,7 +149,7 @@ export class TestMockManager {
  */
 export function withMocks<T extends any[]>(
   mockTypes: Array<'api' | 'browser-apis' | 'all'>,
-  testFn: (...args: T) => void | Promise<void>
+  testFn: (...args: T) => void | Promise<void>,
 ) {
   return async (...args: T) => {
     const manager = new TestMockManager()
@@ -156,7 +157,8 @@ export function withMocks<T extends any[]>(
 
     try {
       await testFn(...args)
-    } finally {
+    }
+    finally {
       manager.teardown()
     }
   }

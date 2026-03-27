@@ -1,6 +1,6 @@
 import { UpdateScheduler } from '../../src/core/UpdateScheduler'
 
-describe('UpdateScheduler', () => {
+describe('updateScheduler', () => {
   beforeEach(() => {
     vi.useFakeTimers()
   })

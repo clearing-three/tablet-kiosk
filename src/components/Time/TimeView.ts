@@ -2,9 +2,9 @@
  * Time View Component
  */
 
-import { formatCurrentTime, formatCurrentDate } from '../../utils/formatters'
-import { getElement } from '../../utils/dom'
 import { DOM_IDS } from '../../utils/constants'
+import { getElement } from '../../utils/dom'
+import { formatCurrentDate, formatCurrentTime } from '../../utils/formatters'
 
 export class TimeView {
   private elements: {

@@ -8,7 +8,7 @@ import type { SolarTimes } from '../../src/types/weather-domain.types'
  * Creates mock weather data for testing
  */
 export function createMockWeatherData(
-  overrides: Partial<WeatherApiData> = {}
+  overrides: Partial<WeatherApiData> = {},
 ): WeatherApiData {
   return {
     lat: 40.7128,
@@ -121,7 +121,7 @@ export function createMockWeatherData(
  * Creates mock astronomy times for testing
  */
 export function createMockAstronomyTimes(
-  overrides: Partial<SolarTimes> = {}
+  overrides: Partial<SolarTimes> = {},
 ): SolarTimes {
   return {
     sunrise: 1640966400, // 06:00:00 UTC
@@ -179,14 +179,14 @@ export const mockApiResponses = {
  * Helper to mock fetch responses
  */
 export function mockFetch(response: Partial<Response>) {
-  ;(global.fetch as Mock).mockResolvedValueOnce(response)
+  ;(globalThis.fetch as Mock).mockResolvedValueOnce(response)
 }
 
 /**
  * Helper to mock fetch rejections
  */
 export function mockFetchRejection(error: Error) {
-  ;(global.fetch as Mock).mockRejectedValueOnce(error)
+  ;(globalThis.fetch as Mock).mockRejectedValueOnce(error)
 }
 
 /**
@@ -202,7 +202,7 @@ export function waitFor(ms: number = 0): Promise<void> {
 export function triggerEvent(
   element: Element,
   eventType: string,
-  eventInit?: EventInit
+  eventInit?: EventInit,
 ) {
   const event = new Event(eventType, eventInit)
   element.dispatchEvent(event)
@@ -213,9 +213,10 @@ export function triggerEvent(
  */
 export function hasTextContent(
   element: Element | null,
-  expectedText: string
+  expectedText: string,
 ): boolean {
-  if (!element) return false
+  if (!element)
+    return false
   return element.textContent?.trim() === expectedText
 }
 
@@ -255,7 +256,7 @@ export const userEvent = {
  */
 export function expectErrorHandling(
   testFn: () => Promise<void> | void,
-  expectedError?: string | RegExp
+  expectedError?: string | RegExp,
 ) {
   return async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
@@ -266,15 +267,17 @@ export function expectErrorHandling(
       if (expectedError) {
         if (typeof expectedError === 'string') {
           expect(consoleSpy).toHaveBeenCalledWith(
-            expect.stringContaining(expectedError)
+            expect.stringContaining(expectedError),
           )
-        } else {
+        }
+        else {
           expect(consoleSpy).toHaveBeenCalledWith(
-            expect.stringMatching(expectedError)
+            expect.stringMatching(expectedError),
           )
         }
       }
-    } finally {
+    }
+    finally {
       consoleSpy.mockRestore()
     }
   }

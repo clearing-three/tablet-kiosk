@@ -1,10 +1,21 @@
 {
   "name": "tablet-kiosk",
-  "version": "1.0.0",
-  "description": "Weather kiosk application for Samsung Galaxy Tab S8 Ultra",
   "type": "module",
-  "main": "dist/index.html",
+  "version": "1.0.0",
   "packageManager": "pnpm@10.32.1",
+  "description": "Weather kiosk application for Samsung Galaxy Tab S8 Ultra",
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/relsam-atinersier/tablet-kiosk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/relsam-atinersier/tablet-kiosk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/relsam-atinersier/tablet-kiosk/issues"
+  },
+  "keywords": [],
+  "main": "dist/index.html",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite",
@@ -18,35 +29,27 @@
     "lint:fix": "eslint . --fix",
     "stylelint": "stylelint \"**/*.css\"",
     "stylelint:fix": "stylelint \"**/*.css\" --fix",
-    "format": "prettier --write \"**/*.{ts,css,html}\"",
-    "format:check": "prettier --check \"**/*.{ts,css,html}\"",
     "type-check": "tsc --noEmit",
     "analyze:lit": "lit-analyzer 'src/**/*.ts'",
-    "validate": "run-s format lint:fix stylelint:fix lint stylelint analyze:lit test build",
+    "validate": "run-s lint:fix stylelint:fix lint stylelint analyze:lit test build",
     "deploy": "./deploy.sh",
     "deploy:list": "./deploy.sh -l",
     "deploy:clean": "./deploy.sh -c",
     "knip": "knip"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/relsam-atinersier/tablet-kiosk.git"
+  "dependencies": {
+    "@lit/context": "1.1.6",
+    "lit": "3.3.2",
+    "zod": "4.3.6"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/relsam-atinersier/tablet-kiosk/issues"
-  },
-  "homepage": "https://github.com/relsam-atinersier/tablet-kiosk#readme",
   "devDependencies": {
+    "@antfu/eslint-config": "7.7.3",
     "@eslint/js": "10.0.1",
     "@types/node": "25.5.0",
     "@typescript-eslint/eslint-plugin": "8.57.2",
     "@typescript-eslint/parser": "8.57.2",
     "@vitest/coverage-v8": "4.1.0",
     "eslint": "10.1.0",
-    "eslint-config-prettier": "10.1.8",
     "eslint-plugin-lit": "2.2.1",
     "eslint-plugin-wc": "3.1.0",
     "happy-dom": "20.8.8",
@@ -54,16 +57,10 @@
     "knip": "6.0.6",
     "lit-analyzer": "2.0.3",
     "npm-run-all": "4.1.5",
-    "prettier": "3.8.1",
     "stylelint": "17.6.0",
     "stylelint-config-standard": "40.0.0",
     "typescript": "5.9.3",
     "vite": "8.0.3",
     "vitest": "4.1.0"
-  },
-  "dependencies": {
-    "@lit/context": "1.1.6",
-    "lit": "3.3.2",
-    "zod": "4.3.6"
   }
 }

@@ -7,15 +7,15 @@
 
 import type { WeatherData } from '../../types/weather-domain.types'
 
-type CurrentWeatherDisplay = WeatherData['current']
-
+import { DOM_IDS } from '../../utils/constants'
+import { getElement } from '../../utils/dom'
 import {
-  formatTemperature,
   createTemperatureRangeElements,
   createWindSpeedElements,
+  formatTemperature,
 } from '../../utils/formatters'
-import { getElement } from '../../utils/dom'
-import { DOM_IDS } from '../../utils/constants'
+
+type CurrentWeatherDisplay = WeatherData['current']
 
 export class CurrentConditionsView {
   private elements: {
@@ -85,7 +85,7 @@ export class CurrentConditionsView {
     this.updateWind(
       currentWeather.windSpeed,
       currentWeather.windDirection,
-      currentWeather.windGust
+      currentWeather.windGust,
     )
     this.updateTemperatureRange(currentWeather.maxTemp, currentWeather.minTemp)
   }

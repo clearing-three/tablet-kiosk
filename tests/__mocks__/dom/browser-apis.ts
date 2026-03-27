@@ -5,6 +5,8 @@
  * used by the tablet kiosk application.
  */
 
+import process from 'node:process'
+
 /**
  * Mock Image constructor for weather icon testing
  */
@@ -132,7 +134,7 @@ export class TimerMock {
 
   static clearAll(): void {
     timerState.intervals.forEach(timer =>
-      TimerMock.originalClearInterval(timer)
+      TimerMock.originalClearInterval(timer),
     )
     timerState.timeouts.forEach(timer => TimerMock.originalClearTimeout(timer))
     timerState.intervals.clear()
@@ -208,8 +210,8 @@ export class GeolocationMock {
   clearWatch = vi.fn()
 
   mockSuccess(position: GeolocationPosition) {
-    this.getCurrentPosition.mockImplementationOnce(success => {
-      setTimeout(() => success(position), 0)
+    this.getCurrentPosition.mockImplementationOnce((success) => {
+      setTimeout(success, 0, position)
     })
   }
 
@@ -217,7 +219,7 @@ export class GeolocationMock {
     this.getCurrentPosition.mockImplementationOnce(
       (_success, errorCallback) => {
         setTimeout(() => errorCallback && errorCallback(error), 0)
-      }
+      },
     )
   }
 }
@@ -266,57 +268,58 @@ export class BrowserApiMock {
 
   static setup() {
     // Mock Image
-    this.originalApis.set('Image', global.Image)
-    global.Image = MockImage as any
+    this.originalApis.set('Image', globalThis.Image)
+    globalThis.Image = MockImage as any
 
     // Mock SVG object element
-    this.originalApis.set('HTMLObjectElement', global.HTMLObjectElement)
-    global.HTMLObjectElement = MockSVGObjectElement as any
+    this.originalApis.set('HTMLObjectElement', globalThis.HTMLObjectElement)
+    globalThis.HTMLObjectElement = MockSVGObjectElement as any
 
     // Mock timers
-    this.originalApis.set('setInterval', global.setInterval)
-    this.originalApis.set('clearInterval', global.clearInterval)
-    this.originalApis.set('setTimeout', global.setTimeout)
-    this.originalApis.set('clearTimeout', global.clearTimeout)
+    this.originalApis.set('setInterval', globalThis.setInterval)
+    this.originalApis.set('clearInterval', globalThis.clearInterval)
+    this.originalApis.set('setTimeout', globalThis.setTimeout)
+    this.originalApis.set('clearTimeout', globalThis.clearTimeout)
 
-    global.setInterval = vi.fn(TimerMock.mockSetInterval) as any
-    global.clearInterval = vi.fn(TimerMock.mockClearInterval) as any
-    global.setTimeout = vi.fn(TimerMock.mockSetTimeout) as any
-    global.clearTimeout = vi.fn(TimerMock.mockClearTimeout) as any
+    globalThis.setInterval = vi.fn(TimerMock.mockSetInterval) as any
+    globalThis.clearInterval = vi.fn(TimerMock.mockClearInterval) as any
+    globalThis.setTimeout = vi.fn(TimerMock.mockSetTimeout) as any
+    globalThis.clearTimeout = vi.fn(TimerMock.mockClearTimeout) as any
 
     // Mock localStorage
-    this.originalApis.set('localStorage', global.localStorage)
-    global.localStorage = new LocalStorageMock() as any
+    this.originalApis.set('localStorage', globalThis.localStorage)
+    globalThis.localStorage = new LocalStorageMock() as any
 
     // Mock console (if needed for specific tests)
     if (process.env.NODE_ENV === 'test') {
-      this.originalApis.set('console', global.console)
-      global.console = new ConsoleMock() as any
+      this.originalApis.set('console', globalThis.console)
+      globalThis.console = new ConsoleMock() as any
     }
 
     // Mock geolocation
-    this.originalApis.set('navigator', global.navigator)
-    global.navigator = {
-      ...global.navigator,
+    this.originalApis.set('navigator', globalThis.navigator)
+    globalThis.navigator = {
+      ...globalThis.navigator,
       geolocation: new GeolocationMock(),
     } as any
 
     // Mock ResizeObserver
-    this.originalApis.set('ResizeObserver', global.ResizeObserver)
-    global.ResizeObserver = ResizeObserverMock as any
+    this.originalApis.set('ResizeObserver', globalThis.ResizeObserver)
+    globalThis.ResizeObserver = ResizeObserverMock as any
 
     // Mock IntersectionObserver
-    this.originalApis.set('IntersectionObserver', global.IntersectionObserver)
-    global.IntersectionObserver = IntersectionObserverMock as any
+    this.originalApis.set('IntersectionObserver', globalThis.IntersectionObserver)
+    globalThis.IntersectionObserver = IntersectionObserverMock as any
   }
 
   static teardown() {
     // Restore original APIs
     this.originalApis.forEach((originalApi, key) => {
       if (originalApi !== undefined) {
-        ;(global as any)[key] = originalApi
-      } else {
-        delete (global as any)[key]
+        ;(globalThis as any)[key] = originalApi
+      }
+      else {
+        delete (globalThis as any)[key]
       }
     })
     this.originalApis.clear()
@@ -328,7 +331,7 @@ export class BrowserApiMock {
   static reset() {
     // Reset all mocks
     TimerMock.clearAll()
-    ;(global.localStorage as any).clear()
+    ;(globalThis.localStorage as any).clear()
 
     // Reset vi mocks
     vi.clearAllMocks()
@@ -367,7 +370,7 @@ export const browserApiHelpers = {
       timestamp: Date.now(),
       toJSON: () => ({ coords, timestamp: Date.now() }),
     }
-    ;(global.navigator.geolocation as GeolocationMock).mockSuccess(position)
+    ;(globalThis.navigator.geolocation as GeolocationMock).mockSuccess(position)
   },
 
   // Mock geolocation error
@@ -379,7 +382,7 @@ export const browserApiHelpers = {
       POSITION_UNAVAILABLE: 2,
       TIMEOUT: 3,
     }
-    ;(global.navigator.geolocation as GeolocationMock).mockError(error)
+    ;(globalThis.navigator.geolocation as GeolocationMock).mockError(error)
   },
 
   // Wait for next tick (useful for async operations)

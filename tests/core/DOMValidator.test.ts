@@ -1,6 +1,6 @@
 import { DOMValidator } from '../../src/core/DOMValidator'
 
-describe('DOMValidator', () => {
+describe('dOMValidator', () => {
   let validator: DOMValidator
 
   beforeEach(() => {

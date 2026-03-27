@@ -9,20 +9,20 @@
  */
 
 import {
-  UPDATE_INTERVALS,
-  FORECAST_CONFIG,
-  MOON_PHASE_CONFIG,
   API_CONFIG,
   ASSET_PATHS,
+  CSS_CLASSES,
   DEFAULTS,
   DOM_IDS,
-  CSS_CLASSES,
-  TIME_FORMAT_OPTIONS,
   ERROR_MESSAGES,
+  FORECAST_CONFIG,
+  MOON_PHASE_CONFIG,
+  TIME_FORMAT_OPTIONS,
+  UPDATE_INTERVALS,
 } from '../../src/utils/constants'
 
 describe('constants', () => {
-  describe('UPDATE_INTERVALS', () => {
+  describe('uPDATE_INTERVALS', () => {
     it('should have correct clock update interval', () => {
       expect(UPDATE_INTERVALS.CLOCK).toBe(1000)
       expect(typeof UPDATE_INTERVALS.CLOCK).toBe('number')
@@ -51,7 +51,7 @@ describe('constants', () => {
     })
   })
 
-  describe('FORECAST_CONFIG', () => {
+  describe('fORECAST_CONFIG', () => {
     it('should have correct forecast days configuration', () => {
       expect(FORECAST_CONFIG.DAYS_TO_SHOW).toBe(3)
       expect(typeof FORECAST_CONFIG.DAYS_TO_SHOW).toBe('number')
@@ -78,7 +78,7 @@ describe('constants', () => {
     })
   })
 
-  describe('MOON_PHASE_CONFIG', () => {
+  describe('mOON_PHASE_CONFIG', () => {
     it('should have correct SVG viewBox', () => {
       expect(MOON_PHASE_CONFIG.SVG_VIEWBOX).toBe('0 0 200 200')
       expect(typeof MOON_PHASE_CONFIG.SVG_VIEWBOX).toBe('string')
@@ -100,10 +100,10 @@ describe('constants', () => {
     })
   })
 
-  describe('API_CONFIG', () => {
+  describe('aPI_CONFIG', () => {
     it('should have correct OpenWeatherMap API URL', () => {
       expect(API_CONFIG.BASE_URL).toBe(
-        'https://api.openweathermap.org/data/3.0/onecall'
+        'https://api.openweathermap.org/data/3.0/onecall',
       )
       expect(typeof API_CONFIG.BASE_URL).toBe('string')
     })
@@ -137,7 +137,7 @@ describe('constants', () => {
     })
   })
 
-  describe('ASSET_PATHS', () => {
+  describe('aSSET_PATHS', () => {
     it('should have correct weather icons path', () => {
       expect(ASSET_PATHS.WEATHER_ICONS).toBe('weather-icons')
       expect(typeof ASSET_PATHS.WEATHER_ICONS).toBe('string')
@@ -153,7 +153,7 @@ describe('constants', () => {
     })
   })
 
-  describe('DEFAULTS', () => {
+  describe('dEFAULTS', () => {
     it('should have correct fallback icon', () => {
       expect(DEFAULTS.FALLBACK_ICON).toBe('na')
       expect(typeof DEFAULTS.FALLBACK_ICON).toBe('string')
@@ -185,7 +185,7 @@ describe('constants', () => {
     })
   })
 
-  describe('DOM_IDS', () => {
+  describe('dOM_IDS', () => {
     it('should have all required time and date element IDs', () => {
       expect(DOM_IDS.TIME).toBe('time')
       expect(DOM_IDS.DATE).toBe('date')
@@ -214,13 +214,13 @@ describe('constants', () => {
     })
 
     it('should have kebab-case ID values', () => {
-      Object.values(DOM_IDS).forEach(id => {
+      Object.values(DOM_IDS).forEach((id) => {
         expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
       })
     })
 
     it('should not have empty or undefined IDs', () => {
-      Object.values(DOM_IDS).forEach(id => {
+      Object.values(DOM_IDS).forEach((id) => {
         expect(id).toBeTruthy()
         expect(typeof id).toBe('string')
         expect(id.length).toBeGreaterThan(0)
@@ -228,7 +228,7 @@ describe('constants', () => {
     })
   })
 
-  describe('CSS_CLASSES', () => {
+  describe('cSS_CLASSES', () => {
     it('should have all required forecast CSS classes', () => {
       expect(CSS_CLASSES.FORECAST_DAY).toBe('forecast-day')
       expect(CSS_CLASSES.FORECAST_DAY_NAME).toBe('forecast-day-name')
@@ -242,13 +242,13 @@ describe('constants', () => {
     })
 
     it('should have kebab-case class names', () => {
-      Object.values(CSS_CLASSES).forEach(className => {
+      Object.values(CSS_CLASSES).forEach((className) => {
         expect(className).toMatch(/^[a-z]+(-[a-z]+)*$/)
       })
     })
 
     it('should not have empty class names', () => {
-      Object.values(CSS_CLASSES).forEach(className => {
+      Object.values(CSS_CLASSES).forEach((className) => {
         expect(className).toBeTruthy()
         expect(typeof className).toBe('string')
         expect(className.length).toBeGreaterThan(0)
@@ -256,7 +256,7 @@ describe('constants', () => {
     })
   })
 
-  describe('TIME_FORMAT_OPTIONS', () => {
+  describe('tIME_FORMAT_OPTIONS', () => {
     it('should have correct 24-hour format options', () => {
       expect(TIME_FORMAT_OPTIONS.HOUR_24).toEqual({
         hour: '2-digit',
@@ -303,14 +303,14 @@ describe('constants', () => {
     })
   })
 
-  describe('ERROR_MESSAGES', () => {
+  describe('eRROR_MESSAGES', () => {
     it('should have all required error messages', () => {
       expect(ERROR_MESSAGES.API_ERROR).toBe('Failed to fetch weather data')
       expect(ERROR_MESSAGES.NETWORK_ERROR).toBe('Network connection error')
       expect(ERROR_MESSAGES.INVALID_RESPONSE).toBe('Invalid API response')
       expect(ERROR_MESSAGES.MOON_PHASE_ERROR).toBe('Error updating moon phase')
       expect(ERROR_MESSAGES.DOM_ELEMENT_NOT_FOUND).toBe(
-        'Required DOM element not found'
+        'Required DOM element not found',
       )
     })
 
@@ -319,7 +319,7 @@ describe('constants', () => {
     })
 
     it('should have meaningful error messages', () => {
-      Object.values(ERROR_MESSAGES).forEach(message => {
+      Object.values(ERROR_MESSAGES).forEach((message) => {
         expect(message).toBeTruthy()
         expect(typeof message).toBe('string')
         expect(message.length).toBeGreaterThan(10)
@@ -352,8 +352,8 @@ describe('constants', () => {
         ERROR_MESSAGES,
       ]
 
-      allConstants.forEach(constantGroup => {
-        Object.values(constantGroup).forEach(value => {
+      allConstants.forEach((constantGroup) => {
+        Object.values(constantGroup).forEach((value) => {
           expect(value).toBeDefined()
           expect(value).not.toBeNull()
         })
@@ -375,7 +375,7 @@ describe('constants', () => {
         'ERROR_MESSAGES',
       ]
 
-      constantNames.forEach(name => {
+      constantNames.forEach((name) => {
         expect(name).toMatch(/^[A-Z_]+$/)
       })
     })
@@ -394,7 +394,7 @@ describe('constants', () => {
         ERROR_MESSAGES,
       ]
 
-      constantGroups.forEach(group => {
+      constantGroups.forEach((group) => {
         expect(typeof group).toBe('object')
         expect(group).not.toBeNull()
       })

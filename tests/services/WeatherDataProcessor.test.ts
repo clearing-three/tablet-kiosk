@@ -8,39 +8,39 @@
  * - Icon mapping
  */
 
-import { WeatherDataProcessor } from '../../src/services/WeatherDataProcessor'
 import { REQUIRED_FORECAST_DAYS } from '../../src/constants/weather.constants'
-import { weatherScenarios, getWeatherScenario } from '../__mocks__'
+import { WeatherDataProcessor } from '../../src/services/WeatherDataProcessor'
+import { getWeatherScenario, weatherScenarios } from '../__mocks__'
 
-describe('WeatherDataProcessor', () => {
+describe('weatherDataProcessor', () => {
   let processor: WeatherDataProcessor
 
   beforeEach(() => {
     processor = new WeatherDataProcessor()
   })
 
-  describe('Data Processing', () => {
+  describe('data Processing', () => {
     it('should process weather data correctly', () => {
       const mockData = getWeatherScenario('multiDayForecast')
       const processed = processor.processWeatherData(mockData)
 
       // Check current weather processing
       expect(processed.current.temperature).toBe(
-        Math.round(mockData.current.temp)
+        Math.round(mockData.current.temp),
       )
       expect(processed.current.feelsLike).toBe(
-        Math.round(mockData.current.feels_like)
+        Math.round(mockData.current.feels_like),
       )
       expect(processed.current.description).toBe(
-        mockData.current.weather[0].description
+        mockData.current.weather[0].description,
       )
       expect(processed.current.icon).toBeDefined()
       expect(typeof processed.current.icon).toBe('string')
       expect(processed.current.minTemp).toBe(
-        Math.round(mockData.daily[0].temp.min)
+        Math.round(mockData.daily[0].temp.min),
       )
       expect(processed.current.maxTemp).toBe(
-        Math.round(mockData.daily[0].temp.max)
+        Math.round(mockData.daily[0].temp.max),
       )
 
       // Check forecast processing (next 3 days, excluding today)
@@ -63,7 +63,7 @@ describe('WeatherDataProcessor', () => {
     })
   })
 
-  describe('Data Processing Edge Cases', () => {
+  describe('data Processing Edge Cases', () => {
     it('should handle extreme weather values', () => {
       const extremeData = getWeatherScenario('extremeHeat')
       const processed = processor.processWeatherData(extremeData)
@@ -180,7 +180,7 @@ describe('WeatherDataProcessor', () => {
       // Verify the data has a valid array with sufficient days
       expect(Array.isArray(validData.daily)).toBe(true)
       expect(validData.daily.length).toBeGreaterThanOrEqual(
-        REQUIRED_FORECAST_DAYS
+        REQUIRED_FORECAST_DAYS,
       )
 
       // Should not throw
@@ -196,7 +196,7 @@ describe('WeatherDataProcessor', () => {
     })
   })
 
-  describe('Icon Mapping', () => {
+  describe('icon Mapping', () => {
     it('should map icon codes internally during processing', () => {
       const mockData = getWeatherScenario('clearSunnyDay')
       const processed = processor.processWeatherData(mockData)
@@ -206,7 +206,7 @@ describe('WeatherDataProcessor', () => {
       expect(typeof processed.current.icon).toBe('string')
       expect(processed.current.icon).not.toMatch(/^\d{2}[dn]$/) // Should not be OWM format like '01d'
 
-      processed.forecast.forEach(day => {
+      processed.forecast.forEach((day) => {
         expect(day.icon).toBeDefined()
         expect(typeof day.icon).toBe('string')
         expect(day.icon).not.toMatch(/^\d{2}[dn]$/)
@@ -221,7 +221,7 @@ describe('WeatherDataProcessor', () => {
         'multiDayForecast',
       ]
 
-      scenarios.forEach(scenarioName => {
+      scenarios.forEach((scenarioName) => {
         const mockData = getWeatherScenario(scenarioName)
         const processed = processor.processWeatherData(mockData)
 
@@ -231,19 +231,19 @@ describe('WeatherDataProcessor', () => {
     })
   })
 
-  describe('Integration with Mocks', () => {
+  describe('integration with Mocks', () => {
     it('should work with all valid weather scenario fixtures', () => {
       const scenarios = Object.keys(weatherScenarios) as Array<
         keyof typeof weatherScenarios
       >
 
-      scenarios.forEach(scenarioName => {
+      scenarios.forEach((scenarioName) => {
         const scenario = getWeatherScenario(scenarioName)
 
         // Skip scenarios designed to test insufficient data error handling
         if (
-          scenarioName === 'minimalResponse' ||
-          scenarioName === 'insufficientForecastData'
+          scenarioName === 'minimalResponse'
+          || scenarioName === 'insufficientForecastData'
         ) {
           return
         }

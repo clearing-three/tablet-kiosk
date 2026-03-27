@@ -4,11 +4,11 @@
 
 import type { Mock, MockInstance } from 'vitest'
 import {
-  preloadAssets,
-  getWeatherIconUrl,
-  validateAssetExists,
   getAssetUrls,
+  getWeatherIconUrl,
+  preloadAssets,
   reportMissingAssets,
+  validateAssetExists,
 } from '../../src/utils/assets'
 
 describe('preloadAssets()', () => {
@@ -28,7 +28,7 @@ describe('preloadAssets()', () => {
   it('includes dynamic weather icon paths', () => {
     preloadAssets()
     const hrefs = Array.from(
-      document.head.querySelectorAll('link[rel="preload"]')
+      document.head.querySelectorAll('link[rel="preload"]'),
     ).map(el => el.getAttribute('href'))
     expect(hrefs).toContain('/weather-icons/clear-day.svg')
     expect(hrefs).toContain('/weather-icons/rain.svg')
@@ -38,7 +38,7 @@ describe('preloadAssets()', () => {
   it('includes static icon paths', () => {
     preloadAssets()
     const hrefs = Array.from(
-      document.head.querySelectorAll('link[rel="preload"]')
+      document.head.querySelectorAll('link[rel="preload"]'),
     ).map(el => el.getAttribute('href'))
     expect(hrefs).toContain('/weather-icons/sunrise.svg')
     expect(hrefs).toContain('/weather-icons/moonset.svg')
@@ -61,27 +61,27 @@ describe('getWeatherIconUrl', () => {
 
 describe('validateAssetExists', () => {
   it('returns true when fetch responds with ok', async () => {
-    ;(global.fetch as Mock).mockResolvedValueOnce({ ok: true })
+    ;(globalThis.fetch as Mock).mockResolvedValueOnce({ ok: true })
     const result = await validateAssetExists('/weather-icons/clear-day.svg')
     expect(result).toBe(true)
   })
 
   it('returns false when fetch responds with not ok', async () => {
-    ;(global.fetch as Mock).mockResolvedValueOnce({ ok: false })
+    ;(globalThis.fetch as Mock).mockResolvedValueOnce({ ok: false })
     const result = await validateAssetExists('/weather-icons/missing.svg')
     expect(result).toBe(false)
   })
 
   it('returns false when fetch throws', async () => {
-    ;(global.fetch as Mock).mockRejectedValueOnce(new Error('network error'))
+    ;(globalThis.fetch as Mock).mockRejectedValueOnce(new Error('network error'))
     const result = await validateAssetExists('/weather-icons/clear-day.svg')
     expect(result).toBe(false)
   })
 
   it('calls fetch with HEAD method', async () => {
-    ;(global.fetch as Mock).mockResolvedValueOnce({ ok: true })
+    ;(globalThis.fetch as Mock).mockResolvedValueOnce({ ok: true })
     await validateAssetExists('/some-asset.svg')
-    expect(global.fetch).toHaveBeenCalledWith('/some-asset.svg', {
+    expect(globalThis.fetch).toHaveBeenCalledWith('/some-asset.svg', {
       method: 'HEAD',
     })
   })

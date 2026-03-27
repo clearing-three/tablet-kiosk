@@ -1,10 +1,10 @@
-import { WeatherController } from '../../src/controllers/WeatherController'
-import type { WeatherService } from '../../src/services/WeatherService'
-import type { CurrentConditionsView } from '../../src/components/Weather/CurrentConditionsView'
-import type { ForecastView } from '../../src/components/Weather/ForecastView'
 import type { SunView } from '../../src/components/Astronomy/SunView'
 import type { ErrorDisplay } from '../../src/components/ErrorDisplay'
+import type { CurrentConditionsView } from '../../src/components/Weather/CurrentConditionsView'
+import type { ForecastView } from '../../src/components/Weather/ForecastView'
+import type { WeatherService } from '../../src/services/WeatherService'
 import type { WeatherData } from '../../src/types/weather-domain.types'
+import { WeatherController } from '../../src/controllers/WeatherController'
 
 const mockWeatherData: WeatherData = {
   current: {
@@ -34,7 +34,7 @@ const mockWeatherData: WeatherData = {
   },
 }
 
-describe('WeatherController', () => {
+describe('weatherController', () => {
   let mockWeatherService: Pick<WeatherService, 'getWeatherData'>
   let mockWeatherView: Pick<CurrentConditionsView, 'render'>
   let mockForecastView: Pick<ForecastView, 'render'>
@@ -57,7 +57,7 @@ describe('WeatherController', () => {
       mockSunView as SunView,
       mockWeatherService as WeatherService,
       mockErrorDisplay as ErrorDisplay,
-      10000 // 10s interval for testing
+      10000, // 10s interval for testing
     )
   })
 
@@ -72,7 +72,7 @@ describe('WeatherController', () => {
       await controller.update()
 
       expect(mockWeatherView.render).toHaveBeenCalledWith(
-        mockWeatherData.current
+        mockWeatherData.current,
       )
     })
 
@@ -80,7 +80,7 @@ describe('WeatherController', () => {
       await controller.update()
 
       expect(mockForecastView.render).toHaveBeenCalledWith(
-        mockWeatherData.forecast
+        mockWeatherData.forecast,
       )
     })
 
@@ -115,7 +115,7 @@ describe('WeatherController', () => {
 
       expect(mockErrorDisplay.show).toHaveBeenCalledWith(
         'weather-update',
-        fetchError
+        fetchError,
       )
     })
 

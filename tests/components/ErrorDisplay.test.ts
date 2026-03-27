@@ -1,6 +1,6 @@
 import { ErrorDisplay } from '../../src/components/ErrorDisplay'
 
-describe('ErrorDisplay', () => {
+describe('errorDisplay', () => {
   let errorDisplay: ErrorDisplay
 
   beforeEach(() => {
@@ -87,7 +87,7 @@ describe('ErrorDisplay', () => {
 
       const pre = document.querySelector('pre')!
       const toggle = document.querySelector(
-        '.error-bar-toggle'
+        '.error-bar-toggle',
       ) as HTMLButtonElement
 
       expect(pre.hidden).toBe(true)
@@ -101,7 +101,7 @@ describe('ErrorDisplay', () => {
       errorDisplay.show('init', 'error')
 
       const dismiss = document.querySelector(
-        '.error-bar-dismiss'
+        '.error-bar-dismiss',
       ) as HTMLButtonElement
       dismiss.click()
 

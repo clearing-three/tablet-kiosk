@@ -66,7 +66,7 @@ export function formatTemperature(temp: number): string {
  */
 export function createTemperatureRangeElements(
   max: number,
-  min: number
+  min: number,
 ): DocumentFragment {
   const fragment = document.createDocumentFragment()
 
@@ -93,7 +93,7 @@ export function createTemperatureRangeElements(
  */
 export function createWindSpeedElements(
   speed: number,
-  gust?: number
+  gust?: number,
 ): DocumentFragment {
   const fragment = document.createDocumentFragment()
 

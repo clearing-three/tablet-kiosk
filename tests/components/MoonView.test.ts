@@ -8,7 +8,7 @@
 
 import { MoonView } from '../../src/components/Astronomy/MoonView'
 
-describe('MoonView', () => {
+describe('moonView', () => {
   let moonView: MoonView
 
   beforeEach(() => {

@@ -6,14 +6,14 @@
  */
 
 import type { WeatherData } from '../../types/weather-domain.types'
+import { DOM_IDS } from '../../utils/constants'
+import { getElement } from '../../utils/dom'
+import { createTemperatureRangeElements } from '../../utils/formatters'
 
 type ForecastDay = WeatherData['forecast'][0]
-import { createTemperatureRangeElements } from '../../utils/formatters'
-import { getElement } from '../../utils/dom'
-import { DOM_IDS } from '../../utils/constants'
 
-export const ERROR_MISSING_CHILD_ELEMENTS =
-  'Forecast day element is missing required child elements'
+export const ERROR_MISSING_CHILD_ELEMENTS
+  = 'Forecast day element is missing required child elements'
 
 export class ForecastView {
   private elements: {
@@ -42,7 +42,7 @@ export class ForecastView {
    */
   private updateForecastDayElement(
     element: HTMLElement,
-    day: ForecastDay
+    day: ForecastDay,
   ): void {
     const dayName = element.querySelector('.forecast-day-name')
     const icon = element.querySelector('.forecast-icon') as HTMLObjectElement
@@ -60,7 +60,7 @@ export class ForecastView {
     rangeContainer.innerHTML = ''
     const rangeElements = createTemperatureRangeElements(
       day.maxTemp,
-      day.minTemp
+      day.minTemp,
     )
     rangeContainer.appendChild(rangeElements)
   }

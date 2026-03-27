@@ -42,13 +42,13 @@ export class Moon extends LitElement {
   private _moonService = new NasaMoonService()
 
   connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback?.()
     this.updateMoon()
     this._timer = setInterval(() => this.updateMoon(), SIXTY_MINUTES_MILLIS)
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback()
+    super.disconnectedCallback?.()
     if (this._timer) {
       clearInterval(this._timer)
     }

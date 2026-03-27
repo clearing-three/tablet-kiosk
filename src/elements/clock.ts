@@ -34,13 +34,13 @@ export class Clock extends LitElement {
   private _timer?: ReturnType<typeof setInterval>
 
   connectedCallback() {
-    super.connectedCallback()
+    super.connectedCallback?.()
     this.updateTime()
     this._timer = setInterval(() => this.updateTime(), 1000)
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback()
+    super.disconnectedCallback?.()
     clearInterval(this._timer)
   }
 

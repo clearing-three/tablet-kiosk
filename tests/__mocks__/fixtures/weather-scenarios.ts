@@ -33,13 +33,13 @@ function generateFourDayForecast(
       case 'rainy':
         weatherCondition
           = i === 0
-            ? baseDay.weather[0]
+            ? baseDay.weather[0]!
             : {
                 id: 500 + (i % 3),
                 main: 'Rain',
                 description: ['light rain', 'moderate rain', 'heavy rain'][
                   i % 3
-                ],
+                ]!,
                 icon: '10d',
               }
         tempAdjustment = -2 * i // Gets cooler over time
@@ -47,32 +47,32 @@ function generateFourDayForecast(
       case 'snowy':
         weatherCondition
           = i === 0
-            ? baseDay.weather[0]
+            ? baseDay.weather[0]!
             : {
                 id: 600 + (i % 3),
                 main: 'Snow',
                 description: ['light snow', 'moderate snow', 'heavy snow'][
                   i % 3
-                ],
+                ]!,
                 icon: '13d',
               }
         tempAdjustment = -5 * i // Gets much cooler
         break
       case 'mixed': {
         const conditions = [
-          baseDay.weather[0],
+          baseDay.weather[0]!,
           { id: 801, main: 'Clouds', description: 'few clouds', icon: '02d' },
           { id: 500, main: 'Rain', description: 'light rain', icon: '10d' },
           { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
         ]
-        weatherCondition = conditions[i]
+        weatherCondition = conditions[i]!
         tempAdjustment = (i - 1) * 1.5 // Slight variation
         break
       }
       default: // clear
         weatherCondition
           = i === 0
-            ? baseDay.weather[0]
+            ? baseDay.weather[0]!
             : {
                 id: 800 + (i % 2),
                 main: i % 2 === 0 ? 'Clear' : 'Clouds',
@@ -107,7 +107,7 @@ function generateFourDayForecast(
       dew_point: baseDay.dew_point + tempAdjustment,
       wind_speed: Math.max(0, baseDay.wind_speed + i * 0.5),
       wind_deg: (baseDay.wind_deg + i * 10) % 360,
-      weather: [weatherCondition],
+      weather: [weatherCondition!],
       clouds: Math.min(100, baseDay.clouds + i * 10),
       pop: Math.min(1.0, baseDay.pop + i * 0.1),
       uvi: Math.max(0, baseDay.uvi - i * 0.5),

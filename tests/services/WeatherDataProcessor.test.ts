@@ -32,25 +32,25 @@ describe('weatherDataProcessor', () => {
         Math.round(mockData.current.feels_like),
       )
       expect(processed.current.description).toBe(
-        mockData.current.weather[0].description,
+        mockData.current.weather[0]!.description,
       )
       expect(processed.current.icon).toBeDefined()
       expect(typeof processed.current.icon).toBe('string')
       expect(processed.current.minTemp).toBe(
-        Math.round(mockData.daily[0].temp.min),
+        Math.round(mockData.daily[0]!.temp.min),
       )
       expect(processed.current.maxTemp).toBe(
-        Math.round(mockData.daily[0].temp.max),
+        Math.round(mockData.daily[0]!.temp.max),
       )
 
       // Check forecast processing (next 3 days, excluding today)
       expect(processed.forecast).toHaveLength(2)
       processed.forecast.forEach((day, index) => {
-        const originalDay = mockData.daily[index + 1] // Skip today
+        const originalDay = mockData.daily[index + 1]! // Skip today
         expect(day.dayName).toBeDefined()
         expect(day.icon).toBeDefined()
         expect(typeof day.icon).toBe('string')
-        expect(day.description).toBe(originalDay.weather[0].description)
+        expect(day.description).toBe(originalDay.weather[0]!.description)
         expect(day.maxTemp).toBe(Math.round(originalDay.temp.max))
         expect(day.minTemp).toBe(Math.round(originalDay.temp.min))
         expect(day.date).toBeInstanceOf(Date)
@@ -82,7 +82,7 @@ describe('weatherDataProcessor', () => {
         },
         daily: [
           {
-            ...getWeatherScenario('clearSunnyDay').daily[0],
+            ...getWeatherScenario('clearSunnyDay').daily[0]!,
             temp: {
               min: 65.3,
               max: 78.9,
@@ -270,7 +270,7 @@ describe('weatherDataProcessor', () => {
 
       // Verify that the processing doesn't mutate the original data
       expect(originalData.current.temp).toBeDefined()
-      expect(originalData.daily[0].temp.min).toBeDefined()
+      expect(originalData.daily[0]!.temp.min).toBeDefined()
     })
   })
 })

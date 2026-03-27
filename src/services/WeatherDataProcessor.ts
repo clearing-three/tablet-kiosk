@@ -20,20 +20,20 @@ export class WeatherDataProcessor {
    */
   processWeatherData(data: WeatherApiData): WeatherData {
     const current = data.current
-    const todaysForecast = data.daily[0]
+    const todaysForecast = data.daily[0]!
 
     // Process current weather
     const currentWeather = {
       temperature: Math.round(current.temp),
       feelsLike: Math.round(current.feels_like),
-      description: current.weather[0].description,
-      icon: mapOWMIconToSVG(current.weather[0].icon),
+      description: current.weather[0]!.description,
+      icon: mapOWMIconToSVG(current.weather[0]!.icon),
       minTemp: Math.round(todaysForecast.temp.min),
       maxTemp: Math.round(todaysForecast.temp.max),
       windSpeed: Math.round(current.wind_speed),
       windDirection: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][
         Math.round(current.wind_deg / 45) % 8
-      ],
+      ]!,
       windGust:
         current.wind_gust !== undefined
           ? Math.round(current.wind_gust)
@@ -45,8 +45,8 @@ export class WeatherDataProcessor {
       const date = new Date(day.dt * 1000)
       return {
         dayName: date.toLocaleDateString(undefined, { weekday: 'short' }),
-        icon: mapOWMIconToSVG(day.weather[0].icon),
-        description: day.weather[0].description,
+        icon: mapOWMIconToSVG(day.weather[0]!.icon),
+        description: day.weather[0]!.description,
         maxTemp: Math.round(day.temp.max),
         minTemp: Math.round(day.temp.min),
         date,

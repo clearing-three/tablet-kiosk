@@ -9,7 +9,7 @@ export const SUN_ICON_PATH = 'weather-icons/clear-day.svg'
 
 @customElement('x-sun-times')
 export class SunTimes extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: flex;
       align-items: center;
@@ -64,7 +64,7 @@ export class SunTimes extends LitElement {
       : ''
   }
 
-  render() {
+  override render() {
     return html`
       <img
         src="${SUN_ICON_PATH}"

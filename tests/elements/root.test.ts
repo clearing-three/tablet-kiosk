@@ -29,7 +29,6 @@ describe('Root', () => {
       const moon = element.shadowRoot?.querySelector('x-moon')
       const weather = element.shadowRoot?.querySelector('x-weather')
 
-
       expect(clock).toBeDefined()
       expect(moon).toBeDefined()
       expect(weather).toBeDefined()

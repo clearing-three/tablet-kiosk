@@ -7,7 +7,7 @@ import { weatherServiceConfig } from '../config/environment'
 
 @customElement('x-weather')
 export class Weather extends LitElement {
-  private static readonly TEN_MINUTES_MILLIS = 10 * 60 * 1000
+  public static readonly TEN_MINUTES_MILLIS = 10 * 60 * 1000
 
   static styles = css`
     :host {

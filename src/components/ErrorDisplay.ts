@@ -2,7 +2,7 @@ type ErrorSource = 'init' | 'weather-update' | 'clock-update' | 'nasa-moon'
 
 function getErrorDetails(error: unknown): { message: string, stack?: string } {
   if (error instanceof Error)
-    return { message: error.message, stack: error.stack }
+    return { message: error.message, ...(error.stack ? { stack: error.stack } : {}) }
   return { message: String(error) }
 }
 

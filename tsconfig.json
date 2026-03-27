@@ -21,6 +21,7 @@
     /* Linting */
     "strict": true,
     "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,

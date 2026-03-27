@@ -34,10 +34,9 @@ export class WeatherDataProcessor {
       windDirection: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][
         Math.round(current.wind_deg / 45) % 8
       ]!,
-      windGust:
-        current.wind_gust !== undefined
-          ? Math.round(current.wind_gust)
-          : undefined,
+      ...(current.wind_gust !== undefined
+        ? { windGust: Math.round(current.wind_gust) }
+        : {}),
     }
 
     // Process forecast (next 3 days, skipping today)

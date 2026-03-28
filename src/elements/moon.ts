@@ -10,7 +10,6 @@ export class Moon extends LitElement {
     :host {
       display: block;
       text-align: center;
-      align-self: flex-end;
     }
 
     .moon-phase-render {

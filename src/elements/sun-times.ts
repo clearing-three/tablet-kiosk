@@ -13,6 +13,7 @@ export class SunTimes extends LitElement {
     :host {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 1vh;
       font-size: 3.5vh;
       font-weight: 300;

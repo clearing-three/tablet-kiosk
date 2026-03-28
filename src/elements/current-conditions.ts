@@ -25,7 +25,7 @@ export class CurrentConditions extends LitElement {
     }
 
     .temp-now {
-      font-size: 8.4vh;
+      font-size: 10vh;
       font-weight: 500;
       color: var(--color-text-tertiary);
     }
@@ -34,14 +34,14 @@ export class CurrentConditions extends LitElement {
       display: flex;
       align-items: center;
       gap: 1.2vh;
-      font-size: 4.8vh;
+      font-size: 5.5vh;
     }
 
     .feels-like-display::before {
       content: '';
       display: block;
       width: 0.15vh;
-      height: 1.2em;
+      height: 2em;
       background-color: var(--color-feels-like);
       opacity: 0.5;
     }
@@ -113,7 +113,7 @@ export class CurrentConditions extends LitElement {
     }
 
     .weather-range {
-      font-size: 3.6vh;
+      font-size: 4.5vh;
       opacity: 0.9;
     }
 

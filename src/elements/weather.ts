@@ -6,6 +6,7 @@ import { WeatherContext } from '../context/weather-context.js'
 import { WeatherService } from '../services/WeatherService.js'
 import './sun-times.js'
 import './current-conditions.js'
+import './forecast.js'
 
 @customElement('x-weather')
 export class Weather extends LitElement {
@@ -17,7 +18,11 @@ export class Weather extends LitElement {
     }
 
     x-current-conditions {
-      margin-top: 5vh;
+      margin-top: 9vh;
+    }
+
+    x-forecast {
+      margin-top: 9vh;
     }
   `
 
@@ -50,6 +55,7 @@ export class Weather extends LitElement {
     return html`
       <x-sun-times></x-sun-times>
       <x-current-conditions></x-current-conditions>
+      <x-forecast days="2"></x-forecast>
     `
   }
 }

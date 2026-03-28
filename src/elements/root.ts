@@ -15,21 +15,23 @@ export class Root extends LitElement {
     }
 
     .pane-left {
-      width: 45%;
+      width: 60%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-evenly;
       padding: 2vh;
+      padding-left: 4vw;
     }
 
     .pane-right {
-      width: 55%;
+      width: 40%;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1vh;
       padding: 2vh;
+      padding-right: 8vw;
     }
   `
 

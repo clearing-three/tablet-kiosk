@@ -141,7 +141,7 @@ export class CurrentConditions extends LitElement {
   private get temperature(): string {
     return this._weatherData?.current.temperature
       ? formatTemperature(this._weatherData.current.temperature)
-      : '--'
+      : ''
   }
 
   private get feelsLike(): string {

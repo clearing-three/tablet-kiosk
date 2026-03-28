@@ -20,8 +20,8 @@ export class Moon extends LitElement {
     }
 
     .moon {
-      max-width: 43vw;
-      max-height: 43vh;
+      max-width: 50vw;
+      max-height: 50vh;
       width: auto;
       height: auto;
       display: block;

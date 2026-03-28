@@ -31,7 +31,7 @@ export class Root extends LitElement {
       align-items: center;
       gap: 1vh;
       padding: 2vh;
-      padding-right: 10vw;
+      padding-right: 8vw;
     }
   `
 

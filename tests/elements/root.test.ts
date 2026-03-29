@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-
 import { Root } from '../../src/elements/root'
 
 mockChildren()
@@ -34,6 +33,38 @@ describe('root', () => {
       expect(weather).toBeDefined()
     })
   })
+
+  describe('error handling', () => {
+    it('should call diagnostic.showError when error-occurred event is dispatched', async () => {
+      // given
+      document.body.appendChild(element)
+      await element.updateComplete
+
+      const diagnostic = element.shadowRoot?.querySelector('x-diagnostic')
+      const showErrorSpy = vi.fn()
+      if (diagnostic) {
+        (diagnostic as any).showError = showErrorSpy
+      }
+
+      const errorDetail = {
+        source: 'test-component',
+        error: new Error('Test error message'),
+        timestamp: new Date(),
+      }
+
+      // when
+      const event = new CustomEvent('error-occurred', {
+        detail: errorDetail,
+        bubbles: true,
+        composed: true,
+      })
+      element.dispatchEvent(event)
+
+      // then
+      expect(showErrorSpy).toHaveBeenCalledWith(errorDetail)
+      expect(showErrorSpy).toHaveBeenCalledOnce()
+    })
+  })
 })
 
 function mockChildren() {
@@ -46,6 +77,10 @@ function mockChildren() {
   })
 
   vi.mock('../../src/elements/weather', () => {
+    return {}
+  })
+
+  vi.mock('../../src/elements/diagnostic', () => {
     return {}
   })
 }

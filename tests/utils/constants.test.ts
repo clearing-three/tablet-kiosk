@@ -13,7 +13,6 @@ import {
   ASSET_PATHS,
   CSS_CLASSES,
   DEFAULTS,
-  DOM_IDS,
   ERROR_MESSAGES,
   FORECAST_CONFIG,
   MOON_PHASE_CONFIG,
@@ -185,49 +184,6 @@ describe('constants', () => {
     })
   })
 
-  describe('dOM_IDS', () => {
-    it('should have all required time and date element IDs', () => {
-      expect(DOM_IDS.TIME).toBe('time')
-      expect(DOM_IDS.DATE).toBe('date')
-    })
-
-    it('should have all required weather element IDs', () => {
-      expect(DOM_IDS.TEMP_NOW).toBe('temp-now')
-      expect(DOM_IDS.WEATHER_RANGE).toBe('weather-range')
-    })
-
-    it('should have all required astronomy element IDs', () => {
-      expect(DOM_IDS.SUNRISE_TIME).toBe('sunrise-time')
-      expect(DOM_IDS.SUNSET_TIME).toBe('sunset-time')
-    })
-
-    it('should have all required moon phase element IDs', () => {
-      expect(DOM_IDS.MOON).toBe('moon')
-    })
-
-    it('should have forecast element ID', () => {
-      expect(DOM_IDS.FORECAST).toBe('forecast')
-    })
-
-    it('should be readonly at TypeScript level', () => {
-      expect(Object.keys(DOM_IDS).length).toBeGreaterThan(0)
-    })
-
-    it('should have kebab-case ID values', () => {
-      Object.values(DOM_IDS).forEach((id) => {
-        expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
-      })
-    })
-
-    it('should not have empty or undefined IDs', () => {
-      Object.values(DOM_IDS).forEach((id) => {
-        expect(id).toBeTruthy()
-        expect(typeof id).toBe('string')
-        expect(id.length).toBeGreaterThan(0)
-      })
-    })
-  })
-
   describe('cSS_CLASSES', () => {
     it('should have all required forecast CSS classes', () => {
       expect(CSS_CLASSES.FORECAST_DAY).toBe('forecast-day')
@@ -346,7 +302,6 @@ describe('constants', () => {
         API_CONFIG,
         ASSET_PATHS,
         DEFAULTS,
-        DOM_IDS,
         CSS_CLASSES,
         TIME_FORMAT_OPTIONS,
         ERROR_MESSAGES,
@@ -388,7 +343,6 @@ describe('constants', () => {
         API_CONFIG,
         ASSET_PATHS,
         DEFAULTS,
-        DOM_IDS,
         CSS_CLASSES,
         TIME_FORMAT_OPTIONS,
         ERROR_MESSAGES,

@@ -65,34 +65,6 @@ export const DEFAULTS = {
 } as const
 
 /**
- * DOM element IDs used throughout the application
- */
-export const DOM_IDS = {
-  // Time and date elements
-  TIME: 'time',
-  DATE: 'date',
-
-  // Current weather elements
-  TEMP_NOW: 'temp-now',
-  FEELS_LIKE: 'feels-like',
-  WIND_DIRECTION: 'wind-direction',
-  WIND_SPEED: 'wind-speed',
-  WEATHER_RANGE: 'weather-range',
-
-  // Astronomy elements
-  SUNRISE_TIME: 'sunrise-time',
-  SUNSET_TIME: 'sunset-time',
-
-  // Moon phase elements
-  MOON: 'moon',
-
-  // Forecast elements
-  FORECAST: 'forecast',
-  FORECAST_DAY_1: 'forecast-day-1',
-  FORECAST_DAY_2: 'forecast-day-2',
-} as const
-
-/**
  * CSS classes used in dynamic content generation
  */
 export const CSS_CLASSES = {

@@ -49,8 +49,5 @@ export interface WeatherData {
     minTemp: number
     date: Date
   }>
-  astronomy: {
-    sunrise: number // Unix timestamp
-    sunset: number // Unix timestamp
-  }
+  astronomy: SolarTimes
 }

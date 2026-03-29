@@ -7,8 +7,8 @@
 
 import type { WeatherServiceConfig } from '../types/service-config.types'
 import type { WeatherData } from '../types/weather-domain.types'
-import { OpenWeatherApiClient } from './OpenWeatherApiClient'
-import { WeatherDataProcessor } from './WeatherDataProcessor'
+import { OpenWeatherApiClient } from './open-weather-api-client'
+import { WeatherDataProcessor } from './weather-data-processor'
 
 export class WeatherService {
   private readonly client: OpenWeatherApiClient

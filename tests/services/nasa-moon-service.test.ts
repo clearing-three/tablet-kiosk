@@ -8,7 +8,7 @@
  */
 
 import type { Mock } from 'vitest'
-import { NasaMoonService } from '../../src/services/NasaMoonService'
+import { NasaMoonService } from '../../src/services/nasa-moon-service'
 import { mockNasaSuccessResponse, NasaMoonApiMock } from '../__mocks__/nasa-api'
 
 describe('nasaMoonService', () => {

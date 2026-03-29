@@ -1,6 +1,6 @@
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { NasaMoonService } from '../services/NasaMoonService.js'
+import { NasaMoonService } from '../services/nasa-moon-service.js'
 
 export const SIXTY_MINUTES_MILLIS = 3600000
 

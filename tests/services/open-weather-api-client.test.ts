@@ -9,7 +9,7 @@
 
 import type { Mock } from 'vitest'
 import type { WeatherServiceConfig } from '../../src/types/service-config.types'
-import { OpenWeatherApiClient } from '../../src/services/OpenWeatherApiClient'
+import { OpenWeatherApiClient } from '../../src/services/open-weather-api-client'
 import { getWeatherScenario, OpenWeatherMapMock } from '../__mocks__'
 
 describe('openWeatherApiClient', () => {

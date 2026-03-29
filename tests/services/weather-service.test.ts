@@ -5,7 +5,7 @@
  */
 
 import type { WeatherServiceConfig } from '../../src/types/service-config.types'
-import { WeatherService } from '../../src/services/WeatherService'
+import { WeatherService } from '../../src/services/weather-service'
 import { getWeatherScenario, OpenWeatherMapMock } from '../__mocks__'
 
 describe('weatherService', () => {

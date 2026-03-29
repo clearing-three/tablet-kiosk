@@ -5,7 +5,7 @@ import { SIXTY_MINUTES_MILLIS } from '../../src/elements/moon'
 
 const mockGetCurrentMoonImage = vi.fn()
 
-vi.mock('../../src/services/NasaMoonService', () => ({
+vi.mock('../../src/services/nasa-moon-service', () => ({
   NasaMoonService: vi.fn().mockImplementation(function (this: any) {
     this.getCurrentMoonImage = mockGetCurrentMoonImage
     this.fetchMoonImage = vi.fn()

@@ -9,11 +9,8 @@
  */
 
 import {
-  createTemperatureRangeElements,
-  createWindSpeedElements,
   formatCurrentDate,
   formatCurrentTime,
-  formatDayNameFromUnix,
   formatTemperature,
   formatTimeFromUnix,
 } from '../../src/utils/formatters'
@@ -120,41 +117,6 @@ describe('formatters', () => {
     })
   })
 
-  describe('formatDayNameFromUnix', () => {
-    it('should format Unix timestamp to short day name', () => {
-      // January 1, 2024 was a Monday
-      const mondayUnix = 1704067200
-      const result = formatDayNameFromUnix(mondayUnix)
-
-      expect(result).toMatch(/^[A-Z][a-z]{2}$/) // Should be "Mon", "Tue", etc.
-    })
-
-    it('should handle different days of the week', () => {
-      const testCases = [
-        1704067200, // Monday
-        1704153600, // Tuesday
-        1704240000, // Wednesday
-        1704326400, // Thursday
-        1704412800, // Friday
-        1704499200, // Saturday
-        1704585600, // Sunday
-      ]
-
-      testCases.forEach((unix) => {
-        const result = formatDayNameFromUnix(unix)
-        expect(result).toMatch(/^[A-Z][a-z]{2}$/)
-      })
-    })
-
-    it('should handle edge case timestamps', () => {
-      const epochResult = formatDayNameFromUnix(0)
-      expect(epochResult).toMatch(/^[A-Z][a-z]{2}$/)
-
-      const futureResult = formatDayNameFromUnix(2147483647)
-      expect(futureResult).toMatch(/^[A-Z][a-z]{2}$/)
-    })
-  })
-
   describe('formatTemperature', () => {
     it('should round positive temperatures correctly', () => {
       expect(formatTemperature(72.3)).toBe('72')
@@ -185,100 +147,6 @@ describe('formatters', () => {
     })
   })
 
-  describe('createTemperatureRangeElements', () => {
-    it('should create temperature range elements correctly', () => {
-      const fragment = createTemperatureRangeElements(75.7, 60.3)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.querySelector('.temp-high')?.textContent).toBe('76')
-      expect(container.querySelector('.temp-low')?.textContent).toBe('60')
-    })
-
-    it('should handle same max and min temperatures', () => {
-      const fragment = createTemperatureRangeElements(70, 70)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.querySelector('.temp-high')?.textContent).toBe('70')
-      expect(container.querySelector('.temp-low')?.textContent).toBe('70')
-    })
-
-    it('should handle negative temperatures', () => {
-      const fragment = createTemperatureRangeElements(-5.2, -10.8)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.querySelector('.temp-high')?.textContent).toBe('-5')
-      expect(container.querySelector('.temp-low')?.textContent).toBe('-11')
-    })
-
-    it('should handle mixed positive/negative temperatures', () => {
-      const fragment = createTemperatureRangeElements(32.1, -10.5)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.querySelector('.temp-high')?.textContent).toBe('32')
-      expect(container.querySelector('.temp-low')?.textContent).toBe('-10')
-    })
-
-    it('should round both temperatures appropriately', () => {
-      const fragment = createTemperatureRangeElements(78.9, 65.1)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.querySelector('.temp-high')?.textContent).toBe('79')
-      expect(container.querySelector('.temp-low')?.textContent).toBe('65')
-    })
-  })
-
-  describe('createWindSpeedElements', () => {
-    it('should create wind speed element without gust', () => {
-      const fragment = createWindSpeedElements(5)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.textContent).toBe('5')
-      expect(container.querySelector('.wind-gust')).toBeNull()
-    })
-
-    it('should create wind speed elements with gust', () => {
-      const fragment = createWindSpeedElements(5, 19)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      const gustElement = container.querySelector('.wind-gust')
-      expect(gustElement).not.toBeNull()
-      expect(gustElement?.textContent).toBe('19')
-    })
-
-    it('should handle zero wind speed', () => {
-      const fragment = createWindSpeedElements(0)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.textContent).toBe('0')
-    })
-
-    it('should handle zero gust speed', () => {
-      const fragment = createWindSpeedElements(5, 0)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      const gustElement = container.querySelector('.wind-gust')
-      expect(gustElement?.textContent).toBe('0')
-    })
-
-    it('should handle large wind speeds', () => {
-      const fragment = createWindSpeedElements(45, 68)
-      const container = document.createElement('div')
-      container.appendChild(fragment)
-
-      expect(container.textContent).toContain('45')
-      expect(container.querySelector('.wind-gust')?.textContent).toBe('68')
-    })
-  })
-
   describe('edge cases and error handling', () => {
     it('should handle NaN input gracefully', () => {
       expect(formatTemperature(Number.NaN)).toBe('NaN')
@@ -294,7 +162,6 @@ describe('formatters', () => {
       const futureTimestamp = 4102444800
 
       expect(() => formatTimeFromUnix(futureTimestamp)).not.toThrow()
-      expect(() => formatDayNameFromUnix(futureTimestamp)).not.toThrow()
     })
 
     it('should handle negative timestamps in time functions', () => {
@@ -302,7 +169,6 @@ describe('formatters', () => {
       const pastTimestamp = -86400
 
       expect(() => formatTimeFromUnix(pastTimestamp)).not.toThrow()
-      expect(() => formatDayNameFromUnix(pastTimestamp)).not.toThrow()
     })
   })
 })

@@ -9,7 +9,7 @@
  */
 
 import { REQUIRED_FORECAST_DAYS } from '../../src/constants/weather.constants'
-import { WeatherDataProcessor } from '../../src/services/WeatherDataProcessor'
+import { WeatherDataProcessor } from '../../src/services/weather-data-processor'
 import { getWeatherScenario, weatherScenarios } from '../__mocks__'
 
 describe('weatherDataProcessor', () => {

@@ -5,7 +5,7 @@ import { Weather } from '../../src/elements/weather'
 const mockGetWeatherData = vi.fn()
 const mockSetValue = vi.fn()
 
-vi.mock('../../src/services/WeatherService', () => ({
+vi.mock('../../src/services/weather-service', () => ({
   WeatherService: vi.fn().mockImplementation(function (this: any) {
     this.getWeatherData = mockGetWeatherData
   }),

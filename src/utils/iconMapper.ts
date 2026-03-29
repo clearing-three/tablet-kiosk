@@ -2,10 +2,7 @@
  * Weather icon mapping utilities for OpenWeatherMap icons to local SVG files
  */
 
-/**
- * Type definition for OpenWeatherMap icon codes
- */
-export type OWMIconCode
+type OWMIconCode
   = | '01d'
     | '01n' // Clear sky
     | '02d'
@@ -25,10 +22,7 @@ export type OWMIconCode
     | '50d'
     | '50n' // Mist
 
-/**
- * Type definition for local SVG icon names
- */
-export type LocalIconName
+type LocalIconName
   = | 'clear-day'
     | 'clear-night'
     | 'partly-cloudy-day'
@@ -90,35 +84,4 @@ export function mapOWMIconToSVG(owmCode: string): LocalIconName {
  */
 function isValidOWMIconCode(code: string): code is OWMIconCode {
   return Object.hasOwn(ICON_MAP, code)
-}
-
-/**
- * Gets the full path to a weather icon SVG file
- * @param owmCode OpenWeatherMap icon code
- * @param basePath Base path for weather icons (default: '/weather-icons')
- * @returns Full path to the SVG file
- */
-export function getWeatherIconPath(
-  owmCode: string,
-  basePath: string = 'weather-icons',
-): string {
-  const iconName = mapOWMIconToSVG(owmCode)
-  return `${basePath}/${iconName}.svg`
-}
-
-/**
- * Gets all available icon mappings
- * @returns Object containing all OWM to local icon mappings
- */
-export function getAllIconMappings(): Record<OWMIconCode, LocalIconName> {
-  return { ...ICON_MAP }
-}
-
-/**
- * Checks if an icon file exists for the given OWM code
- * @param owmCode OpenWeatherMap icon code
- * @returns True if a mapping exists for the code
- */
-export function hasIconMapping(owmCode: string): boolean {
-  return isValidOWMIconCode(owmCode)
 }

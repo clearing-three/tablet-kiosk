@@ -196,6 +196,27 @@ describe('diagnostic', () => {
       const stackDetail = element.shadowRoot?.querySelector('.error-bar-detail')
       expect(stackDetail?.textContent).toContain('Error: Test error')
     })
+
+    it('should not render toggle button or stack trace when error has no stack', async () => {
+      // given
+      const error = new Error('Test error without stack')
+      delete (error as any).stack
+      const errorDetail: ErrorDetail = {
+        source: 'TestSource',
+        error,
+        timestamp: new Date(),
+      }
+
+      // when
+      element.showError(errorDetail)
+      await element.updateComplete
+
+      // then
+      const toggleButton = element.shadowRoot?.querySelector('.error-bar-toggle')
+      const stackDetail = element.shadowRoot?.querySelector('.error-bar-detail')
+      expect(toggleButton).toBeNull()
+      expect(stackDetail).toBeNull()
+    })
   })
 
   describe('accessibility', () => {

@@ -44,7 +44,7 @@ pnpm install
 
 ### Common development tasks
 - `pnpm dev`: Start development server with hot reload
-- `pnpm validate`: Run linting + all tests + build 
+- `pnpm validate`: Run linting + all tests + build
 - `pnpm test:coverage`: Create test coverage report (`coverage/index.html`)
 - `pnpm knip`: Find unused exports, files, and dependencies
 

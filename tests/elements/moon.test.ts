@@ -326,4 +326,54 @@ describe('moon', () => {
       element.remove()
     })
   })
+
+  describe('error handling', () => {
+    it('should dispatch error-occurred event when moon fetch fails', async () => {
+      // given
+      const error = new Error('fetch failed')
+      mockGetCurrentMoonImage.mockRejectedValue(error)
+      element = document.createElement('x-moon') as Moon
+
+      const errorHandler = vi.fn()
+      element.addEventListener('error-occurred', errorHandler)
+
+      // when
+      document.body.appendChild(element)
+      await waitForMoonUpdate(element)
+
+      // then
+      expect(errorHandler).toHaveBeenCalledOnce()
+      const event = errorHandler.mock.calls[0]![0] as CustomEvent
+      expect(event.detail.source).toBe('Nasa Moon')
+      expect(event.detail.error).toBe(error)
+      expect(event.detail.timestamp).toBeInstanceOf(Date)
+      expect(event.bubbles).toBe(true)
+      expect(event.composed).toBe(true)
+      element.remove()
+    })
+
+    it('should continue updating moon after error', async () => {
+      // given
+      const error = new Error('fetch failed')
+      mockGetCurrentMoonImage.mockRejectedValueOnce(error)
+      mockGetCurrentMoonImage.mockResolvedValue(mockMoonImage)
+      element = document.createElement('x-moon') as Moon
+
+      // when
+      document.body.appendChild(element)
+      await waitForMoonUpdate(element)
+
+      // then
+      expect(mockGetCurrentMoonImage).toHaveBeenCalledOnce()
+
+      // when
+      await vi.advanceTimersByTimeAsync(SIXTY_MINUTES_MILLIS)
+      await waitForMoonUpdate(element)
+
+      // then
+      expect(mockGetCurrentMoonImage).toHaveBeenCalledTimes(2)
+      expect(getMoonImageSrc(element)).toBe(mockMoonImage.url)
+      element.remove()
+    })
+  })
 })

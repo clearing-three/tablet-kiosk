@@ -1,16 +1,38 @@
-# Kiosk
+# Weather Kiosk Display
 
-A weather kiosk app for tablet displays. Shows current weather, a 3-day forecast, astronomical times (sunrise/sunset, moonrise/moonset), moon phase, and a live clock. Designed for a Samsung Galaxy Tab S8 Ultra running in Fully Kiosk Browser, pulling data from the OpenWeatherMap One Call 3.0 API.
+A weather kiosk app for a repurposed Android tablet. Displays current weather conditions and moon phase visualization.
+
+Built with TypeScript and [Lit](https://lit.dev/) web components. Deployed from a Debian-based development machine to an Android tablet via ADB.
+
+![Weather Kiosk Screenshot](kiosk-display.png)
+
+## Design
+
+The UI is composed of small, focused Lit elements. Each element handles a specific concern (clock, moon phase, current conditions, forecast).
+
+### Service Layer
+
+Data fetching is isolated in service classes:
+- **[`WeatherService`](src/services/weather-service.ts)** — orchestrates OpenWeatherMap API calls and data processing
+- **[`NasaMoonService`](src/services/nasa-moon-service.ts)** — handles NASA Dial-a-Moon API interactions
+
+### State Management
+
+Weather data is shared via Lit's [Context API](https://lit.dev/docs/data/context/). The [`x-weather`](src/elements/weather.ts) component fetches data every 10 minutes and provides it to child components (`x-sun-times`, `x-current-conditions`, `x-forecast`) through context.
+
+### Error Handling
+
+Components bubble `error-occurred` [custom events](https://lit.dev/docs/components/events/#dispatching-events) up to `x-root`, which displays them via an overlay.
 
 ## Development
 
-### Kiosk environment setup
+### Local dev environment setup
 
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` and set OpenWeatherMap API key and coordinates.
+Edit `.env.local` and set [OpenWeatherMap API key](https://openweathermap.org/api) and coordinates.
 
 ### Initialization
 
@@ -20,69 +42,40 @@ corepack enable
 pnpm install
 ```
 
-### Running Locally
+### Common development tasks
 - `pnpm dev`: Start development server with hot reload
-- `pnpm dev:legacy`: (pre Lit) Start development server with hot reload
-- `pnpm build`: Build for production (TypeScript compilation + Vite build)
-- `pnpm preview`: Preview production build locally
-
-### Validation
-```bash
-pnpm validate
-```
-
-### Test Coverage
-- `pnpm test:coverage`: Run tests with coverage report (open `coverage/index.html` to view)
-
-### Dead Code
+- `pnpm validate`: Run linting + all tests + build
+- `pnpm test:coverage`: Create test coverage report (`coverage/index.html`)
 - `pnpm knip`: Find unused exports, files, and dependencies
 
 ## Deployment
 
-Requires tablet setup — see [Tablet](#tablet) section below.
+### Tablet Setup
 
-1. Install Android Debug Bridge.
-```bash
-sudo apt install android-tools-adb
-adb devices
-```
-2. Use `deploy.sh`.
+#### Install Kiosk App
+1. Install [Fully Kiosk Browser](https://www.fully-kiosk.com/) from Google Play
 
-### Deployment Commands
-- `./deploy.sh`: Build, clean device, and deploy files to device
-- `./deploy.sh -l`: List deployed files on device
-- `./deploy.sh -c`: Clean/remove all deployed files from device
-
-## Design
-
-### Call Stack Roots
-
-There are two recurring call stack roots and one startup root. Error handling
-is consolidated at these points.
-
-| Root | Location | Trigger |
-|---|---|---|
-| App startup | `DOMContentLoaded` handler in `main.ts` | Page load |
-| Weather update | `updateWeatherData()` in `main.ts` | `setInterval` every 10 min |
-| Clock update | `startUpdates()` interval in `TimeDisplay.ts` | `setInterval` every 1 sec |
-
-## Third-Party Assets
-
-### Weather Icons
-The SVG weather icons in `public/weather-icons/` are sourced from [basmilius/weather-icons](https://github.com/basmilius/weather-icons). They are served as static assets via Vite's public directory and copied to `dist/weather-icons/` during build.
-
-### Moon Phase Script
-`moon-phase.js` is sourced from [tingletech/moon-phase](https://github.com/tingletech/moon-phase). It provides lunar phase calculations and SVG path generation using Julian date and astronomical algorithms.
-
-## Tablet
-
-* Samsung Galaxy Tab S8 Ultra
-
-### Install Kiosk App
-1. Install "Fully Kiosk Browser"
-
-### Enable Developer Mode
+#### Enable Developer Mode
 1. Settings → About tablet → Software information
     * Tap Build Number 7 times
 2. Settings → Developer options
     * Turn on USB debugging
+
+### Deploy to tablet (from Debian-based OS)
+
+#### Prerequisite: Install Android Debug Bridge
+```bash
+sudo apt install android-tools-adb
+adb devices
+```
+
+#### Deployment Commands
+- `./deploy.sh`: Build app, clean device, and deploy files to device
+- `./deploy.sh -l`: List deployed files on device
+- `./deploy.sh -c`: Clean/remove all deployed files from device
+
+
+## Appendix
+
+### Weather Icons
+The SVG weather icons in `public/weather-icons/` are sourced from [basmilius/weather-icons](https://github.com/basmilius/weather-icons).

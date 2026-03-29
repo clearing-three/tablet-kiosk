@@ -38,75 +38,10 @@ export function formatCurrentDate(): string {
 }
 
 /**
- * Formats a Unix timestamp to a short day name
- * @param unix Unix timestamp in seconds
- * @returns Short day name (e.g., "Mon", "Tue")
- */
-export function formatDayNameFromUnix(unix: number): string {
-  const dateObj = new Date(unix * 1000)
-  return dateObj.toLocaleDateString(undefined, {
-    weekday: 'short',
-  })
-}
-
-/**
  * Formats temperature value by rounding to nearest integer
  * @param temp Temperature value as number
  * @returns Rounded temperature as string
  */
 export function formatTemperature(temp: number): string {
   return String(Math.round(temp))
-}
-
-/**
- * Creates DOM elements for temperature range display with arrows
- * @param max Maximum temperature
- * @param min Minimum temperature
- * @returns DocumentFragment containing styled temperature range elements
- */
-export function createTemperatureRangeElements(
-  max: number,
-  min: number,
-): DocumentFragment {
-  const fragment = document.createDocumentFragment()
-
-  const highSpan = document.createElement('span')
-  highSpan.className = 'temp-high temperature'
-  highSpan.textContent = formatTemperature(max)
-
-  const lowSpan = document.createElement('span')
-  lowSpan.className = 'temp-low temperature'
-  lowSpan.textContent = formatTemperature(min)
-
-  fragment.appendChild(highSpan)
-  fragment.appendChild(document.createTextNode(' '))
-  fragment.appendChild(lowSpan)
-
-  return fragment
-}
-
-/**
- * Creates DOM elements for wind speed display with optional gust
- * @param speed Base wind speed
- * @param gust Optional gust speed
- * @returns DocumentFragment containing wind speed and optional gust elements
- */
-export function createWindSpeedElements(
-  speed: number,
-  gust?: number,
-): DocumentFragment {
-  const fragment = document.createDocumentFragment()
-
-  const speedText = document.createTextNode(String(speed))
-  fragment.appendChild(speedText)
-
-  if (gust !== undefined) {
-    const gustSpan = document.createElement('span')
-    gustSpan.className = 'wind-gust'
-    gustSpan.textContent = String(gust)
-
-    fragment.appendChild(gustSpan)
-  }
-
-  return fragment
 }

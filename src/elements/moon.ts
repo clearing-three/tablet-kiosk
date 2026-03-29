@@ -54,9 +54,24 @@ export class Moon extends LitElement {
   }
 
   private async updateMoon() {
-    const moonImage = await this._moonService.getCurrentMoonImage()
-    this._moonImageUrl = moonImage.url
-    this._moonImageAlt = moonImage.alt_text
+    try {
+      const moonImage = await this._moonService.getCurrentMoonImage()
+      this._moonImageUrl = moonImage.url
+      this._moonImageAlt = moonImage.alt_text
+    }
+    catch (error) {
+      this.dispatchEvent(
+        new CustomEvent('error-occurred', {
+          bubbles: true,
+          composed: true,
+          detail: {
+            source: 'Nasa Moon',
+            error,
+            timestamp: new Date(),
+          },
+        }),
+      )
+    }
   }
 
   override render() {

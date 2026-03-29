@@ -1,11 +1,16 @@
+import type { Diagnostic, ErrorDetail } from './diagnostic.js'
 import { css, html, LitElement } from 'lit'
-import { customElement } from 'lit/decorators.js'
+import { customElement, query } from 'lit/decorators.js'
 import './clock'
+import './diagnostic'
 import './moon'
 import './weather'
 
 @customElement('x-root')
 export class Root extends LitElement {
+  @query('x-diagnostic')
+  private _diagnostic!: Diagnostic
+
   static override styles = css`
     :host {
       display: flex;
@@ -35,8 +40,24 @@ export class Root extends LitElement {
     }
   `
 
+  override connectedCallback() {
+    super.connectedCallback?.()
+    this.addEventListener('error-occurred', this._handleError)
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback?.()
+    this.removeEventListener('error-occurred', this._handleError)
+  }
+
+  private _handleError = (event: Event) => {
+    const customEvent = event as CustomEvent<ErrorDetail>
+    this._diagnostic.showError(customEvent.detail)
+  }
+
   override render() {
     return html`
+      <x-diagnostic hidden></x-diagnostic>
       <div class="pane-left">
         <x-moon></x-moon>
       </div>

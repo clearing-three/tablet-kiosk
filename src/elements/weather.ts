@@ -47,8 +47,23 @@ export class Weather extends LitElement {
   }
 
   private async updateWeather() {
-    const weatherData = await this._weatherService.getWeatherData()
-    this._provider.setValue(weatherData)
+    try {
+      const weatherData = await this._weatherService.getWeatherData()
+      this._provider.setValue(weatherData)
+    }
+    catch (error) {
+      this.dispatchEvent(
+        new CustomEvent('error-occurred', {
+          bubbles: true,
+          composed: true,
+          detail: {
+            source: 'Weather',
+            error,
+            timestamp: new Date(),
+          },
+        }),
+      )
+    }
   }
 
   override render() {

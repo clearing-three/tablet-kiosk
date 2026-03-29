@@ -147,4 +147,53 @@ describe('weather', () => {
       element.remove()
     })
   })
+
+  describe('error handling', () => {
+    it('should dispatch error-occurred event when weather fetch fails', async () => {
+      // given
+      const error = new Error('fetch failed')
+      mockGetWeatherData.mockRejectedValue(error)
+      element = document.createElement('x-weather') as Weather
+
+      const errorHandler = vi.fn()
+      element.addEventListener('error-occurred', errorHandler)
+
+      // when
+      document.body.appendChild(element)
+      await waitForWeatherUpdate(element)
+
+      // then
+      expect(errorHandler).toHaveBeenCalledOnce()
+      const event = errorHandler.mock.calls[0]![0] as CustomEvent
+      expect(event.detail.source).toBe('Weather')
+      expect(event.detail.error).toBe(error)
+      expect(event.detail.timestamp).toBeInstanceOf(Date)
+      expect(event.bubbles).toBe(true)
+      expect(event.composed).toBe(true)
+      element.remove()
+    })
+
+    it('should continue updating weather after error', async () => {
+      // given
+      const error = new Error('fetch failed')
+      mockGetWeatherData.mockRejectedValueOnce(error)
+      mockGetWeatherData.mockResolvedValue(mockWeatherData)
+      element = document.createElement('x-weather') as Weather
+
+      // when
+      document.body.appendChild(element)
+      await waitForWeatherUpdate(element)
+
+      // then
+      expect(mockGetWeatherData).toHaveBeenCalledOnce()
+
+      // when
+      await vi.advanceTimersByTimeAsync(Weather.TEN_MINUTES_MILLIS)
+
+      // then
+      expect(mockGetWeatherData).toHaveBeenCalledTimes(2)
+      expect(mockSetValue).toHaveBeenCalledWith(mockWeatherData)
+      element.remove()
+    })
+  })
 })

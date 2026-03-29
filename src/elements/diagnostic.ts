@@ -3,7 +3,7 @@ import { customElement, state } from 'lit/decorators.js'
 
 export interface ErrorDetail {
   source: string
-  error: unknown
+  error: Error
   timestamp: Date
 }
 
@@ -30,7 +30,7 @@ export class Diagnostic extends LitElement {
       width: 100%;
       background: var(--color-error-bg);
       color: var(--color-error-text);
-      font-family: Roboto, sans-serif;
+      font-family: var(--font-family-base);
       font-size: 1rem;
     }
 
@@ -122,18 +122,12 @@ export class Diagnostic extends LitElement {
     this._showStack = !this._showStack
   }
 
-  private _getErrorMessage(error: unknown): string {
-    if (error instanceof Error) {
-      return error.message
-    }
-    return String(error)
+  private _getErrorMessage(error: Error): string {
+    return error.message
   }
 
-  private _getErrorStack(error: unknown): string | undefined {
-    if (error instanceof Error && error.stack) {
-      return error.stack
-    }
-    return undefined
+  private _getErrorStack(error: Error): string | undefined {
+    return error.stack
   }
 
   override render() {

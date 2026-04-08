@@ -7,7 +7,7 @@
  * - Case sensitivity handling
  */
 
-import { mapOWMIconToSVG } from '../../src/utils/iconMapper'
+import { mapOWMIconToSVG } from '../../src/utils/icon-mapper'
 
 describe('iconMapper', () => {
   describe('mapOWMIconToSVG', () => {

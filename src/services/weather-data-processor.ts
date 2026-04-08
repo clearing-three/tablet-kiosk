@@ -9,7 +9,7 @@
 import type { WeatherApiData } from '../types/weather-api.types'
 import type { WeatherData } from '../types/weather-domain.types'
 import { REQUIRED_FORECAST_DAYS } from '../constants/weather.constants'
-import { mapOWMIconToSVG } from '../utils/iconMapper'
+import { mapOWMIconToSVG } from '../utils/icon-mapper'
 
 export class WeatherDataProcessor {
   /**

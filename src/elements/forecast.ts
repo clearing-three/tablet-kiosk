@@ -3,7 +3,7 @@ import { consume } from '@lit/context'
 import { css, html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { WeatherContext } from '../context/weather-context.js'
-import { formatTemperature } from '../utils/formatters.js'
+import { temperatureDisplay } from '../utils/formatters.js'
 
 type ForecastDay = WeatherData['forecast'][0]
 
@@ -52,16 +52,8 @@ export class Forecast extends LitElement {
       content: '↑';
     }
 
-    .temp-high {
-      color: var(--color-temp-high);
-    }
-
     .temp-low::before {
       content: '↓';
-    }
-
-    .temp-low {
-      color: var(--color-temp-low);
     }
   `
 
@@ -80,6 +72,9 @@ export class Forecast extends LitElement {
   }
 
   private renderForecastDay(day: ForecastDay) {
+    const maxTemp = temperatureDisplay(day.maxTemp)
+    const minTemp = temperatureDisplay(day.minTemp)
+
     return html`
       <div class="forecast-day">
         <div class="forecast-day-name">${day.dayName}</div>
@@ -89,9 +84,9 @@ export class Forecast extends LitElement {
           data="weather-icons/${day.icon}.svg"
         ></object>
         <div class="forecast-range">
-          <span class="temp-high temperature">${formatTemperature(day.maxTemp)}</span>
+          <span class="temp-high temperature" style="color: ${maxTemp.color}">${maxTemp.text}</span>
           ${' '}
-          <span class="temp-low temperature">${formatTemperature(day.minTemp)}</span>
+          <span class="temp-low temperature" style="color: ${minTemp.color}">${minTemp.text}</span>
         </div>
       </div>
     `

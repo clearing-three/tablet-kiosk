@@ -1,10 +1,9 @@
-import type { Mock } from 'vitest'
 import type { WeatherData } from '../../src/types/weather-domain.types'
 import {
   CurrentConditions,
   WIND_ICON_PATH,
 } from '../../src/elements/current-conditions'
-import * as formatters from '../../src/utils/formatters'
+import { temperatureDisplay } from '../../src/utils/formatters'
 
 void CurrentConditions
 
@@ -23,19 +22,8 @@ const WIND_DIRECTION_B = 'SW'
 const MAX_TEMP_B = 90
 const MIN_TEMP_B = 70
 
-const TEMP_A_FORMATTED = '72'
-const FEELS_LIKE_A_FORMATTED = '68'
-const MAX_TEMP_A_FORMATTED = '75'
-const MIN_TEMP_A_FORMATTED = '65'
-
-const TEMP_B_FORMATTED = '85'
-const FEELS_LIKE_B_FORMATTED = '88'
-const MAX_TEMP_B_FORMATTED = '90'
-const MIN_TEMP_B_FORMATTED = '70'
-
 describe('current-conditions', () => {
   let element: CurrentConditions
-  let mockFormatTemperature: Mock
 
   const getTempNow = (el: CurrentConditions): string => {
     return el.shadowRoot?.querySelector('.temp-now')?.textContent?.trim() ?? ''
@@ -74,10 +62,6 @@ describe('current-conditions', () => {
   }
 
   beforeEach(() => {
-    mockFormatTemperature = vi.fn()
-    vi.spyOn(formatters, 'formatTemperature').mockImplementation(
-      mockFormatTemperature,
-    )
     element = document.createElement('x-current-conditions') as CurrentConditions
   })
 
@@ -85,7 +69,6 @@ describe('current-conditions', () => {
     if (element.isConnected) {
       element.remove()
     }
-    vi.restoreAllMocks()
   })
 
   describe('rendering without weather data', () => {
@@ -127,25 +110,32 @@ describe('current-conditions', () => {
         forecast: [],
         astronomy: {} as WeatherData['astronomy'],
       }
-      mockFormatTemperature
-        .mockReturnValueOnce(TEMP_A_FORMATTED)
-        .mockReturnValueOnce(FEELS_LIKE_A_FORMATTED)
-        .mockReturnValueOnce(MAX_TEMP_A_FORMATTED)
-        .mockReturnValueOnce(MIN_TEMP_A_FORMATTED)
-
       // when
       document.body.appendChild(element)
       ;(element as any)._weatherData = mockWeatherData
       await element.updateComplete
 
       // then
-      expect(getTempNow(element)).toContain(TEMP_A_FORMATTED)
-      expect(getFeelsLike(element)).toContain(FEELS_LIKE_A_FORMATTED)
+      const tempA = temperatureDisplay(TEMP_A)
+      const feelsLikeA = temperatureDisplay(FEELS_LIKE_A)
+      const maxTempA = temperatureDisplay(MAX_TEMP_A)
+      const minTempA = temperatureDisplay(MIN_TEMP_A)
+
+      expect(getTempNow(element)).toContain(tempA.text)
+      expect(element.shadowRoot?.querySelector('.temp-now')?.getAttribute('style')).toContain(tempA.color)
+
+      expect(getFeelsLike(element)).toContain(feelsLikeA.text)
+      expect(element.shadowRoot?.querySelector('.feels-like')?.getAttribute('style')).toContain(feelsLikeA.color)
+
       expect(getWindSpeed(element)).toContain(WIND_SPEED_A.toString())
       expect(getWindDirection(element)).toBe(WIND_DIRECTION_A)
       expect(getWindGust(element)).toBe(WIND_GUST_A.toString())
-      expect(getMaxTemp(element)).toContain(MAX_TEMP_A_FORMATTED)
-      expect(getMinTemp(element)).toContain(MIN_TEMP_A_FORMATTED)
+
+      expect(getMaxTemp(element)).toContain(maxTempA.text)
+      expect(element.shadowRoot?.querySelector('.temp-high')?.getAttribute('style')).toContain(maxTempA.color)
+
+      expect(getMinTemp(element)).toContain(minTempA.text)
+      expect(element.shadowRoot?.querySelector('.temp-low')?.getAttribute('style')).toContain(minTempA.color)
     })
 
     it('should not render wind gust when undefined', async () => {
@@ -164,12 +154,6 @@ describe('current-conditions', () => {
         forecast: [],
         astronomy: {} as WeatherData['astronomy'],
       }
-      mockFormatTemperature
-        .mockReturnValueOnce(TEMP_A_FORMATTED)
-        .mockReturnValueOnce(FEELS_LIKE_A_FORMATTED)
-        .mockReturnValueOnce(MAX_TEMP_A_FORMATTED)
-        .mockReturnValueOnce(MIN_TEMP_A_FORMATTED)
-
       // when
       document.body.appendChild(element)
       ;(element as any)._weatherData = mockWeatherData
@@ -210,23 +194,20 @@ describe('current-conditions', () => {
         astronomy: {} as WeatherData['astronomy'],
       }
 
-      mockFormatTemperature
-        .mockReturnValueOnce(TEMP_A_FORMATTED)
-        .mockReturnValueOnce(FEELS_LIKE_A_FORMATTED)
-        .mockReturnValueOnce(MAX_TEMP_A_FORMATTED)
-        .mockReturnValueOnce(MIN_TEMP_A_FORMATTED)
-        .mockReturnValueOnce(TEMP_B_FORMATTED)
-        .mockReturnValueOnce(FEELS_LIKE_B_FORMATTED)
-        .mockReturnValueOnce(MAX_TEMP_B_FORMATTED)
-        .mockReturnValueOnce(MIN_TEMP_B_FORMATTED)
-
       document.body.appendChild(element)
       ;(element as any)._weatherData = firstWeatherData
       await element.updateComplete
 
       // then
-      expect(getTempNow(element)).toContain(TEMP_A_FORMATTED)
-      expect(getFeelsLike(element)).toContain(FEELS_LIKE_A_FORMATTED)
+      const tempA = temperatureDisplay(TEMP_A)
+      const feelsLikeA = temperatureDisplay(FEELS_LIKE_A)
+
+      expect(getTempNow(element)).toContain(tempA.text)
+      expect(element.shadowRoot?.querySelector('.temp-now')?.getAttribute('style')).toContain(tempA.color)
+
+      expect(getFeelsLike(element)).toContain(feelsLikeA.text)
+      expect(element.shadowRoot?.querySelector('.feels-like')?.getAttribute('style')).toContain(feelsLikeA.color)
+
       expect(getWindSpeed(element)).toContain(WIND_SPEED_A.toString())
       expect(getWindDirection(element)).toBe(WIND_DIRECTION_A)
 
@@ -235,8 +216,14 @@ describe('current-conditions', () => {
       await element.updateComplete
 
       // then
-      expect(getTempNow(element)).toContain(TEMP_B_FORMATTED)
-      expect(getFeelsLike(element)).toContain(FEELS_LIKE_B_FORMATTED)
+      const tempB = temperatureDisplay(TEMP_B)
+      const feelsLikeB = temperatureDisplay(FEELS_LIKE_B)
+
+      expect(getTempNow(element)).toContain(tempB.text)
+      expect(element.shadowRoot?.querySelector('.temp-now')?.getAttribute('style')).toContain(tempB.color)
+
+      expect(getFeelsLike(element)).toContain(feelsLikeB.text)
+      expect(element.shadowRoot?.querySelector('.feels-like')?.getAttribute('style')).toContain(feelsLikeB.color)
       expect(getWindSpeed(element)).toContain(WIND_SPEED_B.toString())
       expect(getWindDirection(element)).toBe(WIND_DIRECTION_B)
     })

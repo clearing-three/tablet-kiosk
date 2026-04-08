@@ -1,7 +1,6 @@
-import type { Mock } from 'vitest'
 import type { WeatherData } from '../../src/types/weather-domain.types'
 import { Forecast } from '../../src/elements/forecast'
-import * as formatters from '../../src/utils/formatters'
+import { temperatureDisplay } from '../../src/utils/formatters'
 
 void Forecast
 
@@ -20,16 +19,8 @@ const DAY_3_ICON = 'rain'
 const DAY_3_MAX = 68
 const DAY_3_MIN = 55
 
-const DAY_1_MAX_FORMATTED = '75'
-const DAY_1_MIN_FORMATTED = '60'
-const DAY_2_MAX_FORMATTED = '78'
-const DAY_2_MIN_FORMATTED = '62'
-const DAY_3_MAX_FORMATTED = '68'
-const DAY_3_MIN_FORMATTED = '55'
-
 describe('forecast', () => {
   let element: Forecast
-  let mockFormatTemperature: Mock
 
   const getForecastDays = (el: Forecast): NodeListOf<Element> => {
     return el.shadowRoot?.querySelectorAll('.forecast-day') ?? ([] as any)
@@ -52,10 +43,6 @@ describe('forecast', () => {
   }
 
   beforeEach(() => {
-    mockFormatTemperature = vi.fn()
-    vi.spyOn(formatters, 'formatTemperature').mockImplementation(
-      mockFormatTemperature,
-    )
     element = document.createElement('x-forecast') as Forecast
   })
 
@@ -63,7 +50,6 @@ describe('forecast', () => {
     if (element.isConnected) {
       element.remove()
     }
-    vi.restoreAllMocks()
   })
 
   describe('rendering without weather data', () => {
@@ -111,12 +97,6 @@ describe('forecast', () => {
         ],
         astronomy: {} as WeatherData['astronomy'],
       }
-      mockFormatTemperature
-        .mockReturnValueOnce(DAY_1_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_1_MIN_FORMATTED)
-        .mockReturnValueOnce(DAY_2_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_2_MIN_FORMATTED)
-
       // when
       document.body.appendChild(element)
       ;(element as any)._weatherData = mockWeatherData
@@ -126,15 +106,24 @@ describe('forecast', () => {
       const days = getForecastDays(element)
       expect(days.length).toBe(2)
 
+      const day1Max = temperatureDisplay(DAY_1_MAX)
+      const day1Min = temperatureDisplay(DAY_1_MIN)
+      const day2Max = temperatureDisplay(DAY_2_MAX)
+      const day2Min = temperatureDisplay(DAY_2_MIN)
+
       expect(getDayName(days[0]!)).toBe(DAY_1_NAME)
       expect(getIconPath(days[0]!)).toBe(`weather-icons/${DAY_1_ICON}.svg`)
-      expect(getMaxTemp(days[0]!)).toContain(DAY_1_MAX_FORMATTED)
-      expect(getMinTemp(days[0]!)).toContain(DAY_1_MIN_FORMATTED)
+      expect(getMaxTemp(days[0]!)).toContain(day1Max.text)
+      expect(days[0]!.querySelector('.temp-high')?.getAttribute('style')).toContain(day1Max.color)
+      expect(getMinTemp(days[0]!)).toContain(day1Min.text)
+      expect(days[0]!.querySelector('.temp-low')?.getAttribute('style')).toContain(day1Min.color)
 
       expect(getDayName(days[1]!)).toBe(DAY_2_NAME)
       expect(getIconPath(days[1]!)).toBe(`weather-icons/${DAY_2_ICON}.svg`)
-      expect(getMaxTemp(days[1]!)).toContain(DAY_2_MAX_FORMATTED)
-      expect(getMinTemp(days[1]!)).toContain(DAY_2_MIN_FORMATTED)
+      expect(getMaxTemp(days[1]!)).toContain(day2Max.text)
+      expect(days[1]!.querySelector('.temp-high')?.getAttribute('style')).toContain(day2Max.color)
+      expect(getMinTemp(days[1]!)).toContain(day2Min.text)
+      expect(days[1]!.querySelector('.temp-low')?.getAttribute('style')).toContain(day2Min.color)
     })
 
     it('should render custom number of forecast days', async () => {
@@ -169,14 +158,6 @@ describe('forecast', () => {
         ],
         astronomy: {} as WeatherData['astronomy'],
       }
-      mockFormatTemperature
-        .mockReturnValueOnce(DAY_1_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_1_MIN_FORMATTED)
-        .mockReturnValueOnce(DAY_2_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_2_MIN_FORMATTED)
-        .mockReturnValueOnce(DAY_3_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_3_MIN_FORMATTED)
-
       element.days = 3
 
       // when
@@ -229,14 +210,6 @@ describe('forecast', () => {
         ],
         astronomy: {} as WeatherData['astronomy'],
       }
-
-      mockFormatTemperature
-        .mockReturnValueOnce(DAY_1_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_1_MIN_FORMATTED)
-        .mockReturnValueOnce(DAY_2_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_2_MIN_FORMATTED)
-        .mockReturnValueOnce(DAY_3_MAX_FORMATTED)
-        .mockReturnValueOnce(DAY_3_MIN_FORMATTED)
 
       document.body.appendChild(element)
       ;(element as any)._weatherData = firstWeatherData

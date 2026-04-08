@@ -3,7 +3,7 @@ import { consume } from '@lit/context'
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import { WeatherContext } from '../context/weather-context.js'
-import { formatTemperature } from '../utils/formatters.js'
+import { temperatureDisplay } from '../utils/formatters.js'
 
 export const WIND_ICON_PATH = 'weather-icons/wind-static.svg'
 
@@ -121,16 +121,8 @@ export class CurrentConditions extends LitElement {
       content: '↑';
     }
 
-    .temp-high {
-      color: var(--color-temp-high);
-    }
-
     .temp-low::before {
       content: '↓';
-    }
-
-    .temp-low {
-      color: var(--color-temp-low);
     }
   `
 
@@ -138,16 +130,12 @@ export class CurrentConditions extends LitElement {
   @state()
   private _weatherData?: WeatherData
 
-  private get temperature(): string {
-    return this._weatherData?.current.temperature
-      ? formatTemperature(this._weatherData.current.temperature)
-      : ''
+  private get temperature() {
+    return temperatureDisplay(this._weatherData?.current.temperature)
   }
 
-  private get feelsLike(): string {
-    return this._weatherData?.current.feelsLike
-      ? formatTemperature(this._weatherData.current.feelsLike)
-      : ''
+  private get feelsLike() {
+    return temperatureDisplay(this._weatherData?.current.feelsLike)
   }
 
   private get windSpeed(): number {
@@ -162,24 +150,25 @@ export class CurrentConditions extends LitElement {
     return this._weatherData?.current.windGust
   }
 
-  private get maxTemp(): string {
-    return this._weatherData?.current.maxTemp
-      ? formatTemperature(this._weatherData.current.maxTemp)
-      : ''
+  private get maxTemp() {
+    return temperatureDisplay(this._weatherData?.current.maxTemp)
   }
 
-  private get minTemp(): string {
-    return this._weatherData?.current.minTemp
-      ? formatTemperature(this._weatherData.current.minTemp)
-      : ''
+  private get minTemp() {
+    return temperatureDisplay(this._weatherData?.current.minTemp)
   }
 
   override render() {
+    const temperature = this.temperature
+    const feelsLike = this.feelsLike
+    const maxTemp = this.maxTemp
+    const minTemp = this.minTemp
+
     return html`
       <div class="temp">
-        <div class="temp-now temperature">${this.temperature}</div>
+        <div class="temp-now temperature" style="color: ${temperature.color}">${temperature.text}</div>
         <div class="feels-like-display">
-          <span class="feels-like temperature">${this.feelsLike}</span>
+          <span class="feels-like temperature" style="color: ${feelsLike.color}">${feelsLike.text}</span>
         </div>
       </div>
       <div class="wind-display">
@@ -196,8 +185,8 @@ export class CurrentConditions extends LitElement {
         </div>
       </div>
       <div class="weather-range">
-        <span class="temp-high temperature">${this.maxTemp}</span>
-        <span class="temp-low temperature">${this.minTemp}</span>
+        <span class="temp-high temperature" style="color: ${maxTemp.color}">${maxTemp.text}</span>
+        <span class="temp-low temperature" style="color: ${minTemp.color}">${minTemp.text}</span>
       </div>
     `
   }

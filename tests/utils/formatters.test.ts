@@ -11,8 +11,8 @@
 import {
   formatCurrentDate,
   formatCurrentTime,
-  formatTemperature,
   formatTimeFromUnix,
+  temperatureDisplay,
 } from '../../src/utils/formatters'
 
 describe('formatters', () => {
@@ -117,46 +117,100 @@ describe('formatters', () => {
     })
   })
 
-  describe('formatTemperature', () => {
-    it('should round positive temperatures correctly', () => {
-      expect(formatTemperature(72.3)).toBe('72')
-      expect(formatTemperature(72.7)).toBe('73')
-      expect(formatTemperature(72.5)).toBe('73')
+  describe('temperatureDisplay', () => {
+    it('should return empty strings when temp is undefined', () => {
+      // given
+      const temp = undefined
+
+      // expect
+      expect(temperatureDisplay(temp)).toEqual({ text: '', color: '' })
     })
 
-    it('should round negative temperatures correctly', () => {
-      expect(formatTemperature(-5.3)).toBe('-5')
-      expect(formatTemperature(-5.7)).toBe('-6')
-      expect(formatTemperature(-5.5)).toBe('-5')
+    it('should return formatted text and color for valid temperature', () => {
+      // given
+      const temp = 72.5
+
+      // when
+      const result = temperatureDisplay(temp)
+
+      // then
+      expect(result.text).toBe('73')
+      expect(result.color).toBe('var(--temp-warm)')
     })
 
-    it('should handle zero temperature', () => {
-      expect(formatTemperature(0)).toBe('0')
-      expect(formatTemperature(0.4)).toBe('0')
-      expect(formatTemperature(0.6)).toBe('1')
+    describe('text formatting', () => {
+      it('should round positive temperatures correctly', () => {
+        // expect
+        expect(temperatureDisplay(72.3).text).toBe('72')
+        expect(temperatureDisplay(72.7).text).toBe('73')
+        expect(temperatureDisplay(72.5).text).toBe('73')
+      })
+
+      it('should round negative temperatures correctly', () => {
+        // expect
+        expect(temperatureDisplay(-5.3).text).toBe('-5')
+        expect(temperatureDisplay(-5.7).text).toBe('-6')
+        expect(temperatureDisplay(-5.5).text).toBe('-5')
+      })
+
+      it('should handle zero temperature', () => {
+        // expect
+        expect(temperatureDisplay(0).text).toBe('0')
+        expect(temperatureDisplay(0.4).text).toBe('0')
+        expect(temperatureDisplay(0.6).text).toBe('1')
+      })
+
+      it('should handle integer temperatures', () => {
+        // expect
+        expect(temperatureDisplay(75).text).toBe('75')
+        expect(temperatureDisplay(-10).text).toBe('-10')
+      })
+
+      it('should handle extreme temperatures', () => {
+        // expect
+        expect(temperatureDisplay(999.9).text).toBe('1000')
+        expect(temperatureDisplay(-999.9).text).toBe('-1000')
+      })
+
+      it('should handle NaN input', () => {
+        // expect
+        expect(temperatureDisplay(Number.NaN).text).toBe('NaN')
+      })
+
+      it('should handle Infinity values', () => {
+        // expect
+        expect(temperatureDisplay(Infinity).text).toBe('Infinity')
+        expect(temperatureDisplay(-Infinity).text).toBe('-Infinity')
+      })
     })
 
-    it('should handle integer temperatures', () => {
-      expect(formatTemperature(75)).toBe('75')
-      expect(formatTemperature(-10)).toBe('-10')
-    })
+    describe('color mapping', () => {
+      it('should map temperature to correct color ranges', () => {
+        // expect
+        expect(temperatureDisplay(-5).color).toBe('var(--temp-deep-freeze)')
+        expect(temperatureDisplay(5).color).toBe('var(--temp-arctic)')
+        expect(temperatureDisplay(15).color).toBe('var(--temp-bitter)')
+        expect(temperatureDisplay(25).color).toBe('var(--temp-freezing)')
+        expect(temperatureDisplay(35).color).toBe('var(--temp-cold)')
+        expect(temperatureDisplay(45).color).toBe('var(--temp-cool)')
+        expect(temperatureDisplay(55).color).toBe('var(--temp-mild)')
+        expect(temperatureDisplay(65).color).toBe('var(--temp-comfortable)')
+        expect(temperatureDisplay(75).color).toBe('var(--temp-warm)')
+        expect(temperatureDisplay(85).color).toBe('var(--temp-hot)')
+        expect(temperatureDisplay(95).color).toBe('var(--temp-very-hot)')
+        expect(temperatureDisplay(105).color).toBe('var(--temp-extreme-heat)')
+      })
 
-    it('should handle extreme temperatures', () => {
-      expect(formatTemperature(999.9)).toBe('1000')
-      expect(formatTemperature(-999.9)).toBe('-1000')
+      it('should handle boundary temperatures', () => {
+        // expect
+        expect(temperatureDisplay(0).color).toBe('var(--temp-arctic)')
+        expect(temperatureDisplay(10).color).toBe('var(--temp-bitter)')
+        expect(temperatureDisplay(100).color).toBe('var(--temp-extreme-heat)')
+      })
     })
   })
 
   describe('edge cases and error handling', () => {
-    it('should handle NaN input gracefully', () => {
-      expect(formatTemperature(Number.NaN)).toBe('NaN')
-    })
-
-    it('should handle Infinity values', () => {
-      expect(formatTemperature(Infinity)).toBe('Infinity')
-      expect(formatTemperature(-Infinity)).toBe('-Infinity')
-    })
-
     it('should handle very large timestamps in time functions', () => {
       // Year 2100 timestamp
       const futureTimestamp = 4102444800

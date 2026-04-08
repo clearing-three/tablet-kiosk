@@ -37,11 +37,35 @@ export function formatCurrentDate(): string {
   return now.toLocaleDateString(undefined, options)
 }
 
+const COLOR_RANGES = [
+  [100, 'var(--temp-extreme-heat)'],
+  [90, 'var(--temp-very-hot)'],
+  [80, 'var(--temp-hot)'],
+  [70, 'var(--temp-warm)'],
+  [60, 'var(--temp-comfortable)'],
+  [50, 'var(--temp-mild)'],
+  [40, 'var(--temp-cool)'],
+  [30, 'var(--temp-cold)'],
+  [20, 'var(--temp-freezing)'],
+  [10, 'var(--temp-bitter)'],
+  [0, 'var(--temp-arctic)'],
+  [-Infinity, 'var(--temp-deep-freeze)'],
+] as const
+
 /**
- * Formats temperature value by rounding to nearest integer
- * @param temp Temperature value as number
- * @returns Rounded temperature as string
+ * Creates a temperature display object with formatted text and color
+ * @param temp Temperature value as number or undefined
+ * @returns Object with text (formatted temperature) and color (CSS variable)
  */
-export function formatTemperature(temp: number): string {
-  return String(Math.round(temp))
+export function temperatureDisplay(temp: number | undefined): { text: string, color: string } {
+  if (temp === undefined) {
+    return { text: '', color: '' }
+  }
+
+  const color = COLOR_RANGES.find(([threshold]) => temp >= threshold)?.[1] ?? ''
+
+  return {
+    text: String(Math.round(temp)),
+    color,
+  }
 }

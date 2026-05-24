@@ -43,20 +43,20 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "9.0.0",
-    "@types/node": "25.8.0",
-    "@vitest/coverage-v8": "4.1.6",
+    "@types/node": "25.9.1",
+    "@vitest/coverage-v8": "4.1.7",
     "eslint": "10.4.0",
     "eslint-plugin-lit": "2.3.1",
     "eslint-plugin-wc": "3.1.0",
     "happy-dom": "20.9.0",
     "jsdom": "29.1.1",
-    "knip": "6.14.1",
+    "knip": "6.14.2",
     "lit-analyzer": "2.0.3",
     "only-allow": "1.2.2",
-    "stylelint": "17.11.1",
+    "stylelint": "17.12.0",
     "stylelint-config-standard": "40.0.0",
     "typescript": "6.0.3",
-    "vite": "8.0.13",
-    "vitest": "4.1.6"
+    "vite": "8.0.14",
+    "vitest": "4.1.7"
   }
 }

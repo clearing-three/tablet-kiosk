@@ -14,9 +14,9 @@ jobs:
       matrix:
         task: [lint, stylelint, analyze:lit]
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
 
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
 
       - uses: actions/setup-node@v6.4.0
         with:
@@ -37,9 +37,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
 
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
 
       - uses: actions/setup-node@v6.4.0
         with:
@@ -53,9 +53,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
 
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
 
       - uses: actions/setup-node@v6.4.0
         with:

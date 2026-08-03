@@ -1,7 +1,21 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Root } from '../../src/elements/root'
 
-mockChildren()
+vi.mock('../../src/elements/clock', () => {
+  return {}
+})
+
+vi.mock('../../src/elements/moon', () => {
+  return {}
+})
+
+vi.mock('../../src/elements/weather', () => {
+  return {}
+})
+
+vi.mock('../../src/elements/diagnostic', () => {
+  return {}
+})
 
 // Force module evaluation to ensure @customElement decorator runs
 void Root
@@ -66,21 +80,3 @@ describe('root', () => {
     })
   })
 })
-
-function mockChildren() {
-  vi.mock('../../src/elements/clock', () => {
-    return {}
-  })
-
-  vi.mock('../../src/elements/moon', () => {
-    return {}
-  })
-
-  vi.mock('../../src/elements/weather', () => {
-    return {}
-  })
-
-  vi.mock('../../src/elements/diagnostic', () => {
-    return {}
-  })
-}

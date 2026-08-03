@@ -8,7 +8,7 @@ export default defineConfig({
   envDir: '../', // Look for .env files in project root
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
+      '@': resolve(import.meta.dirname, 'src'),
     },
   },
   build: {
@@ -17,7 +17,7 @@ export default defineConfig({
     assetsDir: 'assets',
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'src/index.html'),
+        main: resolve(import.meta.dirname, 'src/index.html'),
       },
       output: {
         assetFileNames: 'assets/[name]-[hash][extname]',

@@ -5,10 +5,6 @@ vi.mock('../../src/elements/clock', () => {
   return {}
 })
 
-vi.mock('../../src/elements/moon', () => {
-  return {}
-})
-
 vi.mock('../../src/elements/weather', () => {
   return {}
 })
@@ -34,16 +30,14 @@ describe('root', () => {
   })
 
   describe('rendering', () => {
-    it('should render x-clock and x-moon elements', async () => {
+    it('should render x-clock and x-weather elements', async () => {
       document.body.appendChild(element)
       await element.updateComplete
 
       const clock = element.shadowRoot?.querySelector('x-clock')
-      const moon = element.shadowRoot?.querySelector('x-moon')
       const weather = element.shadowRoot?.querySelector('x-weather')
 
       expect(clock).toBeDefined()
-      expect(moon).toBeDefined()
       expect(weather).toBeDefined()
     })
   })

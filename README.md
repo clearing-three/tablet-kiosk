@@ -1,6 +1,6 @@
 # Weather Kiosk Display
 
-A weather kiosk app for a repurposed Android tablet. Displays current weather conditions and moon phase visualization.
+A weather kiosk app for a repurposed Android tablet. Displays current weather conditions.
 
 Built with TypeScript and [Lit](https://lit.dev/) web components. Deployed from a Debian-based development machine to an Android tablet via ADB.
 
@@ -8,13 +8,12 @@ Built with TypeScript and [Lit](https://lit.dev/) web components. Deployed from 
 
 ## Design
 
-The UI is composed of small, focused Lit elements. Each element handles a specific concern (clock, moon phase, current conditions, forecast).
+The UI is composed of small, focused Lit elements. Each element handles a specific concern (clock, current conditions, forecast).
 
 ### Service Layer
 
 Data fetching is isolated in service classes:
 - **[`WeatherService`](src/services/weather-service.ts)** — orchestrates OpenWeatherMap API calls and data processing
-- **[`NasaMoonService`](src/services/nasa-moon-service.ts)** — handles NASA Dial-a-Moon API interactions
 
 ### State Management
 

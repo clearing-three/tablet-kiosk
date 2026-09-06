@@ -39,24 +39,24 @@
   "dependencies": {
     "@lit/context": "1.1.6",
     "lit": "3.3.3",
-    "zod": "4.4.3"
+    "zod": "4.5.4"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "9.3.0",
-    "@types/node": "26.2.0",
-    "@vitest/coverage-v8": "4.1.11",
-    "eslint": "10.8.1",
+    "@antfu/eslint-config": "9.5.1",
+    "@types/node": "26.4.1",
+    "@vitest/coverage-v8": "5.0.0",
+    "eslint": "10.9.1",
     "eslint-plugin-lit": "2.3.1",
     "eslint-plugin-wc": "3.1.0",
-    "happy-dom": "20.11.6",
+    "happy-dom": "20.14.0",
     "jsdom": "30.0.1",
-    "knip": "6.32.2",
+    "knip": "6.34.0",
     "lit-analyzer": "2.0.3",
     "only-allow": "1.2.2",
     "stylelint": "17.14.1",
     "stylelint-config-standard": "40.0.0",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vite": "8.2.2",
-    "vitest": "4.1.11"
+    "vitest": "5.0.0"
   }
 }

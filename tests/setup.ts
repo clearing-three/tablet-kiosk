@@ -72,9 +72,3 @@ expect.extend({
     }
   },
 })
-
-declare module 'vitest' {
-  interface Assertion<T = any> {
-    toBeWithinRange: (floor: number, ceiling: number) => T
-  }
-}

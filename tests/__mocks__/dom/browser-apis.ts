@@ -6,6 +6,7 @@
  */
 
 import process from 'node:process'
+import { vi } from 'vitest'
 
 /**
  * Mock Image constructor for weather icon testing
@@ -264,65 +265,43 @@ export class IntersectionObserverMock {
  * Browser API mock setup utility
  */
 export class BrowserApiMock {
-  private static originalApis: Map<string, unknown> = new Map()
-
   static setup() {
     // Mock Image
-    this.originalApis.set('Image', globalThis.Image)
-    globalThis.Image = MockImage as any
+    vi.stubGlobal('Image', MockImage)
 
     // Mock SVG object element
-    this.originalApis.set('HTMLObjectElement', globalThis.HTMLObjectElement)
-    globalThis.HTMLObjectElement = MockSVGObjectElement as any
+    vi.stubGlobal('HTMLObjectElement', MockSVGObjectElement)
 
     // Mock timers
-    this.originalApis.set('setInterval', globalThis.setInterval)
-    this.originalApis.set('clearInterval', globalThis.clearInterval)
-    this.originalApis.set('setTimeout', globalThis.setTimeout)
-    this.originalApis.set('clearTimeout', globalThis.clearTimeout)
-
-    globalThis.setInterval = vi.fn(TimerMock.mockSetInterval) as any
-    globalThis.clearInterval = vi.fn(TimerMock.mockClearInterval) as any
-    globalThis.setTimeout = vi.fn(TimerMock.mockSetTimeout) as any
-    globalThis.clearTimeout = vi.fn(TimerMock.mockClearTimeout) as any
+    vi.stubGlobal('setInterval', vi.fn(TimerMock.mockSetInterval))
+    vi.stubGlobal('clearInterval', vi.fn(TimerMock.mockClearInterval))
+    vi.stubGlobal('setTimeout', vi.fn(TimerMock.mockSetTimeout))
+    vi.stubGlobal('clearTimeout', vi.fn(TimerMock.mockClearTimeout))
 
     // Mock localStorage
-    this.originalApis.set('localStorage', globalThis.localStorage)
-    globalThis.localStorage = new LocalStorageMock() as any
+    vi.stubGlobal('localStorage', new LocalStorageMock())
 
     // Mock console (if needed for specific tests)
     if (process.env.NODE_ENV === 'test') {
-      this.originalApis.set('console', globalThis.console)
-      globalThis.console = new ConsoleMock() as any
+      vi.stubGlobal('console', new ConsoleMock())
     }
 
     // Mock geolocation
-    this.originalApis.set('navigator', globalThis.navigator)
-    globalThis.navigator = {
+    vi.stubGlobal('navigator', {
       ...globalThis.navigator,
       geolocation: new GeolocationMock(),
-    } as any
+    })
 
     // Mock ResizeObserver
-    this.originalApis.set('ResizeObserver', globalThis.ResizeObserver)
-    globalThis.ResizeObserver = ResizeObserverMock as any
+    vi.stubGlobal('ResizeObserver', ResizeObserverMock)
 
     // Mock IntersectionObserver
-    this.originalApis.set('IntersectionObserver', globalThis.IntersectionObserver)
-    globalThis.IntersectionObserver = IntersectionObserverMock as any
+    vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
   }
 
   static teardown() {
-    // Restore original APIs
-    this.originalApis.forEach((originalApi, key) => {
-      if (originalApi !== undefined) {
-        ;(globalThis as any)[key] = originalApi
-      }
-      else {
-        delete (globalThis as any)[key]
-      }
-    })
-    this.originalApis.clear()
+    // Restore all stubbed globals
+    vi.unstubAllGlobals()
 
     // Clear any active timers
     TimerMock.clearAll()

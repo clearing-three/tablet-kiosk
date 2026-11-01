@@ -31,11 +31,22 @@ export class WeatherDataProcessor {
       minTemp: Math.round(todaysForecast.temp.min),
       maxTemp: Math.round(todaysForecast.temp.max),
       windSpeed: Math.round(current.wind_speed),
-      windDirection: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][
+      windDirection: [
+        'N',
+        'NE',
+        'E',
+        'SE',
+        'S',
+        'SW',
+        'W',
+        'NW',
+      ][
         Math.round(current.wind_deg / 45) % 8
       ]!,
       ...(current.wind_gust !== undefined
-        ? { windGust: Math.round(current.wind_gust) }
+        ? {
+            windGust: Math.round(current.wind_gust),
+          }
         : {}),
     }
 

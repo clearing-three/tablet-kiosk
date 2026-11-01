@@ -347,7 +347,10 @@ export const browserApiHelpers = {
     const position: GeolocationPosition = {
       coords,
       timestamp: Date.now(),
-      toJSON: () => ({ coords, timestamp: Date.now() }),
+      toJSON: () => ({
+        coords,
+        timestamp: Date.now(),
+      }),
     }
     ;(globalThis.navigator.geolocation as GeolocationMock).mockSuccess(position)
   },

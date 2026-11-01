@@ -41,8 +41,20 @@ export function createMockWeatherData(
     daily: [
       {
         dt: 1640995200,
-        temp: { day: 22, night: 15, eve: 20, morn: 18, min: 15, max: 25 },
-        feels_like: { day: 21, night: 14, eve: 19, morn: 17 },
+        temp: {
+          day: 22,
+          night: 15,
+          eve: 20,
+          morn: 18,
+          min: 15,
+          max: 25,
+        },
+        feels_like: {
+          day: 21,
+          night: 14,
+          eve: 19,
+          morn: 17,
+        },
         pressure: 1013,
         humidity: 65,
         dew_point: 12,
@@ -65,8 +77,20 @@ export function createMockWeatherData(
       },
       {
         dt: 1641081600,
-        temp: { day: 25, night: 18, eve: 23, morn: 20, min: 18, max: 28 },
-        feels_like: { day: 24, night: 17, eve: 22, morn: 19 },
+        temp: {
+          day: 25,
+          night: 18,
+          eve: 23,
+          morn: 20,
+          min: 18,
+          max: 28,
+        },
+        feels_like: {
+          day: 24,
+          night: 17,
+          eve: 22,
+          morn: 19,
+        },
         pressure: 1010,
         humidity: 70,
         dew_point: 15,
@@ -89,8 +113,20 @@ export function createMockWeatherData(
       },
       {
         dt: 1641168000,
-        temp: { day: 19, night: 12, eve: 17, morn: 14, min: 12, max: 22 },
-        feels_like: { day: 18, night: 11, eve: 16, morn: 13 },
+        temp: {
+          day: 19,
+          night: 12,
+          eve: 17,
+          morn: 14,
+          min: 12,
+          max: 22,
+        },
+        feels_like: {
+          day: 18,
+          night: 11,
+          eve: 16,
+          morn: 13,
+        },
         pressure: 1008,
         humidity: 80,
         dew_point: 16,

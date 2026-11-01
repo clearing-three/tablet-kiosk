@@ -61,9 +61,24 @@ function generateFourDayForecast(
       case 'mixed': {
         const conditions = [
           baseDay.weather[0]!,
-          { id: 801, main: 'Clouds', description: 'few clouds', icon: '02d' },
-          { id: 500, main: 'Rain', description: 'light rain', icon: '10d' },
-          { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
+          {
+            id: 801,
+            main: 'Clouds',
+            description: 'few clouds',
+            icon: '02d',
+          },
+          {
+            id: 500,
+            main: 'Rain',
+            description: 'light rain',
+            icon: '10d',
+          },
+          {
+            id: 800,
+            main: 'Clear',
+            description: 'clear sky',
+            icon: '01d',
+          },
         ]
         weatherCondition = conditions[i]!
         tempAdjustment = (i - 1) * 1.5 // Slight variation
@@ -75,9 +90,15 @@ function generateFourDayForecast(
             ? baseDay.weather[0]!
             : {
                 id: 800 + (i % 2),
-                main: i % 2 === 0 ? 'Clear' : 'Clouds',
-                description: i % 2 === 0 ? 'clear sky' : 'few clouds',
-                icon: i % 2 === 0 ? '01d' : '02d',
+                main: i % 2 === 0
+                  ? 'Clear'
+                  : 'Clouds',
+                description: i % 2 === 0
+                  ? 'clear sky'
+                  : 'few clouds',
+                icon: i % 2 === 0
+                  ? '01d'
+                  : '02d',
               }
         tempAdjustment = -1 * i // Slightly cooler over time
         break
@@ -111,8 +132,12 @@ function generateFourDayForecast(
       clouds: Math.min(100, baseDay.clouds + i * 10),
       pop: Math.min(1.0, baseDay.pop + i * 0.1),
       uvi: Math.max(0, baseDay.uvi - i * 0.5),
-      rain: weatherPattern === 'rainy' && i > 0 ? i * 0.5 : undefined,
-      snow: weatherPattern === 'snowy' && i > 0 ? i * 0.3 : undefined,
+      rain: weatherPattern === 'rainy' && i > 0
+        ? i * 0.5
+        : undefined,
+      snow: weatherPattern === 'snowy' && i > 0
+        ? i * 0.3
+        : undefined,
     })
   }
 
@@ -164,14 +189,24 @@ export const clearSunnyDay: WeatherApiData = {
         eve: 78.5,
         morn: 60.7,
       },
-      feels_like: { day: 78.1, night: 64.2, eve: 81.3, morn: 62.9 },
+      feels_like: {
+        day: 78.1,
+        night: 64.2,
+        eve: 81.3,
+        morn: 62.9,
+      },
       pressure: 1020,
       humidity: 45,
       dew_point: 52.3,
       wind_speed: 5.2,
       wind_deg: 210,
       weather: [
-        { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
+        {
+          id: 800,
+          main: 'Clear',
+          description: 'clear sky',
+          icon: '01d',
+        },
       ],
       clouds: 5,
       pop: 0.0,
@@ -233,7 +268,12 @@ export const rainyStormyDay: WeatherApiData = {
         eve: 48.3,
         morn: 39.8,
       },
-      feels_like: { day: 38.2, night: 32.1, eve: 41.7, morn: 33.5 },
+      feels_like: {
+        day: 38.2,
+        night: 32.1,
+        eve: 41.7,
+        morn: 33.5,
+      },
       pressure: 995,
       humidity: 85,
       dew_point: 41.8,
@@ -301,14 +341,24 @@ export const snowyWinterDay: WeatherApiData = {
         eve: 30.5,
         morn: 20.3,
       },
-      feels_like: { day: 18.2, night: 12.5, eve: 22.8, morn: 14.7 },
+      feels_like: {
+        day: 18.2,
+        night: 12.5,
+        eve: 22.8,
+        morn: 14.7,
+      },
       pressure: 1008,
       humidity: 78,
       dew_point: 23.1,
       wind_speed: 8.7,
       wind_deg: 340,
       weather: [
-        { id: 602, main: 'Snow', description: 'heavy snow', icon: '13d' },
+        {
+          id: 602,
+          main: 'Snow',
+          description: 'heavy snow',
+          icon: '13d',
+        },
       ],
       clouds: 95,
       pop: 0.85,
@@ -348,14 +398,24 @@ export const extremeHeat: WeatherApiData = {
         eve: 118.5,
         morn: 100.7,
       },
-      feels_like: { day: 125.1, night: 108.2, eve: 128.3, morn: 105.9 },
+      feels_like: {
+        day: 125.1,
+        night: 108.2,
+        eve: 128.3,
+        morn: 105.9,
+      },
       pressure: 1015,
       humidity: 25,
       dew_point: 72.3,
       wind_speed: 3.2,
       wind_deg: 180,
       weather: [
-        { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
+        {
+          id: 800,
+          main: 'Clear',
+          description: 'clear sky',
+          icon: '01d',
+        },
       ],
       clouds: 0,
       pop: 0.0,
@@ -403,14 +463,24 @@ export const extremeCold: WeatherApiData = {
         eve: -12.7,
         morn: -25.4,
       },
-      feels_like: { day: -25.8, night: -35.2, eve: -20.1, morn: -32.7 },
+      feels_like: {
+        day: -25.8,
+        night: -35.2,
+        eve: -20.1,
+        morn: -32.7,
+      },
       pressure: 1025,
       humidity: 45,
       dew_point: -18.7,
       wind_speed: 18.5,
       wind_deg: 315,
       weather: [
-        { id: 602, main: 'Snow', description: 'heavy snow', icon: '13d' },
+        {
+          id: 602,
+          main: 'Snow',
+          description: 'heavy snow',
+          icon: '13d',
+        },
       ],
       clouds: 95,
       pop: 0.9,
@@ -444,14 +514,24 @@ export const multiDayForecast: WeatherApiData = {
         eve: 78.5,
         morn: 60.7,
       },
-      feels_like: { day: 78.1, night: 64.2, eve: 81.3, morn: 62.9 },
+      feels_like: {
+        day: 78.1,
+        night: 64.2,
+        eve: 81.3,
+        morn: 62.9,
+      },
       pressure: 1020,
       humidity: 45,
       dew_point: 52.3,
       wind_speed: 5.2,
       wind_deg: 210,
       weather: [
-        { id: 800, main: 'Clear', description: 'clear sky', icon: '01d' },
+        {
+          id: 800,
+          main: 'Clear',
+          description: 'clear sky',
+          icon: '01d',
+        },
       ],
       clouds: 5,
       pop: 0.0,
